@@ -1,12 +1,12 @@
-const { sql, poolPromise } =  require("../config/db");
+const { sql, poolPromise } = require("../config/db");
 
-exports.findUserByUsername = async (username) => {
+exports.findUserByuserName = async (userName) => {
   try {
     const pool = await poolPromise;
     const result = await pool
       .request()
-      .input('username', sql.VarChar, username)
-      .query('SELECT * FROM Users WHERE Username = @username');
+      .input('userName', sql.VarChar, userName)
+      .query('SELECT * FROM Users WHERE userName = @userName');
 
     return result.recordset[0]; // first match
   } catch (err) {
@@ -15,8 +15,25 @@ exports.findUserByUsername = async (username) => {
   }
 };
 
-exports.addUser = async (username, hashedPassword) => {
-  await db.query("INSERT INTO users (username, password) VALUES (?, ?)", [username, hashedPassword]);
+exports.addUser = async (userName, hashedPassword, email, isActive, isLocked, role) => {
+  try {
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .input('userName', sql.VarChar, userName)
+      .input('passwordHash', sql.VarChar, hashedPassword)
+      .input('email', sql.VarChar, email)
+      .input('isActive', sql.Bit, isActive)
+      .input('isLocked', sql.Bit, isLocked)
+      .input('role', sql.VarChar, role)
+      .query(`
+        INSERT INTO Users (userName, PasswordHash, Email, IsActive, IsLocked, Role)
+        VALUES (@userName, @passwordHash, @email, @isActive, @isLocked, @role)
+      `);
+
+    return result;
+  } catch (err) {
+    console.error('AddUser Error:', err);
+    throw err;
+  }
 };
-
-
