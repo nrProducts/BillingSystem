@@ -5,7 +5,7 @@ import "./styles.css";
 
 const LoginComponent = () => {
   const { login } = useContext(AuthContext);
-  const [username, setUsername] = useState("");
+  const [userName, setuserName] = useState("");
   const [password, setPassword] = useState("");
 
   useEffect(() => {
@@ -15,7 +15,7 @@ const LoginComponent = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    login(username, password);
+    login(userName, password);
   };
 
   return (
@@ -23,7 +23,7 @@ const LoginComponent = () => {
       <div className="form-box">
         <h2>Login</h2>
         <form onSubmit={handleSubmit}>
-          <input className="input-field" type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+          <input className="input-field" type="text" placeholder="userName" value={userName} onChange={(e) => setuserName(e.target.value)} />
           <input className="input-field" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
           <button className="button" type="submit">Login</button>
         </form>

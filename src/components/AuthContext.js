@@ -1,16 +1,18 @@
 // AuthContext.js
 import React, { createContext, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+
   const [auth, setAuth] = useState(null);
 
-  const login = async (username, password) => {
+  const login = async (userName, password) => {
     try {
       const response = await axios.post("http://localhost:5000/api/auth/login", {
-        username,
+        userName,
         password,
       });
       setAuth(response.data.token);
@@ -22,21 +24,18 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = async (username, password) => {
+  const register = async (userData = {}) => {
     try {
       const response = await axios.post("http://localhost:5000/api/auth/register", {
-        username,
-        password,
+        userData,
       });
-      if(response.data?.success){
-        alert(response.data?.message)
-      } else{
-        alert(response.data?.message)
-      }// Save token (alternative: HttpOnly cookies)
+      return response.data; // Let component handle alert and navigation
     } catch (err) {
       console.error("register failed", err);
+      throw err;
     }
   };
+  
 
   const logout = () => {
     setAuth(null);
