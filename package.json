@@ -1,0 +1,46 @@
+{
+  "name": "project-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "concurrently \"npm run start:src\" \"npm run start:backend\"",
+    "start:src": "react-scripts start",
+    "start:backend": "node backend/server.js",
+    "install:src": "npm install --prefix src",
+    "install:backend": "npm install --prefix backend"
+  },
+  "dependencies": {
+    "@fluentui/react": "^8.96.0",
+    "@fluentui/react-icons": "^2.0.274",
+    "axios": "^1.7.9",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.3",
+    "concurrently": "^8.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "install": "^0.13.0",
+    "jsonwebtoken": "^9.0.2",
+    "npm": "^11.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-router-dom": "^7.5.1",
+    "web-vitals": "^4.2.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0",
+    "react-scripts": "^5.0.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
