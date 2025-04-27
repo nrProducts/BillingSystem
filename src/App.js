@@ -1,56 +1,48 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// import { AuthProvider } from "./components/AuthContext";
-// import LoginComponent from "./components/LoginComponent";
-// import RegisterComponent from "./components/RegisterComponent";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
-import './index.css'
+import './index.css';
 import Login from "./components/Login";
-import Home from "./components/home/Home";
+import Home from "./components/home/HomeContainer";
 import ProtectedRoute from "./ProtectedRoute";
 import ItemsManager from "./components/items/ItemsManager";
-
+import Navbar from "./components/Nav/Navbar";
 
 const App = () => {
+
+      const handleLogout = async () => {
+          await supabase.auth.signOut()
+          navigate('/login')
+      }
+  
+
   return (
     <Router>
       <Routes>
+        {/* Login page without layout */}
         <Route path="/login" element={<Login />} />
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/items"
-          element={
-            <ProtectedRoute>
-              <ItemsManager />
-            </ProtectedRoute>
-          }
-        />
 
+        {/* All protected pages with layout */}
+        <Route
+          path="*"
+          element={
+            <ProtectedRoute>
+              <div className="app-container">
+                <Navbar />
+                {/* Center Content */}
+                <main className="main-content">
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/items" element={<ItemsManager />} />
+                  </Routes>
+                </main>
+              </div>
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
-  )
+  );
 }
-
-
-// const App = () => {
-//   return (
-//     <AuthProvider>
-//       <Router>
-//         <Routes>
-//           <Route path="/" element={<LoginComponent />} />
-//           <Route path="/login" element={<LoginComponent />} />
-//           <Route path="/register" element={<RegisterComponent />} />
-//         </Routes>
-//       </Router>
-//     </AuthProvider>
-//   );
-// };
 
 export default App;

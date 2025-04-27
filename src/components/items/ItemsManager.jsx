@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { fetchItems, addItem, updateItem, deleteItem } from '../../api/items'
 import ItemForm from '../items/ItemForm'
-import Navbar from '../Navbar'
 
 const ItemsManager = () => {
   const [items, setItems] = useState([])
@@ -40,8 +39,7 @@ const ItemsManager = () => {
 
   return (
     <div className="items-manager">
-      <Navbar />
-      <h2>📦 Manage Your Items</h2>
+      <h2>Manage Your Items</h2>
       <ItemForm
         onSubmit={editingItem ? handleUpdate : handleAdd}
         initialData={editingItem}

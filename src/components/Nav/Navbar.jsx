@@ -1,0 +1,62 @@
+import { useEffect, useState } from 'react';
+import { Link, useNavigate, NavLink } from 'react-router-dom';
+import { supabase } from '../../supabase/client';
+import './Nav.css';
+
+const Navbar = () => {
+  const [session, setSession] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Get current session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate('/login');
+  };
+
+  return (
+    <aside className="sidebar">
+      <nav>
+        <ul>
+          <li>
+            <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`}>
+              Home
+            </NavLink>
+          </li>
+          {session ? (
+            <>
+              <li>
+                <NavLink to="/items" className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`}>
+                  Manage Items
+                </NavLink>
+              </li>
+              <li>
+                <button onClick={handleLogout} className="nav-link logout-btn">Logout</button>
+              </li>
+            </>
+          ) : (
+            <li>
+              <NavLink to="/login" className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`}>
+                Login
+              </NavLink>
+            </li>
+          )}
+        </ul>
+      </nav>
+    </aside>
+  );
+};
+
+export default Navbar;

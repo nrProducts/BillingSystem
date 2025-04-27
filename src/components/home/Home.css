@@ -1,29 +1,169 @@
 .home-container {
-    padding: 20px;
-    max-width: 900px;
-    margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+/* Left Section - Catalog */
+.catalog-section {
+  flex: 2;
+  border-top: 1px solid #f1f1f1;
+  border-bottom: 1px solid #f1f1f1;
+  padding: 20px;
+}
+
+/* Right Section - Bill Preview */
+.bill-preview {
+  flex: 1;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Search Input */
+input[type="text"] {
+  margin: 10px 0;
+  padding: 10px;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease-in-out;
+}
+
+input[type="text"]:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Table Styles */
+/* Ant Design Table Styles */
+.ant-table {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #dee2e6; /* Table border */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+}
+
+.ant-table-thead > tr > th {
+  background-color: #a1c5ec !important;; /* Default header background */
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-bottom: 2px solid #dee2e6; /* Border under the header */
+}
+
+.ant-table-tbody > tr:hover {
+  background-color: #f9f9f9; /* Hover effect for rows */
+}
+
+.ant-table-tbody > tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.ant-table-tbody > tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+.ant-table-tbody > tr > td {
+  color: #6c757d !important;; /* Text color for table data */
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee; /* Border for cells */
+}
+
+/* If you want to add a border to table cells */
+.ant-table-cell {
+  border-right: 1px solid #dee2e6;
+}
+
+.ant-table-thead > tr > th,
+.ant-table-tbody > tr > td {
+  padding: 16px; /* Adjust padding as needed */
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+  .ant-table {
+    font-size: 12px;
   }
-  
-  input[type="text"] {
-    margin: 10px 0;
-    padding: 8px;
-    width: 300px;
+
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td {
+    padding: 10px 12px;
   }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-  }
-  
-  table th, table td {
-    border: 1px solid #ccc;
-    padding: 10px;
-    text-align: left;
-  }
-  
-  button {
-    padding: 5px 10px;
-    cursor: pointer;
-  }
-  
+}
+
+
+/* Buttons */
+button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Billing Section Styling */
+.billing-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.billing-summary {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.billing-amount {
+  font-size: 22px;
+  color: #28a745;
+}
+
+.billing-summary,
+.billing-amount {
+  transition: color 0.3s ease;
+}
+
+.billing-summary:hover {
+  color: #007bff;
+}
+
+.bounce-button {
+  background-color: #ff7f50;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.bounce-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+}
