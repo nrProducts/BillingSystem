@@ -13,6 +13,7 @@
     display: flex;
     height: 100vh;
     width: 100%;
+    flex-direction: row;
   }
   
   .image-side {
@@ -27,7 +28,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0 2rem;
+    padding: 2rem;
   }
   
   .login-box {
@@ -37,5 +38,42 @@
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 435px;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column;
+    }
+  
+    .image-side {
+      height: 40vh;
+      flex: none;
+    }
+  
+    .form-side {
+      height: 60vh;
+      flex: none;
+      padding: 1.5rem;
+    }
+  
+    .login-box {
+      max-width: 100%;
+      padding: 1.5rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .image-side {
+      height: 35vh;
+    }
+  
+    .form-side {
+      height: 65vh;
+    }
+  
+    .login-box {
+      padding: 1rem;
+    }
   }
   
