@@ -1,27 +1,29 @@
-import { Table, Input, Button } from 'antd';
+import { Table, Input, Button, Spin } from 'antd';
 import './Home.css';
 import BillContainer from './BillPreview/BillPerviewContainer';
 
-const Home = ({ filteredItems, itemColumns, selectedItems, search, setSearch, total, handleRemove }) => {
+const Home = ({ filteredItems, loader, itemColumns, selectedItems, search, setSearch, total, handleRemove }) => {
 
   return (
     <div className="home-container">
       <div className="catalog-section">
-        <Input
-          placeholder="Search items..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          style={{ marginBottom: 20, width: 300 }}
-        />
+        <Spin spinning={loader} tip={'Loding...'}>
+          <Input
+            placeholder="Search items..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            style={{ marginBottom: 20, width: 300 }}
+          />
 
-        <Table
-          dataSource={filteredItems}
-          columns={itemColumns}
-          rowKey="id"
-          pagination={{ pageSize: 5 }}
-        />
+          <Table
+            dataSource={filteredItems}
+            columns={itemColumns}
+            rowKey="id"
+            pagination={{ pageSize: 5 }}
+            rowClassName={(record) => (record?.is_active == false ? 'inactive-row' : '')}
+          />
+        </Spin>
       </div>
-
       <div className="bill-preview">
         <BillContainer
           itemColumns={itemColumns}

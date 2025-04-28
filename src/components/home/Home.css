@@ -7,7 +7,7 @@
 
 /* Left Section - Catalog */
 .catalog-section {
-  flex: 2;
+  flex: 3 1;
   border-top: 1px solid #f1f1f1;
   border-bottom: 1px solid #f1f1f1;
   padding: 20px;
@@ -17,7 +17,7 @@
 .bill-preview {
   flex: 1;
   padding: 20px;
-  background-color: #ffffff;
+  background-color: #2c3e5045;
   border: 1px solid #dee2e6;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -166,4 +166,12 @@ button:disabled {
 .bounce-button:hover {
   transform: scale(1.1);
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.inactive-row {
+  background-color: #e0e0e0 !important; /* darker gray */
+  color: #a0a0a0 !important;            /* lighter text */
+  font-style: italic;                   /* optional: make text italic */
+  opacity: 0.8;                         /* optional: slight transparency */
+  cursor: not-allowed;                  /* optional: indicate disabled */
 }
