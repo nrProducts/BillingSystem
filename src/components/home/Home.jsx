@@ -24,15 +24,13 @@ const Home = ({ filteredItems, loader, itemColumns, selectedItems, search, setSe
           />
         </Spin>
       </div>
-      <div className="bill-preview">
-        <BillContainer
-          itemColumns={itemColumns}
-          total={total}
-          filteredItems={filteredItems}
-          selectedItems={selectedItems}
-          handleRemove={handleRemove}
-        />
-      </div>
+      <BillContainer
+        itemColumns={itemColumns}
+        total={total}
+        filteredItems={filteredItems}
+        selectedItems={selectedItems}
+        handleRemove={handleRemove}
+      />
     </div>
   );
 };

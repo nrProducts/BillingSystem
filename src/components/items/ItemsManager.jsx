@@ -42,7 +42,7 @@ const ItemsManager = () => {
     try {
       setLoader(true);
       const data = await fetchItems()
-      setItems(data)
+      setItems(data?.data ?? '')
       setLoader(false);
     } catch (err) {
       setLoader(false);

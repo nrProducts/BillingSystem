@@ -19,7 +19,7 @@ const HomeContainer = () => {
         try {
             setLoader(true);
             const data = await fetchItems()
-            setItems(data)
+            setItems(data?.data ?? [])
             setLoader(false);
         } catch (err) {
             setLoader(false);
@@ -28,11 +28,11 @@ const HomeContainer = () => {
     }
 
     const editItems = async (record, value) => {
-        console.info(value)
         try {
             setLoader(true);
             const updatedData = { ...record, is_active: value }
-            const result = await updateItem(record?.id, updatedData);
+            console.info(updatedData,'updatedData')
+            await updateItem(record?.id, updatedData);
             await loadItems();
         } catch (err) {
             setLoader(false);
