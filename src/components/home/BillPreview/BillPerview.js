@@ -1,5 +1,8 @@
 import { Card, Button, Divider } from 'antd';
 import './../Home.css';
+import {
+    MinusCircleOutlined
+  } from '@ant-design/icons';
 
 const BillPreview = ({ selectedItems, total, handleRemove }) => {
     //❌
@@ -15,7 +18,7 @@ const BillPreview = ({ selectedItems, total, handleRemove }) => {
                         <Card key={item?.id} style={{ marginBottom: 15 }} bodyStyle={{ padding: 15 }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
                                 <div><strong>Item:</strong> {item?.name}</div>
-                                <Button size="small" danger onClick={() => handleRemove(item?.id)}> ➖ </Button> 
+                                <Button size="small" onClick={() => handleRemove(item?.id)}> <MinusCircleOutlined  style={{ color: 'red' }}/> </Button> 
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: '#555' }}>
                                 <div>Qty: {item?.quantity}</div>
