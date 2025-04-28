@@ -28,6 +28,7 @@ const HomeContainer = () => {
     }
 
     const editItems = async (record, value) => {
+        console.info(value)
         try {
             setLoader(true);
             const updatedData = { ...record, is_active: value }
@@ -81,10 +82,10 @@ const HomeContainer = () => {
         ].filter(Boolean);
     }
 
-    const getMenu = (records) => (
+    const getMenu = (record) => (
         <Menu
-            onClick={(e) => editItems(records, menuItems?.find(x => x?.key == e?.key)?.value)}
-            items={menuItems(records)}
+            onClick={(e) => editItems(record, menuItems(record)?.find(x => x?.key == e?.key)?.value)}
+            items={menuItems(record)}
         />
     );
 

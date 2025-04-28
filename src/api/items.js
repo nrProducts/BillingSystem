@@ -4,15 +4,15 @@ export const fetchItems = async () => {
   const { data, error } = await supabase
     .from('items')
     .select('*')
-    // .order('created', { ascending: false })
+    .order('id', { ascending: true }); // Order by id in ascending order
 
   if (error) {
-    console.error('Error fetching items:', error.message)
-    return []
+    console.error('Error fetching items:', error.message);
+    return [];
   }
 
-  return data
-}
+  return data;
+};
 
 export const addItem = async (item) => {
   const { data, error } = await supabase.from('items').insert([item]).select()
