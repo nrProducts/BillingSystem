@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
-import { Button, Dropdown, Menu } from 'antd';
+import { Button, Dropdown, Menu, Tag } from 'antd';
 import Home from "./Home"
 import { fetchItems, updateItem } from "../../api/items"
-import { EllipsisOutlined  } from '@ant-design/icons'; // Import the icon
+import { EllipsisOutlined } from '@ant-design/icons'; // Import the icon
 
 const HomeContainer = () => {
 
@@ -27,11 +27,11 @@ const HomeContainer = () => {
         }
     }
 
-    const editItems = async(record, value) =>{
+    const editItems = async (record, value) => {
         try {
             setLoader(true);
-            const updatedData = {...record, is_active : value}
-            const result = await updateItem(record?.id,updatedData);
+            const updatedData = { ...record, is_active: value }
+            const result = await updateItem(record?.id, updatedData);
             await loadItems();
         } catch (err) {
             setLoader(false);
@@ -74,15 +74,17 @@ const HomeContainer = () => {
         i?.name.toLowerCase().includes(search?.toLowerCase())
     );
 
-    const menuItems = [
-        { key: '1', label: 'Sold Out', value : false },
-        { key: '2', label: 'Active', value : true },
-    ];
-    
+    const menuItems = (record) => {
+        return [
+            record?.is_active && { key: '1', label: 'Sold Out', value: false },
+            !record?.is_active && { key: '2', label: 'Active', value: true },
+        ].filter(Boolean);
+    }
+
     const getMenu = (records) => (
         <Menu
-            onClick={(e) => editItems(records, menuItems?.find(x=>x?.key == e?.key)?.value)}
-            items={menuItems}
+            onClick={(e) => editItems(records, menuItems?.find(x => x?.key == e?.key)?.value)}
+            items={menuItems(records)}
         />
     );
 
@@ -94,7 +96,7 @@ const HomeContainer = () => {
             render: (_, record) => {
                 return (
                     <Dropdown overlay={getMenu(record)} trigger={['click']}>
-                        <Button type="text" icon={<EllipsisOutlined  style={{fontSize : '20px'}}/>} />
+                        <Button type="text" icon={<EllipsisOutlined style={{ fontSize: '20px' }} />} />
                     </Dropdown>
                 );
             },
@@ -115,6 +117,19 @@ const HomeContainer = () => {
             dataIndex: 'price',
             key: 'price',
             render: (price) => `$${price?.toFixed(2)}`,
+        },
+        {
+            title: 'Status',
+            dataIndex: 'is_active',
+            key: 'is_active',
+            render: (isActive) => (
+                <Tag
+                    color={isActive ? '#28a745' : '#dc3545'}
+                    style={{ color: 'white', fontSize: '14px', padding: '0 8px' }}
+                >
+                    {isActive ? 'Active' : 'Sold Out'}
+                </Tag>
+            ),
         },
         {
             title: 'Action',
@@ -143,7 +158,7 @@ const HomeContainer = () => {
             handleRemove={handleRemove}
             setSearch={setSearch}
             selectedItems={selectedItems}
-            loader = {loader}
+            loader={loader}
         />
     </div>
 
