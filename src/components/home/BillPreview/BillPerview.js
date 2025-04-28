@@ -7,7 +7,8 @@ import {
 const BillPreview = ({ selectedItems, total, handleRemove }) => {
     //❌
     return (
-        <div style={{ maxWidth: 600, margin: '40px auto', padding: 20, background: '#fff', borderRadius: 8, boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
+        <div style={{ maxWidth: 600, margin: '40px auto', padding: 20, background: '#fff', borderRadius: 8, boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+                overflowY: 'auto' }}>
             <h2 style={{ textAlign: 'center', marginBottom: 30 }}>🧾 Bill Preview</h2>
 
             {selectedItems?.length === 0 ? (

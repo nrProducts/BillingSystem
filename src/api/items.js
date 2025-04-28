@@ -3,15 +3,21 @@ import { supabase } from '../supabase/client'
 export const fetchItems = async () => {
   const { data, error } = await supabase
     .from('items')
-    .select('*')
-    .order('id', { ascending: true }); // Order by id in ascending order
+    .select('id, user_id, name, category_id, category:category_id(name), price, is_active, created')
+    .order('id', { ascending: true });
 
   if (error) {
     console.error('Error fetching items:', error.message);
     return [];
   }
+  else {
+    const updatedItems = data.map(item => ({
+      ...item,
+      category: item.category ? item.category.name : null
+    }));
 
-  return data;
+    return updatedItems;
+  }
 };
 
 export const addItem = async (item) => {

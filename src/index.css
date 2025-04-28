@@ -43,7 +43,9 @@ h1 {
 }
 
 .main-content {
-  flex: 1;
+  flex: 1 1;
   padding: 30px;
   background-color: #fdfdfd;
+  height: 100vh; /* Set the height to 100% of the viewport */
+  overflow: hidden; /* Prevent any scrolling */
 }

@@ -7,14 +7,23 @@
 
 /* Left Section - Catalog */
 .catalog-section {
-  flex: 3 1;
-  border-top: 1px solid #f1f1f1;
-  border-bottom: 1px solid #f1f1f1;
-  padding: 20px;
+  flex: 2 1 600px;
+  background: #ffffff;
+  border-radius: 0.5rem;
+  box-shadow: 2px 4px 8px rgb(0 0 0 / 0.1);
+  padding: 1.5rem 2rem;
+  /* display: flex;
+  flex-direction: column; */
+  align-items: flex-start;
+  transition: box-shadow 0.3s ease;
+  height: 75vh;
+}
+.catalog-section:hover {
+  box-shadow: 0 6px 12px rgb(0 0 0 / 0.15);
 }
 
 /* Right Section - Bill Preview */
-.bill-preview {
+/* .bill-preview {
   flex: 1;
   padding: 20px;
   background-color: #2c3e5045;
@@ -25,7 +34,22 @@
   top: 20px;
   height: fit-content;
   transition: transform 0.3s ease-in-out;
+} */
+
+.bill-preview {
+  flex: 1 1 320px;
+  background-color: #e2e8f0;
+  border-radius: 0.75rem;
+  padding: 1.5rem 1.75rem;
+  box-shadow: 0 4px 10px rgb(0 0 0 / 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 400px;
+  height: 75vh;
 }
+
+
 
 /* Search Input */
 input[type="text"] {
@@ -100,6 +124,24 @@ input[type="text"]:focus {
   .ant-table-thead > tr > th,
   .ant-table-tbody > tr > td {
     padding: 10px 12px;
+  }
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .home-container {
+    flex-direction: column;
+    padding: 1rem;
+  }
+  .catalog-section,
+  .bill-preview {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+  .bill-preview {
+    min-height: auto;
+    margin-top: 1.5rem;
   }
 }
 
