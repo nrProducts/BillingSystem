@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 import './index.css';
-import Login from "./components/Login";
+import Login from "./components/login/Login";
 import Home from "./components/home/HomeContainer";
 import ProtectedRoute from "./ProtectedRoute";
 import ItemsManager from "./components/items/ItemsManager";
