@@ -22,7 +22,7 @@ export const fetchItems = async () => {
 export const addItem = async (item) => {
   const { data, error } = await supabase
     .from('items')
-    .insert([item])
+    .insert(item)
     .select();
 
   if (error) {

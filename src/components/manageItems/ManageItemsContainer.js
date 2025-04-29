@@ -1,42 +1,53 @@
 import { useEffect, useState } from 'react'
 import { fetchItems, addItem, updateItem, deleteItem } from '../../api/items'
+import { fetchCategory } from '../../api/category'
 import { Button, Dropdown, Menu } from 'antd';
 import { EllipsisOutlined } from '@ant-design/icons';
 import ManageItems from './ManageItems';
+import { v4 as uuidv4 } from "uuid";
 
 const ManageItemsContainer = () => {
+
+    const userId = sessionStorage.getItem('userId');
+
     const [items, setItems] = useState([])
     const [search, setSearch] = useState('');
     const [loader, setLoader] = useState(false);
-    const [editingItem, setEditingItem] = useState(null)
+    const [formItems, setFormItems] = useState([]);
+    const [visibleForm, setVisibleForm] = useState(false)
+    const [category,setCategory] = useState([]);
 
     useEffect(() => {
-        loadItems()
+        loadItems();
+        loadCategory();
     }, [])
 
-
     const handleAdd = async (item) => {
-        await addItem(item)
-        await loadItems()
-    }
+        setLoader(true);
+        await addItem(item);
+        await loadItems();
+        setLoader(false);
+        setVisibleForm(false);
+        setFormItems([]);
+    };
+    
 
     const handleUpdate = async (item) => {
-        await updateItem(editingItem.id, item)
-        setEditingItem(null)
+        setLoader(true);
+        await updateItem(item.id, item)
         await loadItems()
+        setLoader(false);
+        setVisibleForm(false);
+        setFormItems([]);
     }
 
     const handleDelete = async (id) => {
         if (window.confirm('Delete this item?')) {
             await deleteItem(id)
             await loadItems()
+            setLoader(false);
         }
     }
-
-
-    useEffect(() => {
-        loadItems()
-    }, [])
 
     const loadItems = async () => {
         try {
@@ -50,17 +61,40 @@ const ManageItemsContainer = () => {
         }
     }
 
-    const editItems = async (record, value) => {
-        console.info(value)
+    const loadCategory = async () => {
         try {
             setLoader(true);
-            const updatedData = { ...record, is_active: value }
-            const result = await updateItem(record?.id, updatedData);
-            await loadItems();
+            const data = await fetchCategory()
+            setCategory(data?.data ?? '')
+            setLoader(false);
+        } catch (err) {
+            setLoader(false);
+            alert('Error loading category')
+        }
+    }
+
+    const manageItems = async (record, value) => {
+        try {
+            setLoader(true);
+            if(value == 'Edit'){
+                setVisibleForm(true);
+                setFormItems([{...record, isEdit : true}]);
+                setLoader(false);
+            }else if(value == 'Remove'){
+                await handleDelete()
+            }else{
+                const updatedData = { ...record, is_active: true }
+                await updateItem(record?.id, updatedData);
+            }
         } catch (err) {
             setLoader(false);
             alert('Error loading items')
         }
+    }
+
+    const onAddClicked = () =>{
+        setVisibleForm(true);
+        setFormItems([{ id: uuidv4(), user_id : userId, category_id: "", name: "", price: null, error: {} }]);
     }
 
     const filteredItems = items?.filter(i =>
@@ -69,15 +103,15 @@ const ManageItemsContainer = () => {
 
     const menuItems = (record) => {
         return [
-            record?.is_active && { key: '1', label: 'Edit', value: false },
-            record?.is_active && { key: '1', label: 'Remove', value: false },
-            !record?.is_active && { key: '2', label: 'Active', value: true },
+            record?.is_active && { key: '1', label: 'Edit', value: 'Edit' },
+            record?.is_active && { key: '1', label: 'Remove', value: 'Remove' },
+            !record?.is_active && { key: '2', label: 'Active', value: 'Active' },
         ].filter(Boolean);
     }
 
     const getMenu = (record) => (
         <Menu
-            // onClick={(e) => editItems(record, menuItems(record)?.find(x => x?.key == e?.key)?.value)}
+            onClick={(e) => manageItems(record, menuItems(record)?.find(x => x?.key == e?.key)?.value)}
             items={menuItems(record)}
         />
     );
@@ -123,10 +157,14 @@ const ManageItemsContainer = () => {
                 search={search}
                 setSearch={setSearch}                
                 loader={loader}
-                editingItem={editingItem}
                 handleUpdate={handleUpdate}
                 handleAdd={handleAdd}
-                setEditingItem={setEditingItem}
+                onAddClicked = {onAddClicked}
+                visibleForm = {visibleForm}
+                formItems = {formItems}
+                setFormItems = {setFormItems}
+                setVisibleForm = {setVisibleForm}
+                category = {category}
             />
         </div>
     )

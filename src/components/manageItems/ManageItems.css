@@ -1,10 +1,101 @@
-input {
-    margin: 5px;
-    padding: 5px;
-  }
+/* Ensure proper margin and padding for all elements */
+input,
+button {
+  margin: 5px;
+  padding: 5px;
+}
+
+/* Style for the main container */
+.manage-items-container {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
   
-  button {
-    margin: 5px;
-    padding: 6px 12px;
-  }
-  
+}
+
+/* Left: Item Table Section */
+.item-table-section {
+  flex: 3;
+  min-width: 350px; /* Ensure it doesn't get too narrow */
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  background: #ffffff;
+  border-radius: 0.5rem;
+  box-shadow: 2px 4px 8px rgb(0 0 0 / 0.1);
+  padding: 1.5rem 2rem;
+  /* display: flex;
+  flex-direction: column; */
+  transition: box-shadow 0.3s ease;
+  height: 75vh;
+}
+
+/* Right: Category List Styled Like Bill Preview */
+.category-preview-section {
+  flex: 1;
+  width: 300px;
+  min-width: 200px; /* Ensure it doesn't collapse too much */
+  margin-left: 24px;
+  background-color: #ffffff;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  border: 1px solid #eaeaea;
+  height: 75vh;
+}
+
+/* Category List Card */
+.category-card {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 16px;
+  border: 1px solid #eaeaea;
+}
+
+/* Styling the header of the category section */
+.category-card h3 {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Category list styling */
+.category-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.category-item {
+  padding: 8px 12px;
+  border: 1px solid #f0f0f0;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  margin-bottom: 8px;
+  transition: background 0.3s;
+}
+
+.category-item:hover {
+  background-color: #e6f7ff;
+  cursor: pointer;
+}
+
+.no-categories {
+  color: #999;
+  font-style: italic;
+}
+
+/* Table Styles */
+.ant-table {
+  margin-top: 16px;
+}
+
+.inactive-row {
+  opacity: 0.6;
+}
+
+/* Ensure button styles are consistent */
+button {
+  margin: 5px;
+  padding: 6px 12px;
+}

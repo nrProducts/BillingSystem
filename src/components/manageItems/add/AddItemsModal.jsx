@@ -5,43 +5,37 @@ import { v4 as uuidv4 } from "uuid";
 
 const { Option } = Select;
 
-const categoryOptions = [
-  { value: "general", label: "General" },
-  { value: "electronics", label: "Electronics" },
-  { value: "groceries", label: "Groceries" },
-  { value: "clothing", label: "Clothing" },
-];
+const AddItemsModal = (props) => {
 
-const AddItemsModal = () => {
-  const [visible, setVisible] = useState(false);
-  const [items, setItems] = useState([]);
+  const userId = sessionStorage.getItem('userId');
 
   const handleAddRow = () => {
-    setItems((prev) => [
+    props?.setFormItems((prev) => [
       ...prev,
       {
         id: uuidv4(),
-        category: "",
-        name: "",
-        price: null,
-        error: {},
+        user_id : userId,
+        category_id : "",
+        name : "",
+        price : null,
+        error : {},
       },
     ]);
   };
 
   const handleRemoveRow = (id) => {
-    setItems((prev) => prev.filter((item) => item.id !== id));
+    props?.setFormItems((prev) => prev.filter((item) => item.id !== id));
   };
 
   const handleChange = (id, field, value) => {
-    setItems((prev) =>
+    props?.setFormItems((prev) => //props?.formItems
       prev.map((item) =>
         item.id === id
           ? {
-              ...item,
-              [field]: value,
-              error: { ...item.error, [field]: null },
-            }
+            ...item,
+            [field]: value,
+            error: { ...item.error, [field]: null },
+          }
           : item
       )
     );
@@ -49,10 +43,10 @@ const AddItemsModal = () => {
 
   const validateItems = () => {
     let isValid = true;
-    const validated = items.map((item) => {
+    const validated = props?.formItems.map((item) => {
       const error = {};
-      if (!item.category) {
-        error.category = "Required";
+      if (!item.category_id) {
+        error.category_id = "Required";
         isValid = false;
       }
       if (!item.name?.trim()) {
@@ -65,37 +59,44 @@ const AddItemsModal = () => {
       }
       return { ...item, error };
     });
-    setItems(validated);
+    props?.setFormItems(validated);
     return isValid;
   };
 
   const handleSubmit = () => {
+
     if (!validateItems()) {
       message.error("Please correct the errors before submitting.");
       return;
     }
 
-    const cleaned = items.map(({ id, error, ...rest }) => rest);
-    console.log("✅ Submitted items:", cleaned);
-    setVisible(false);
-    setItems([]);
+    const isEdit = props?.formItems?.[0]?.isEdit ?? false;
+    if(isEdit){
+      const cleanedForEdit = props?.formItems.map(({ error, category, isEdit, ...rest }) => rest);
+      props?.handleUpdate(cleanedForEdit?.[0]);
+    }else{
+      const cleanedForAdd = props?.formItems.map(({ id, error, category, ...rest }) => rest);
+      props?.handleAdd(cleanedForAdd);
+    }
   };
 
   const columns = [
     {
       title: "Category",
       dataIndex: "category",
+      width: 200,
       render: (_, record) => (
-        <div>
+        <div style={{ display: "flex", flexDirection: "column" }}>
           <Select
-            value={record.category}
+            value={record.category || undefined}
             placeholder="Select category"
             style={{ width: "100%", height: 40 }}
-            onChange={(val) => handleChange(record.id, "category", val)}
+            onChange={(val,opt) => handleChange(record.id, "category_id", opt?.key)}
+            
           >
-            {categoryOptions.map((cat) => (
-              <Option key={cat.value} value={cat.value}>
-                {cat.label}
+            {props?.category.map((cat) => (
+              <Option key={cat.id} value={cat.name}>
+                {cat.name}
               </Option>
             ))}
           </Select>
@@ -108,8 +109,9 @@ const AddItemsModal = () => {
     {
       title: "Name",
       dataIndex: "name",
+      width: 400,
       render: (_, record) => (
-        <div>
+        <div style={{ display: "flex", flexDirection: "column" }}>
           <Input
             value={record.name}
             placeholder="Enter item name"
@@ -125,17 +127,14 @@ const AddItemsModal = () => {
     {
       title: "Price ($)",
       dataIndex: "price",
+      width: 200,
       render: (_, record) => (
-        <div>
-          <InputNumber
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <Input
             value={record.price}
             placeholder="Enter price"
-            style={{ width: "100%", height: 40 }}
-            min={0}
-            step={0.01}
-            onChange={(val) => handleChange(record.id, "price", val)}
-            stringMode
-            controls={false}
+            style={{ height: 40 }}
+            onChange={(e) => handleChange(record.id, "price", e.target.value)}
           />
           {record.error?.price && (
             <div style={{ color: "red", fontSize: 12 }}>{record.error.price}</div>
@@ -145,48 +144,45 @@ const AddItemsModal = () => {
     },
     {
       title: "Action",
+      width: 100,
       render: (_, record) => (
-        <Button
-          danger
-          icon={<DeleteOutlined />}
-          onClick={() => handleRemoveRow(record.id)}
-          style={{
-            height: 40,
-            width: 40,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: 0,
-          }}
-        />
+        <div style={{ display: "flex", alignItems: "center", height: "100%" }}>
+          <Button
+            danger
+            icon={<DeleteOutlined />}
+            disabled={props?.formItems?.length === 1}
+            onClick={() => handleRemoveRow(record.id)}
+            style={{
+              height: 40,
+              width: 40,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: 0,
+            }}
+          />
+        </div>
       ),
     },
   ];
 
   return (
     <>
-      <Button type="primary" onClick={() => {
-        setItems([{ id: uuidv4(), category: "", name: "", price: null, error: {} }]);
-        setVisible(true);
-      }}>
-        Bulk Add Items
-      </Button>
-
       <Modal
-        title="Bulk Add Items"
-        open={visible}
-        onCancel={() => setVisible(false)}
+        title={props?.formItems?.[0]?.isEdit ? 'Edit Item' : 'Bulk Add Items'}
+        open={props?.visibleForm}
+        onCancel={() => props?.setVisibleForm(false)}
         onOk={handleSubmit}
         width={900}
         okText="Submit"
       >
         <Table
-          dataSource={items}
+          dataSource={props?.formItems}
           columns={columns}
           pagination={false}
           rowKey="id"
         />
-        <Button
+        {props?.formItems?.[0]?.isEdit ? <></> : <Button
           onClick={handleAddRow}
           type="dashed"
           icon={<PlusOutlined />}
@@ -194,7 +190,8 @@ const AddItemsModal = () => {
           style={{ marginTop: 20 }}
         >
           Add Item Row
-        </Button>
+        </Button>}
+
       </Modal>
     </>
   );
