@@ -43,6 +43,7 @@ const ManageItemsContainer = () => {
 
     const handleDelete = async (id) => {
         if (window.confirm('Delete this item?')) {
+            setLoader(true);
             await deleteItem(id)
             await loadItems()
             setLoader(false);
@@ -81,7 +82,7 @@ const ManageItemsContainer = () => {
                 setFormItems([{...record, isEdit : true}]);
                 setLoader(false);
             }else if(value == 'Remove'){
-                await handleDelete()
+                await handleDelete(record?.id);
             }else{
                 const updatedData = { ...record, is_active: true }
                 await updateItem(record?.id, updatedData);
@@ -104,8 +105,8 @@ const ManageItemsContainer = () => {
     const menuItems = (record) => {
         return [
             record?.is_active && { key: '1', label: 'Edit', value: 'Edit' },
-            record?.is_active && { key: '1', label: 'Remove', value: 'Remove' },
-            !record?.is_active && { key: '2', label: 'Active', value: 'Active' },
+            record?.is_active && { key: '2', label: 'Remove', value: 'Remove' },
+            !record?.is_active && { key: '3', label: 'Active', value: 'Active' },
         ].filter(Boolean);
     }
 
