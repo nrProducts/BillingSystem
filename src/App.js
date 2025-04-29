@@ -5,7 +5,7 @@ import './index.css';
 import Login from "./components/login/Login";
 import Home from "./components/home/HomeContainer";
 import ProtectedRoute from "./ProtectedRoute";
-import ItemsManager from "./components/items/ItemsManager";
+import ManageItems from "./components/manageItems/ManageItemsContainer";
 import Navbar from "./components/Nav/Navbar";
 
 const App = () => {
@@ -33,7 +33,7 @@ const App = () => {
                 <main className="main-content">
                   <Routes>
                     <Route path="/" element={<Home />} />
-                    <Route path="/items" element={<ItemsManager />} />
+                    <Route path="/items" element={<ManageItems />} />
                   </Routes>
                 </main>
               </div>

@@ -31,8 +31,8 @@ const HomeContainer = () => {
         try {
             setLoader(true);
             const updatedData = { ...record, is_active: value }
-            console.info(updatedData,'updatedData')
-            await updateItem(record?.id, updatedData);
+            const {category, ...sanitizedData } = updatedData
+            await updateItem(record?.id, sanitizedData );
             await loadItems();
         } catch (err) {
             setLoader(false);
