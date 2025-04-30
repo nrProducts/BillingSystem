@@ -84,8 +84,12 @@ const ManageItemsContainer = () => {
             }else if(value == 'Remove'){
                 await handleDelete(record?.id);
             }else{
-                const updatedData = { ...record, is_active: true }
-                await updateItem(record?.id, updatedData);
+                const isActive = value !== 'Inactive';
+                const updatedData = { ...record, is_active: isActive };
+                const { category, ...sanitizedData } = updatedData;
+                            
+                await updateItem(record?.id, sanitizedData);
+                await loadItems();
             }
         } catch (err) {
             setLoader(false);
@@ -106,7 +110,8 @@ const ManageItemsContainer = () => {
         return [
             record?.is_active && { key: '1', label: 'Edit', value: 'Edit' },
             record?.is_active && { key: '2', label: 'Remove', value: 'Remove' },
-            !record?.is_active && { key: '3', label: 'Active', value: 'Active' },
+            record?.is_active && { key: '3', label: 'Inactive', value: 'Inactive' },
+            !record?.is_active && { key: '4', label: 'Active', value: 'Active' },
         ].filter(Boolean);
     }
 
