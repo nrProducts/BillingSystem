@@ -1,11 +1,11 @@
-import { Card, Button, Divider } from 'antd';
+import { Card, Button, Divider, Spin } from 'antd';
 import { MinusCircleOutlined } from '@ant-design/icons';
 
 const BillHeader = () => (
   <h2 className="bill-title">🧾 Bill Preview</h2>
 );
 
-export const BillPreview = ({ selectedItems, handleRemove, billingDetails, handleGenerateBill }) => {
+export const BillPreview = ({ selectedItems, handleRemove, billingDetails, handleGenerateBill, loader }) => {
 
   const { subtotal, gstAmount, total } = billingDetails;
 
@@ -47,7 +47,7 @@ export const BillPreview = ({ selectedItems, handleRemove, billingDetails, handl
           </div>
         )}
       </div>
-
+      <Spin spinning={loader} tip="Loading..." />
       {/* Footer with GST and totals */}
       <div className="bill-footer">
         <Divider style={{ margin: '8px 0' }} />

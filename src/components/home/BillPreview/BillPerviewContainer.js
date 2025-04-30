@@ -1,11 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import Bill from "./BillPerview";
 import { createBillItems } from "../../../api/billItems";
 import { createBills } from "../../../api/bills";
+import { notification } from 'antd';
 
 const BillContainer = (props) => {
 
-    const {selectedItems, setSelectedItems, handleRemove} = props;    
+    const [loader, setLoader] = useState(false);
+    const { selectedItems, setSelectedItems, handleRemove } = props;
     const userId = sessionStorage.getItem('userId');
 
     const subtotal = selectedItems.reduce(
@@ -13,15 +15,19 @@ const BillContainer = (props) => {
         0
     );
 
-    const gstAmount = selectedItems.reduce(
-        (sum, item) => sum + item.price * item.quantity * ((item.gst_rate || 0) / 100),
-        0
-    );
+    const gstAmount = selectedItems.reduce((sum, item) => {
+        if (item.gst_rate != null) {
+            const itemTotal = item.price * item.quantity;
+            return sum + itemTotal * (item.gst_rate / 100);
+        }
+        return sum;
+    }, 0);
 
     const grandTotal = subtotal + gstAmount;
 
     const handleGenerateBill = async () => {
         if (selectedItems.length === 0) return;
+        setLoader(true);
 
         const billDetails = {
             total_gst: gstAmount,
@@ -29,21 +35,21 @@ const BillContainer = (props) => {
             user_id: userId,
         };
         const { data: bill, error: billError } = await createBills(billDetails)
-        debugger;
         if (billError) {
             console.error("Error creating bill:", billError);
+            setLoader(false);
             return;
         }
 
         const billItems = selectedItems.map((item) => {
             const itemTotal = item.price * item.quantity;
-            const gstAmount = itemTotal * (item.gst_rate / 100);
+            const gstAmount = item.gst_rate != null ? itemTotal * (item.gst_rate / 100) : 0;
             return {
                 bill_id: bill.id,
                 item_id: item.id,
                 quantity: item.quantity,
                 price: item.price,
-                gst_rate: item.gst_rate,
+                gst_rate: item.gst_rate ?? 0,
                 gst_amount: gstAmount,
                 total_amount: itemTotal + gstAmount,
             };
@@ -53,10 +59,16 @@ const BillContainer = (props) => {
 
         if (itemError) {
             console.error("Error adding bill items:", itemError);
+            setLoader(false);
             return;
         }
 
-        // message.success("Bill generated successfully!");
+        notification.success({
+            message: "Success",
+            description: "Bill has been generated successfully.",
+            placement: "topRight", // or "bottomRight", "bottomLeft", etc.
+        });
+        setLoader(false);
         setSelectedItems([]);
     };
 
@@ -66,7 +78,15 @@ const BillContainer = (props) => {
         total: grandTotal
     }
 
-    return <Bill selectedItems={selectedItems} billingDetails={billingDetails} handleRemove={handleRemove} handleGenerateBill={handleGenerateBill} />
+    return (
+        <Bill
+            selectedItems={selectedItems}
+            billingDetails={billingDetails}
+            handleRemove={handleRemove}
+            handleGenerateBill={handleGenerateBill}
+            loader={loader}
+        />
+    );
 }
 
 export default BillContainer
