@@ -65,11 +65,7 @@ const HomeContainer = () => {
         );
     };
 
-
-    const total = selectedItems.reduce(
-        (sum, i) => sum + i?.price * i?.quantity,
-        0
-    );
+    
 
     const filteredItems = items?.filter(i =>
         i?.name.toLowerCase().includes(search?.toLowerCase())
@@ -154,7 +150,7 @@ const HomeContainer = () => {
         <h2>Home</h2>
         <Home items={items}
             itemColumns={itemColumns}
-            total={total}
+            setSelectedItems={setSelectedItems}
             filteredItems={filteredItems}
             handleRemove={handleRemove}
             setSearch={setSearch}

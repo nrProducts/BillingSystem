@@ -18,6 +18,8 @@ const AddItemsModal = (props) => {
         category_id : "",
         name : "",
         price : null,
+        gst_rate : null,
+        hsn_code : "",
         error : {},
       },
     ]);
@@ -138,6 +140,72 @@ const AddItemsModal = (props) => {
           />
           {record.error?.price && (
             <div style={{ color: "red", fontSize: 12 }}>{record.error.price}</div>
+          )}
+        </div>
+      ),
+    },
+    {
+      title: "GST Rate (%)",
+      dataIndex: "gst_rate",
+      width: 200,
+      render: (_, record) => (
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <Input
+            value={record.gst_rate}
+            placeholder="Enter GST Rate"
+            style={{ height: 40 }}
+            onChange={(e) => {
+              const value = e.target.value;
+    
+              // Allow only numbers and optional decimal
+              const numberRegex = /^\d{0,3}(\.\d{0,2})?$/;
+    
+              if (value === '' || numberRegex.test(value)) {
+                let numeric = parseFloat(value);
+                if (!isNaN(numeric) && (numeric < 0 || numeric > 100)) {
+                  handleChange(record.id, "error", {
+                    ...record.error,
+                    gst_rate: "GST must be between 0 and 100",
+                  });
+                } else {
+                  handleChange(record.id, "gst_rate", value);
+                  handleChange(record.id, "error", {
+                    ...record.error,
+                    gst_rate: "", // Clear error
+                  });
+                }
+              }
+            }}
+            onBlur={() => {
+              const numeric = parseFloat(record.gst_rate);
+              if (isNaN(numeric) || numeric < 0 || numeric > 100) {
+                handleChange(record.id, "error", {
+                  ...record.error,
+                  gst_rate: "Please enter a valid GST rate (0–100%)",
+                });
+              }
+            }}
+          />
+          {record.error?.gst_rate && (
+            <div style={{ color: "red", fontSize: 12 }}>{record.error.gst_rate}</div>
+          )}
+        </div>
+      ),
+    },      
+    {
+      title: "HSN Code",
+      dataIndex: "hsn_code",
+      width: 400,
+      render: (_, record) => (
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <Input
+            value={record.hsn_code}
+            placeholder="Enter HSN Code"
+            style={{ height: 40 }}
+            onChange={(e) => handleChange(record.id, "hsn_code", e.target.value)}
+          />
+          {record.error?.hsn_code && (
+            <div style={{ color: "red", fontSize: 12 }}>{record.error.hsn_code}</div>
           )}
         </div>
       ),

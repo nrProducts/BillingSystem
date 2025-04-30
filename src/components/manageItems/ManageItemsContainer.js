@@ -15,7 +15,7 @@ const ManageItemsContainer = () => {
     const [loader, setLoader] = useState(false);
     const [formItems, setFormItems] = useState([]);
     const [visibleForm, setVisibleForm] = useState(false)
-    const [category,setCategory] = useState([]);
+    const [category, setCategory] = useState([]);
 
     useEffect(() => {
         loadItems();
@@ -30,7 +30,7 @@ const ManageItemsContainer = () => {
         setVisibleForm(false);
         setFormItems([]);
     };
-    
+
 
     const handleUpdate = async (item) => {
         setLoader(true);
@@ -77,17 +77,17 @@ const ManageItemsContainer = () => {
     const manageItems = async (record, value) => {
         try {
             setLoader(true);
-            if(value == 'Edit'){
+            if (value == 'Edit') {
                 setVisibleForm(true);
-                setFormItems([{...record, isEdit : true}]);
+                setFormItems([{ ...record, isEdit: true }]);
                 setLoader(false);
-            }else if(value == 'Remove'){
+            } else if (value == 'Remove') {
                 await handleDelete(record?.id);
-            }else{
+            } else {
                 const isActive = value !== 'Inactive';
                 const updatedData = { ...record, is_active: isActive };
                 const { category, ...sanitizedData } = updatedData;
-                            
+
                 await updateItem(record?.id, sanitizedData);
                 await loadItems();
             }
@@ -97,9 +97,9 @@ const ManageItemsContainer = () => {
         }
     }
 
-    const onAddClicked = () =>{
+    const onAddClicked = () => {
         setVisibleForm(true);
-        setFormItems([{ id: uuidv4(), user_id : userId, category_id: "", name: "", price: null, error: {} }]);
+        setFormItems([{ id: uuidv4(), user_id: userId, category_id: "", name: "", price: null, error: {} }]);
     }
 
     const filteredItems = items?.filter(i =>
@@ -152,6 +152,19 @@ const ManageItemsContainer = () => {
             key: 'price',
             render: (price) => `$${price?.toFixed(2)}`,
         },
+        {
+            title: 'GST Rate (%)',
+            dataIndex: 'gst_rate',
+            key: 'gst_rate',
+            render: (rate) => rate != null ? `${rate.toFixed(2)}%` : '-',
+        },
+        {
+            title: 'HSN Code',
+            dataIndex: 'hsn_code',
+            key: 'hsn_code',
+            render: (code) => code || '-',
+        },
+
     ];
 
     return (
@@ -161,16 +174,16 @@ const ManageItemsContainer = () => {
                 itemColumns={itemColumns}
                 filteredItems={filteredItems}
                 search={search}
-                setSearch={setSearch}                
+                setSearch={setSearch}
                 loader={loader}
                 handleUpdate={handleUpdate}
                 handleAdd={handleAdd}
-                onAddClicked = {onAddClicked}
-                visibleForm = {visibleForm}
-                formItems = {formItems}
-                setFormItems = {setFormItems}
-                setVisibleForm = {setVisibleForm}
-                category = {category}
+                onAddClicked={onAddClicked}
+                visibleForm={visibleForm}
+                formItems={formItems}
+                setFormItems={setFormItems}
+                setVisibleForm={setVisibleForm}
+                category={category}
             />
         </div>
     )

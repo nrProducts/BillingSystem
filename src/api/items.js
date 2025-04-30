@@ -3,7 +3,7 @@ import { supabase } from '../supabase/client'
 export const fetchItems = async () => {
   const { data, error } = await supabase
     .from('items')
-    .select('id, user_id, name, category_id, category:category_id(name), price, is_active, created')
+    .select('id, user_id, name, category_id, category:category_id(name), price, is_active, created, gst_rate, hsn_code')
     .order('id', { ascending: true });
 
   if (error) {

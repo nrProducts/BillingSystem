@@ -2,7 +2,7 @@ import { Table, Input, Button, Spin } from 'antd';
 import './Home.css';
 import BillContainer from './BillPreview/BillPerviewContainer';
 
-const Home = ({ filteredItems, loader, itemColumns, selectedItems, search, setSearch, total, handleRemove }) => {
+const Home = ({ filteredItems, loader, itemColumns, selectedItems, search, setSearch, setSelectedItems, handleRemove }) => {
 
   return (
     <div className="home-container">
@@ -26,7 +26,7 @@ const Home = ({ filteredItems, loader, itemColumns, selectedItems, search, setSe
       </div>
       <BillContainer
         itemColumns={itemColumns}
-        total={total}
+        setSelectedItems={setSelectedItems}
         filteredItems={filteredItems}
         selectedItems={selectedItems}
         handleRemove={handleRemove}
