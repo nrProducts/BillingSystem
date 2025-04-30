@@ -9,6 +9,20 @@ export const fetchCategory = async () => {
   if (error) {
     console.error('Error fetching category:', error.message);
     return { data: [], message: error?.message, error };
-  } 
-    return { data: data, message: 'Items fetched successfully', error: null };
+  }
+  return { data: data, message: 'Items fetched successfully', error: null };
 };
+
+export const addCategory = async (item) => {
+  const { data, error } = await supabase
+    .from('category')
+    .insert(item)
+    .select();
+
+  if (error) {
+    console.error('Error adding category:', error.message);
+    return { data: [], message: error?.message, error };
+  }
+
+  return { data: data[0], message: 'category added successfully', error: null };
+}

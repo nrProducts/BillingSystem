@@ -8,7 +8,7 @@ const { Option } = Select;
 const AddItemsModal = (props) => {
 
   const userId = sessionStorage.getItem('userId');
-
+  
   const handleAddRow = () => {
     props?.setFormItems((prev) => [
       ...prev,
@@ -28,6 +28,7 @@ const AddItemsModal = (props) => {
   const handleRemoveRow = (id) => {
     props?.setFormItems((prev) => prev.filter((item) => item.id !== id));
   };
+
 
   const handleChange = (id, field, value) => {
     props?.setFormItems((prev) => //props?.formItems
@@ -96,7 +97,7 @@ const AddItemsModal = (props) => {
             onChange={(val,opt) => handleChange(record.id, "category_id", opt?.key)}
             
           >
-            {props?.category.map((cat) => (
+            {props?.categoryList.map((cat) => (
               <Option key={cat.id} value={cat.name}>
                 {cat.name}
               </Option>
@@ -241,7 +242,7 @@ const AddItemsModal = (props) => {
         open={props?.visibleForm}
         onCancel={() => props?.setVisibleForm(false)}
         onOk={handleSubmit}
-        width={900}
+        width={1500}
         okText="Submit"
       >
         <Table

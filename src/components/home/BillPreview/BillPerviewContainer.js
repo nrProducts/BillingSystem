@@ -27,50 +27,56 @@ const BillContainer = (props) => {
 
     const handleGenerateBill = async () => {
         if (selectedItems.length === 0) return;
-        setLoader(true);
-
-        const billDetails = {
-            total_gst: gstAmount,
-            grand_total: grandTotal,
-            user_id: userId,
-        };
-        const { data: bill, error: billError } = await createBills(billDetails)
-        if (billError) {
-            console.error("Error creating bill:", billError);
-            setLoader(false);
-            return;
-        }
-
-        const billItems = selectedItems.map((item) => {
-            const itemTotal = item.price * item.quantity;
-            const gstAmount = item.gst_rate != null ? itemTotal * (item.gst_rate / 100) : 0;
-            return {
-                bill_id: bill.id,
-                item_id: item.id,
-                quantity: item.quantity,
-                price: item.price,
-                gst_rate: item.gst_rate ?? 0,
-                gst_amount: gstAmount,
-                total_amount: itemTotal + gstAmount,
+    
+        try {
+            setLoader(true);
+    
+            const billPayload = {
+                total_gst: gstAmount,
+                grand_total: grandTotal,
+                user_id: userId,
             };
-        });
-
-        const { error: itemError } = await createBillItems(billItems)
-
-        if (itemError) {
-            console.error("Error adding bill items:", itemError);
+    
+            const { data: bill, error: billError } = await createBills(billPayload);
+            if (billError) throw new Error(billError || "Failed to create bill");
+    
+            const billItemsPayload = selectedItems.map((item) => {
+                const itemTotal = item.price * item.quantity;
+                const gstAmount = item.gst_rate ? itemTotal * (item.gst_rate / 100) : 0;
+    
+                return {
+                    bill_id: bill.id,
+                    item_id: item.id,
+                    quantity: item.quantity,
+                    price: item.price,
+                    gst_rate: item.gst_rate ?? 0,
+                    gst_amount: gstAmount,
+                    total_amount: itemTotal + gstAmount,
+                };
+            });
+    
+            const { error: itemError } = await createBillItems(billItemsPayload);
+            if (itemError) throw new Error(itemError);
+    
+            notification.success({
+                message: "Success",
+                description: "Bill has been generated successfully.",
+                placement: "topRight",
+            });
+    
+            setSelectedItems([]);
+        } catch (error) {
+            console.error("Billing Error:", error);
+            notification.error({
+                message: "Error",
+                description: error.message || "Something went wrong during billing.",
+                placement: "topRight",
+            });
+        } finally {
             setLoader(false);
-            return;
         }
-
-        notification.success({
-            message: "Success",
-            description: "Bill has been generated successfully.",
-            placement: "topRight", // or "bottomRight", "bottomLeft", etc.
-        });
-        setLoader(false);
-        setSelectedItems([]);
     };
+    
 
     const billingDetails = {
         subtotal: subtotal,

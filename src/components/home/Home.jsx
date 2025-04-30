@@ -19,7 +19,7 @@ const Home = ({ filteredItems, loader, itemColumns, selectedItems, search, setSe
             dataSource={filteredItems}
             columns={itemColumns}
             rowKey="id"
-            pagination={{ pageSize: 5 }}
+            pagination={{ pageSize: 10 }}
             rowClassName={(record) => (record?.is_active == false ? 'inactive-row' : '')}
           />
         </Spin>

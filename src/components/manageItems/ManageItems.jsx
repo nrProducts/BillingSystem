@@ -1,15 +1,9 @@
-import React, { useMemo } from "react";
+import React from "react";
 import AddItemsModal from "./add/AddItemsModal";
 import { Table, Input, Spin, Button } from "antd";
 import "./ManageItems.css"; // Import external CSS
-
-const categoryOptions = [
-  { value: "general", label: "General" },
-  { value: "electronics", label: "Electronics" },
-  { value: "groceries", label: "Groceries" },
-  { value: "clothing", label: "Clothing" },
-];
-
+import { PlusOutlined, SaveOutlined } from '@ant-design/icons';
+import { Label } from "@fluentui/react";
 
 const ManageItems = ({
   filteredItems,
@@ -26,9 +20,15 @@ const ManageItems = ({
   onAddClicked,
   formItems,
   setFormItems,
-  category
+  categoryList,
+  addCategoryForm,
+  newCategory,
+  handleCategory,
+  submitCategory,
+  setAddCategoryForm,
+  categoryError,
+  SetCategoryError
 }) => {
-
   return (
     <div>
       <Button
@@ -45,9 +45,9 @@ const ManageItems = ({
           visibleForm={visibleForm}
           formItems={formItems}
           setFormItems={setFormItems}
-          category = {category}
-          handleUpdate = {handleUpdate}
-          handleAdd = {handleAdd}
+          categoryList={categoryList}
+          handleUpdate={handleUpdate}
+          handleAdd={handleAdd}
         />
       )}
 
@@ -65,7 +65,7 @@ const ManageItems = ({
               dataSource={filteredItems}
               columns={itemColumns}
               rowKey="id"
-              pagination={{ pageSize: 5 }}
+              pagination={{ pageSize: 10 }}
               rowClassName={(record) =>
                 record?.is_active === false ? "inactive-row" : ""
               }
@@ -76,10 +76,59 @@ const ManageItems = ({
         {/* Right: Category List Styled Like Bill Preview */}
         <div className="category-preview-section">
           <div className="category-card">
-            <h3>📁 Category List</h3>
-            {category.length > 0 ? (
+            <div className="category-header">
+              <h3>📁 Category List</h3>
+              <Button
+                className={`fab-button ${addCategoryForm ? "rotated" : ""}`}
+                type="primary"
+                shape="circle"
+                icon={<PlusOutlined />}
+                onClick={() => { setAddCategoryForm(!addCategoryForm), SetCategoryError('') }}
+              />
+            </div>
+
+            {addCategoryForm && (
+              <div className="parent">
+                <div className="child1">
+                  <Label>Category Name :</Label>
+                </div>
+                <div className="child2">
+                  <Input
+                    value={newCategory}
+                    placeholder="Category name"
+                    onChange={(e) => handleCategory(e.target.value)}
+                    style={categoryError ? { border: '1px solid red' } : {}}
+                  />
+                </div>
+                <div className="child3">
+                  <SaveOutlined
+                    onClick={submitCategory}
+                    // style={{
+                    //   color: '#1890ff',
+                    //   backgroundColor: '#1890ff',  // Added background color
+                    //   fontSize: '36px',
+                    //   cursor: 'pointer',
+                    //   border: '1px solid red',
+                    //   padding: '5px'
+                    // }}
+                    style={{
+                      color: '#fff',                // White icon/text color
+                      backgroundColor: '#1890ff',  // Matching background
+                      fontSize: '33px',
+                      cursor: 'pointer',
+                      // border: '1px solid red',
+                      borderRadius: '4px',
+                      padding: '5px'
+                    }}
+                                        
+                  />
+                </div>
+              </div>
+            )}
+
+            {categoryList?.length > 0 ? (
               <ul className="category-list">
-                {category.map((cat) => (
+                {categoryList?.map((cat) => (
                   <li key={cat?.id} className="category-item">
                     {cat?.name || "Uncategorized"}
                   </li>
@@ -88,8 +137,10 @@ const ManageItems = ({
             ) : (
               <p className="no-categories">No categories found.</p>
             )}
+
           </div>
         </div>
+
       </div>
     </div>
   );

@@ -80,20 +80,38 @@
 }
 
 .bill-footer {
-  padding-top: 1rem;
-  background: #fff;
+  padding: 1rem;
+  background: #f9f9f9;
+  border-top: 1px solid #ddd;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
 }
 
-.bill-total {
-  text-align: right;
-  font-size: 1.5rem;
-  font-weight: bold;
+.bill-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   margin-bottom: 1rem;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+}
+
+.total-row {
+  font-weight: bold;
+  font-size: 1.2rem;
+  border-top: 1px solid #ccc;
+  padding-top: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .bill-generate-btn {
   margin-top: 0.5rem;
+  font-size: 1.1rem;
 }
+
 
 
 /* Search Input */

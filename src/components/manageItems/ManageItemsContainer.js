@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { fetchItems, addItem, updateItem, deleteItem } from '../../api/items'
-import { fetchCategory } from '../../api/category'
-import { Button, Dropdown, Menu } from 'antd';
+import { fetchCategory, addCategory } from '../../api/category'
+import { Button, Dropdown, Menu, Tag } from 'antd';
 import { EllipsisOutlined } from '@ant-design/icons';
 import ManageItems from './ManageItems';
 import { v4 as uuidv4 } from "uuid";
@@ -15,7 +15,11 @@ const ManageItemsContainer = () => {
     const [loader, setLoader] = useState(false);
     const [formItems, setFormItems] = useState([]);
     const [visibleForm, setVisibleForm] = useState(false)
-    const [category, setCategory] = useState([]);
+    const [categoryList, setCategoryList] = useState([]);
+    const [addCategoryForm, setAddCategoryForm] = useState(false);
+    const [newCategory, setNewCategory] = useState('');
+    const [categoryError, SetCategoryError] = useState('');
+
 
     useEffect(() => {
         loadItems();
@@ -66,7 +70,7 @@ const ManageItemsContainer = () => {
         try {
             setLoader(true);
             const data = await fetchCategory()
-            setCategory(data?.data ?? '')
+            setCategoryList(data?.data ?? '')
             setLoader(false);
         } catch (err) {
             setLoader(false);
@@ -101,6 +105,24 @@ const ManageItemsContainer = () => {
         setVisibleForm(true);
         setFormItems([{ id: uuidv4(), user_id: userId, category_id: "", name: "", price: null, error: {} }]);
     }
+
+    const handleCategory = (value) => {
+        setNewCategory(value);
+        SetCategoryError('')
+    }
+
+    const submitCategory = async () => {
+        if (newCategory) {
+            const payload = { user_id: userId, name: newCategory }
+            await addCategory(payload)
+            await loadCategory()
+            setAddCategoryForm(false);
+            setNewCategory('')
+        } else {
+            SetCategoryError('required')
+        }
+    }
+
 
     const filteredItems = items?.filter(i =>
         i?.name.toLowerCase().includes(search?.toLowerCase())
@@ -164,6 +186,19 @@ const ManageItemsContainer = () => {
             key: 'hsn_code',
             render: (code) => code || '-',
         },
+        {
+            title: 'Status',
+            dataIndex: 'is_active',
+            key: 'is_active',
+            render: (isActive) => (
+                <Tag
+                    color={isActive ? '#28a745' : '#dc3545'}
+                    style={{ color: 'white', fontSize: '14px', padding: '0 8px' }}
+                >
+                    {isActive ? 'Active' : 'Sold Out'}
+                </Tag>
+            ),
+        },
 
     ];
 
@@ -183,7 +218,14 @@ const ManageItemsContainer = () => {
                 formItems={formItems}
                 setFormItems={setFormItems}
                 setVisibleForm={setVisibleForm}
-                category={category}
+                categoryList={categoryList}
+                setAddCategoryForm={setAddCategoryForm}
+                addCategoryForm={addCategoryForm}
+                newCategory={newCategory}
+                handleCategory={handleCategory}
+                submitCategory={submitCategory}
+                categoryError={categoryError}
+                SetCategoryError={SetCategoryError}
             />
         </div>
     )
