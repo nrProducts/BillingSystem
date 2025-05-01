@@ -16,6 +16,7 @@ const Navbar = () => {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      sessionStorage.setItem('userId', session.user.id);
     });
 
     return () => subscription.unsubscribe();
@@ -23,6 +24,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
+    sessionStorage.removeItem('userId');
     navigate('/login');
   };
 
@@ -38,12 +40,17 @@ const Navbar = () => {
           {session ? (
             <>
               <li>
+                <NavLink to="/itemBilling" className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`}>
+                  Item Billing
+                </NavLink>
+              </li>
+              <li>
                 <NavLink to="/items" className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`}>
                   Manage Items
                 </NavLink>
               </li>
               <li>
-              <NavLink onClick={handleLogout} className="nav-link logout-btn">Logout</NavLink>
+                <NavLink onClick={handleLogout} className="nav-link logout-btn">Logout</NavLink>
               </li>
             </>
           ) : (

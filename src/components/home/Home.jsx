@@ -1,39 +1,35 @@
-import { Table, Input, Button, Spin } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import './Home.css';
-import BillContainer from './BillPreview/BillPerviewContainer';
+import HomeImg1 from '../../asserts/images/homeImg1.jpg';
+import HomeImg2 from '../../asserts/images/homeImg2.jpg';
 
-const Home = ({ filteredItems, loader, itemColumns, selectedItems, search, setSearch, setSelectedItems, handleRemove }) => {
+const Home = () => {
+
+  const navigate = useNavigate();
+
+  const onStartBilling = () => {
+    navigate('/itemBilling');
+  }
 
   return (
     <div className="home-container">
-      <div className="catalog-section">
-        <Spin spinning={loader} tip={'Loding...'}>
-          <Input
-            placeholder="Search items..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            style={{ marginBottom: 20, width: 300 }}
-          />
+      <div className="home-content">
+        <h1 className="home-title">Smart Billing Manager</h1>
+        <p className="home-description">
+          Effortlessly manage your inventory and billing with a user-friendly interface.
+          Add, update, and generate bills in just a few clicks. Perfect for itemized billing workflows.
+        </p>
 
-          <Table
-            dataSource={filteredItems}
-            columns={itemColumns}
-            rowKey="id"
-            pagination={{ pageSize: 10 }}
-           //scroll={{ y: 'calc(75vh - 150px)' }} // Adjust height as needed
-            rowClassName={(record) => (record?.is_active === false ? 'inactive-row' : '')}
-          />
+        <p className="home-extra-description">
+          Our Smart Billing Manager streamlines your billing process, reducing errors and saving you time.
+          Whether you're managing a small business or a large enterprise, our system scales with your needs.
+          Try it now and see how easy it is to maintain accurate records.
+        </p>
 
-        </Spin>
+        <button className="start-button" onClick={onStartBilling}>Start Billing</button>
       </div>
-      <BillContainer
-        itemColumns={itemColumns}
-        setSelectedItems={setSelectedItems}
-        filteredItems={filteredItems}
-        selectedItems={selectedItems}
-        handleRemove={handleRemove}
-      />
     </div>
+
   );
 };
 
