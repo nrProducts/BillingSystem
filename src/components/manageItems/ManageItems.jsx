@@ -103,20 +103,11 @@ const ManageItems = ({
                 <div className="child3">
                   <SaveOutlined
                     onClick={submitCategory}
-                    // style={{
-                    //   color: '#1890ff',
-                    //   backgroundColor: '#1890ff',  // Added background color
-                    //   fontSize: '36px',
-                    //   cursor: 'pointer',
-                    //   border: '1px solid red',
-                    //   padding: '5px'
-                    // }}
                     style={{
                       color: '#fff',                // White icon/text color
                       backgroundColor: '#1890ff',  // Matching background
                       fontSize: '33px',
                       cursor: 'pointer',
-                      // border: '1px solid red',
                       borderRadius: '4px',
                       padding: '5px'
                     }}

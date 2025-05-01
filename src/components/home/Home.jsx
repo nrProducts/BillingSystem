@@ -20,8 +20,10 @@ const Home = ({ filteredItems, loader, itemColumns, selectedItems, search, setSe
             columns={itemColumns}
             rowKey="id"
             pagination={{ pageSize: 10 }}
-            rowClassName={(record) => (record?.is_active == false ? 'inactive-row' : '')}
+           //scroll={{ y: 'calc(75vh - 150px)' }} // Adjust height as needed
+            rowClassName={(record) => (record?.is_active === false ? 'inactive-row' : '')}
           />
+
         </Spin>
       </div>
       <BillContainer
