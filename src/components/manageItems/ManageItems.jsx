@@ -31,14 +31,6 @@ const ManageItems = ({
 }) => {
   return (
     <div>
-      <Button
-        type="primary"
-        onClick={onAddClicked}
-        style={{ marginBottom: 16 }}
-      >
-        Bulk Add Items
-      </Button>
-
       {visibleForm && (
         <AddItemsModal
           setVisibleForm={setVisibleForm}
@@ -54,13 +46,24 @@ const ManageItems = ({
       <div className="manage-items-container">
         {/* Left: Item Table Section */}
         <div className="item-table-section">
+          <h2>Manage Your Items</h2>
           <Spin spinning={loader} tip={"Loading..."}>
-            <Input
-              placeholder="Search items..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              style={{ marginBottom: 20, width: "100%" }}
-            />
+            <div className="table-controls">
+              <Input
+                placeholder="Search items..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                style={{ width: "100%" }}
+              />
+              <Button
+                type="primary"
+                onClick={onAddClicked}
+                style={{ marginLeft: "1rem" }}
+              >
+                Bulk Add Items
+              </Button>
+            </div>
+
             <Table
               dataSource={filteredItems}
               columns={itemColumns}
@@ -72,6 +75,7 @@ const ManageItems = ({
             />
           </Spin>
         </div>
+
 
         {/* Right: Category List Styled Like Bill Preview */}
         <div className="category-preview-section">
@@ -111,7 +115,7 @@ const ManageItems = ({
                       borderRadius: '4px',
                       padding: '5px'
                     }}
-                                        
+
                   />
                 </div>
               </div>

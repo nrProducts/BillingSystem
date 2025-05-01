@@ -1,6 +1,7 @@
+/* Adjusting .home-container */
 .home-container {
   position: relative;
-  height: 100vh;
+  height: calc(100vh - 70px - 40px); /* Subtracting header and footer height */
   background-image: url('../../asserts/images/homeImg3.jpg'); /* or HomeImg2.jpg */
   background-size: cover;
   background-position: center;

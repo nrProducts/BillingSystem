@@ -204,7 +204,6 @@ const ManageItemsContainer = () => {
 
     return (
         <div className="items-manager">
-            <h2>Manage Your Items</h2>
             <ManageItems
                 itemColumns={itemColumns}
                 filteredItems={filteredItems}

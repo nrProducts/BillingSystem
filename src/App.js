@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import './index.css';
 import Login from "./components/login/Login";
@@ -8,31 +8,31 @@ import ManageItems from "./components/manageItems/ManageItemsContainer";
 import Navbar from "./components/Nav/Navbar";
 import ItemBilling from "./components/ItemBillingModule/ItemBillingContainer";
 import Home from "./components/home/Home";
-
+import Header from "./components/layout/header";
+import Footer from "./components/layout/footer";
 
 const App = () => {
-  
   return (
     <Router>
       <Routes>
-        {/* Login page without layout */}
         <Route path="/login" element={<Login />} />
-
-        {/* All protected pages with layout */}
         <Route
           path="*"
           element={
             <ProtectedRoute>
               <div className="app-container">
                 <Navbar />
-                {/* Center Content */}
-                <main className="main-content">
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/itemBilling" element={<ItemBilling />} />
-                    <Route path="/items" element={<ManageItems />} />
-                  </Routes>
-                </main>
+                <div className="main-content">
+                  <Header />
+                  <div className="page-content">
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/itemBilling" element={<ItemBilling />} />
+                      <Route path="/items" element={<ManageItems />} />
+                    </Routes>
+                  </div>
+                  <Footer />
+                </div>
               </div>
             </ProtectedRoute>
           }
@@ -40,6 +40,7 @@ const App = () => {
       </Routes>
     </Router>
   );
-}
+};
 
 export default App;
+

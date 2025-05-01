@@ -147,7 +147,6 @@ const ItemBillingContainer = () => {
     ];
 
     return <div>
-        <h2>Item Billing</h2>
         <ItemBilling items={items}
             itemColumns={itemColumns}
             setSelectedItems={setSelectedItems}

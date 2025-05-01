@@ -10,6 +10,7 @@ button {
   display: flex;
   gap: 20px;
   align-items: flex-start;
+  padding: 20px;
 }
 
 /* Item Table Section (left panel) */
@@ -24,6 +25,18 @@ button {
   height: 75vh;
   overflow-y: auto;
 }
+
+.table-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+.table-controls input {
+  flex: 1;
+}
+
 
 /* Category Section (right panel) */
 .category-preview-section {

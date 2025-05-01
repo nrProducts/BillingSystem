@@ -7,6 +7,7 @@ const ItemBilling = ({ filteredItems, loader, itemColumns, selectedItems, search
   return (
     <div className="itemBilling-container">
       <div className="catalog-section">
+      <h2>Item Billing</h2>
         <Spin spinning={loader} tip={'Loding...'}>
           <Input
             placeholder="Search items..."

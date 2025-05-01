@@ -44,9 +44,14 @@ h1 {
 }
 
 .main-content {
-  flex: 1 1;
-  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 100vh;
+}
+
+.page-content {
+  flex: 1;
+  overflow-y: auto;
   background-color: #fdfdfd;
-  height: 100vh; /* Set the height to 100% of the viewport */
-  overflow: hidden; /* Prevent any scrolling */
 }
