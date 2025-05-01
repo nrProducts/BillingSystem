@@ -2,14 +2,14 @@ import { Card, Button, Divider, Spin } from 'antd';
 import { MinusCircleOutlined } from '@ant-design/icons';
 
 const BillHeader = () => (
-  <h2 className="bill-title">🧾 Bill Preview</h2>
+  <h3 className="bill-title">🧾 Bill Preview</h3>
 );
 
 export const BillPreview = ({ selectedItems, handleRemove, billingDetails, handleGenerateBill, loader }) => {
   const { subtotal, gstAmount, total } = billingDetails;
 
   return (
-    <div className="bill-preview">
+    <div className="bill-container">
       <BillHeader />
       <div className="bill-body">
         <Spin spinning={loader} tip="Loading...">
@@ -34,10 +34,10 @@ export const BillPreview = ({ selectedItems, handleRemove, billingDetails, handl
                     />
                   </div>
                   <div className="bill-item-details">
-                    <div>Qty: {item.quantity}</div>
-                    <div>Unit: ₹{item.price.toFixed(2)}</div>
-                    <div>Subtotal: ₹{(item.price * item.quantity).toFixed(2)}</div>
-                    <div>GST Rate: {item.gst_rate}%</div>
+                    <div>Qty : {item.quantity}</div>
+                    <div>Unit : ₹{item.price.toFixed(2)}</div>
+                    <div style={{ fontWeight: '600' }}>Subtotal : ₹{(item.price * item.quantity).toFixed(2)}</div>
+                    <div style={{ color: '#0c7a0c' }}>GST Rate : {item.gst_rate}%</div>
                   </div>
                 </Card>
               ))}
@@ -46,7 +46,6 @@ export const BillPreview = ({ selectedItems, handleRemove, billingDetails, handl
         </Spin>
       </div>
 
-      {/* Footer */}
       <div className="bill-footer">
         <div className="bill-summary">
           <div className="summary-row">
@@ -73,7 +72,6 @@ export const BillPreview = ({ selectedItems, handleRemove, billingDetails, handl
           ✅ Generate Bill
         </Button>
       </div>
-
     </div>
   );
 };

@@ -122,7 +122,7 @@ const ItemBillingContainer = () => {
             render: (isActive) => (
                 <Tag
                     color={isActive ? '#28a745' : '#dc3545'}
-                    style={{ color: 'white', fontSize: '14px', padding: '0 8px' }}
+                    style={{ color: 'white', fontSize: '12px', padding: '0 8px' }}
                 >
                     {isActive ? 'Active' : 'Sold Out'}
                 </Tag>

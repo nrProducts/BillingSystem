@@ -16,7 +16,7 @@ const Navbar = () => {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
-      sessionStorage.setItem('userId', session.user.id);
+      sessionStorage.setItem('userId', session?.user?.id);
     });
 
     return () => subscription.unsubscribe();

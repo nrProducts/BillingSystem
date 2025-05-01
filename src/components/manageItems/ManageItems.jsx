@@ -2,7 +2,7 @@ import React from "react";
 import AddItemsModal from "./add/AddItemsModal";
 import { Table, Input, Spin, Button } from "antd";
 import "./ManageItems.css"; // Import external CSS
-import { PlusOutlined, SaveOutlined } from '@ant-design/icons';
+import { PlusOutlined, CheckOutlined } from '@ant-design/icons';
 import { Label } from "@fluentui/react";
 
 const ManageItems = ({
@@ -42,102 +42,100 @@ const ManageItems = ({
           handleAdd={handleAdd}
         />
       )}
-
-      <div className="manage-items-container">
-        {/* Left: Item Table Section */}
-        <div className="item-table-section">
-          <h2>Manage Your Items</h2>
-          <Spin spinning={loader} tip={"Loading..."}>
-            <div className="table-controls">
-              <Input
-                placeholder="Search items..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                style={{ width: "100%" }}
-              />
-              <Button
-                type="primary"
-                onClick={onAddClicked}
-                style={{ marginLeft: "1rem" }}
-              >
-                Bulk Add Items
-              </Button>
-            </div>
-
-            <Table
-              dataSource={filteredItems}
-              columns={itemColumns}
-              rowKey="id"
-              pagination={{ pageSize: 10 }}
-              rowClassName={(record) =>
-                record?.is_active === false ? "inactive-row" : ""
-              }
-            />
-          </Spin>
-        </div>
-
-
-        {/* Right: Category List Styled Like Bill Preview */}
-        <div className="category-preview-section">
-          <div className="category-card">
-            <div className="category-header">
-              <h3>📁 Category List</h3>
-              <Button
-                className={`fab-button ${addCategoryForm ? "rotated" : ""}`}
-                type="primary"
-                shape="circle"
-                icon={<PlusOutlined />}
-                onClick={() => { setAddCategoryForm(!addCategoryForm), SetCategoryError('') }}
-              />
-            </div>
-
-            {addCategoryForm && (
-              <div className="parent">
-                <div className="child1">
-                  <Label>Category Name :</Label>
-                </div>
-                <div className="child2">
+      <div className="shared-layout-container">
+        <div className="shared-table-section">
+          <div className="manage-items-container">
+            {/* Left: Item Table Section */}
+            <div className="item-table-section">
+              <h3 className="title">Manage Your Items</h3>
+              <Spin spinning={loader} tip={"Loading..."}>
+                <div className="table-controls">
                   <Input
-                    value={newCategory}
-                    placeholder="Category name"
-                    onChange={(e) => handleCategory(e.target.value)}
-                    style={categoryError ? { border: '1px solid red' } : {}}
+                    placeholder="Search items..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    style={{ width: "100%" }}
                   />
+                  <Button
+                    type="primary"
+                    onClick={onAddClicked}
+                    style={{ marginLeft: "1rem" }}
+                  >
+                    Bulk Add Items
+                  </Button>
                 </div>
-                <div className="child3">
-                  <SaveOutlined
-                    onClick={submitCategory}
-                    style={{
-                      color: '#fff',                // White icon/text color
-                      backgroundColor: '#1890ff',  // Matching background
-                      fontSize: '33px',
-                      cursor: 'pointer',
-                      borderRadius: '4px',
-                      padding: '5px'
-                    }}
 
-                  />
-                </div>
-              </div>
-            )}
-
-            {categoryList?.length > 0 ? (
-              <ul className="category-list">
-                {categoryList?.map((cat) => (
-                  <li key={cat?.id} className="category-item">
-                    {cat?.name || "Uncategorized"}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="no-categories">No categories found.</p>
-            )}
-
+                <Table
+                  dataSource={filteredItems}
+                  columns={itemColumns}
+                  rowKey="id"
+                  pagination={{ pageSize: 10 }}
+                  // scroll={{ y: 'calc(75vh - 150px)' }} 
+                  rowClassName={(record) =>
+                    record?.is_active === false ? "inactive-row" : ""
+                  }
+                />
+              </Spin>
+            </div>
           </div>
         </div>
+        <div className="shared-side-section">
+          {/* Right: Category List Styled Like Bill Preview */}
+          <div className="category-preview-section">
+            <div className="category-card">
+              <div className="category-header">
+                <h3>📁 Category List</h3>
+                <Button
+                  className={`fab-button ${addCategoryForm ? "rotated" : ""}`}
+                  type="primary"
+                  shape="circle"
+                  icon={<PlusOutlined />}
+                  onClick={() => { setAddCategoryForm(!addCategoryForm), SetCategoryError('') }}
+                />
+              </div>
 
-      </div>
-    </div>
+              {addCategoryForm && (
+                <div className="parent">
+                  <div className="child2">
+                    <Input
+                      value={newCategory}
+                      placeholder="Category name"
+                      onChange={(e) => handleCategory(e.target.value)}
+                      style={{
+                        height: '32px',
+                        padding: '4px 10px',
+                        fontSize: '14px',
+                        border: categoryError ? '1px solid red' : '1px solid #dcdcdc',
+                        borderRadius: '6px'
+                      }}
+                    />
+                  </div>
+                  <div className="child3">
+                    <CheckOutlined
+                      onClick={submitCategory}
+                      className="check-icon"
+                    />
+                  </div>
+                </div>
+              )}
+
+
+              {categoryList?.length > 0 ? (
+                <ul className="category-list">
+                  {categoryList?.map((cat) => (
+                    <li key={cat?.id} className="category-item">
+                      {cat?.name || "Uncategorized"}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="no-categories">No categories found.</p>
+              )}
+
+            </div>
+          </div>
+        </div>
+      </div></div>
   );
 };
 

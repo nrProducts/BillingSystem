@@ -5,12 +5,36 @@ button {
   padding: 5px;
 }
 
-/* Main layout for the items and category sections */
-.manage-items-container {
+/* Shared layout container */
+.shared-layout-container {
   display: flex;
   gap: 20px;
   align-items: flex-start;
   padding: 20px;
+}
+
+/* Table section - 80% */
+.shared-table-section {
+  flex: 4;
+  min-width: 0;
+  height: calc(100vh - 70px - 80px);
+  background: #fff;
+  padding: 15px;
+  border-radius: 0.5rem;
+  box-shadow: 2px 4px 8px rgb(0 0 0 / 0.1);
+  overflow-y: auto;
+}
+
+/* Side section - 20% */
+.shared-side-section {
+  flex: 1;
+  min-width: 0;
+  height: calc(100vh - 70px - 80px);
+  background: #fff;
+  padding: 15px;
+  border-radius: 0.5rem;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
 }
 
 /* Item Table Section (left panel) */
@@ -18,39 +42,21 @@ button {
   flex: 3;
   min-width: 350px;
   background: #ffffff;
-  border-radius: 0.5rem;
-  box-shadow: 2px 4px 8px rgb(0 0 0 / 0.1);
-  padding: 1.5rem 2rem;
-  transition: box-shadow 0.3s ease;
-  height: 75vh;
-  overflow-y: auto;
+}
+
+.title{
+  margin: 0 0 0 0;
 }
 
 .table-controls {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 10px;
   gap: 1rem;
 }
 .table-controls input {
   flex: 1;
-}
-
-
-/* Category Section (right panel) */
-.category-preview-section {
-  flex: 1;
-  width: 300px;
-  min-width: 220px;
-  margin-left: 24px;
-  background-color: #ffffff;
-  padding: 16px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  border: 1px solid #eaeaea;
-  height: 75vh;
-  overflow-y: auto;
 }
 
 /* Card container inside the category panel */
@@ -68,7 +74,7 @@ button {
 }
 
 .category-header h3 {
-  font-size: 18px;
+  font-size: 12px;
   font-weight: 600;
   margin: 0;
 }
@@ -103,13 +109,20 @@ button {
   text-align: center;
 }
 
-/* Table styles */
-.ant-table {
-  margin-top: 16px;
-}
-
 .inactive-row {
   opacity: 0.6;
+}
+
+input[type="text"] {
+  margin: 10px 0;
+  padding: 10px;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease-in-out;
 }
 
 /* General input and button styling for better appearance */
@@ -159,53 +172,53 @@ button {
 }
 
 .parent {
-  border: 1px solid #ccc;
   width: 100%;
+  background-color: #f9f9f9;
+  border: 1px solid #e5e7eb; /* Light border */
+  border-radius: 10px;
+  padding: 16px 20px;
   display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 12px;
-  background: white;
-  padding: 12px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  align-items: flex-start; /* important for error alignment */
+  gap: 12px;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.2s ease-in-out;
 }
 
-.child1 {
-  width: 20%;
-  margin: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-top: 16px;
+.parent:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .child2 {
-  width: 64%;
-  margin: 5px;
+  flex: 1;
   display: flex;
-  flex-direction: column;
 }
 
-.child2 .input-wrapper {
-  display: flex;
-  flex-direction: column;
-  /* min-height: 48px; Matches input height */
+.child2 input {
+  width: 100%;
+  height: 32px;
+  padding: 4px 10px;
+  font-size: 12px;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
 }
 
 .child3 {
-  width: 10%;
-  margin: 5px;
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 60px;
+  justify-content: center;
 }
 
-.child3 .ant-btn {
-  height: 40px; /* Match button height with input */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
+.child3 .check-icon {
+  color: #fff;
+  background-color: #1890ff;
+  font-size: 18px;
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
+
+.child3 .check-icon:hover {
+  background-color: #1677c7;
+}
+
