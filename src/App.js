@@ -10,6 +10,7 @@ import ItemBilling from "./components/ItemBillingModule/ItemBillingContainer";
 import Home from "./components/home/Home";
 import Header from "./components/layout/header";
 import Footer from "./components/layout/footer";
+import BillingDashboard from "./components/billingDashboard/BillingDashboard";
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
                       <Route path="/" element={<Home />} />
                       <Route path="/itemBilling" element={<ItemBilling />} />
                       <Route path="/items" element={<ManageItems />} />
+                      <Route path="/billingdashboard" element={<BillingDashboard />} />
                     </Routes>
                   </div>
                   <Footer />

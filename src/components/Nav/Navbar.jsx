@@ -40,6 +40,11 @@ const Navbar = () => {
           {session ? (
             <>
               <li>
+                <NavLink to="/billingdashboard" className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`}>
+                  Dashboard
+                </NavLink>
+              </li>
+              <li>
                 <NavLink to="/itemBilling" className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`}>
                   Item Billing
                 </NavLink>
