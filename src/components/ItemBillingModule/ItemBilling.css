@@ -11,7 +11,7 @@
   flex: 4;
   min-width: 0;
   /* height: 75vh; */
-  height: calc(100vh - 70px - 80px);
+  height: calc(100vh - 70px - 50px);
   background: #fff;
   padding: 15px;
   border-radius: 0.5rem;
@@ -24,7 +24,7 @@
   flex: 1;
   min-width: 0;
   /* height: 75vh; */
-  height: calc(100vh - 70px - 80px);
+  height: calc(100vh - 70px - 50px);
   background: #fff;
   padding: 15px;
   border-radius: 0.5rem;
