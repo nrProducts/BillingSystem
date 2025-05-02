@@ -25,25 +25,45 @@ const BillContainer = (props) => {
 
     const grandTotal = subtotal + gstAmount;
 
+    // Function to call the backend to print the bill
+    const printBillFromBackend = async (bill, items) => {
+        try {
+            const response = await fetch('http://localhost:5000/print', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ bill, items }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to print bill');
+            }
+
+            const data = await response.text();
+            console.log(data); // Print the response from the backend
+        } catch (error) {
+            console.error('Error during print request:', error);
+        }
+    };
+
     const handleGenerateBill = async () => {
         if (selectedItems.length === 0) return;
-    
+
         try {
             setLoader(true);
-    
+
             const billPayload = {
                 total_gst: gstAmount,
                 grand_total: grandTotal,
                 user_id: userId,
             };
-    
+
             const { data: bill, error: billError } = await createBills(billPayload);
             if (billError) throw new Error(billError || "Failed to create bill");
-    
+
             const billItemsPayload = selectedItems.map((item) => {
                 const itemTotal = item.price * item.quantity;
                 const gstAmount = item.gst_rate ? itemTotal * (item.gst_rate / 100) : 0;
-    
+
                 return {
                     bill_id: bill.id,
                     item_id: item.id,
@@ -54,16 +74,19 @@ const BillContainer = (props) => {
                     total_amount: itemTotal + gstAmount,
                 };
             });
-    
+
             const { error: itemError } = await createBillItems(billItemsPayload);
             if (itemError) throw new Error(itemError);
-    
+
             notification.success({
                 message: "Success",
                 description: "Bill has been generated successfully.",
                 placement: "topRight",
             });
-    
+
+            // Call backend to print the bill
+            await printBillFromBackend(bill, selectedItems);
+
             setSelectedItems([]);
         } catch (error) {
             console.error("Billing Error:", error);
@@ -76,7 +99,9 @@ const BillContainer = (props) => {
             setLoader(false);
         }
     };
-    
+
+
+
 
     const billingDetails = {
         subtotal: subtotal,
