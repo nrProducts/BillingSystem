@@ -120,14 +120,15 @@ const BillsTable = () => {
   ];
 
   return (
-    <div className="dashboard-card billing-table">
-      <h2>Bill Details</h2>
-      <Space style={{ marginBottom: 16, flexWrap: 'wrap' }}>
+    <div className=".bill_table">
+      <h3 style={{margin : 0}}>Bill Details</h3>
+      <Space style={{marginTop : 10, marginBottom: 15, flexWrap: 'wrap' }}>
         <DatePicker.RangePicker
           value={dateRange}
           onChange={handleDateChange}
           format="YYYY-MM-DD"
           allowClear
+          style={{ marginbottom: 20}}
         />
       </Space>
 

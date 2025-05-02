@@ -106,12 +106,13 @@ input[type="text"]:focus {
 .ant-table-thead>tr>th,
 .ant-table-tbody>tr>td {
   padding: 16px;
+  line-height: 2 !important;
   /* Adjust padding as needed */
 }
 
 .ant-table-tbody>tr>td {
   padding: 8px !important;
-  line-height: 0.5 !important;
+  /* line-height: 2 !important; */
   font-size: 12px;
   /* Adjust padding as needed */
 }

@@ -19,3 +19,13 @@
     cursor: pointer;
   }
   
+.bill_table{
+  min-width: 0;
+  /* height: 75vh; */
+  height: auto;
+  background: #fff;
+  padding: 15px;
+  border-radius: 0.5rem;
+  box-shadow: 2px 4px 8px rgb(0 0 0 / 0.1);
+  overflow: auto;
+}
