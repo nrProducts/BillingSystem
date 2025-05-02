@@ -52,7 +52,7 @@ const Home = () => {
               <div className="feature-content">
                 {feature.icon}
                 <Title level={4}>{feature.title}</Title>
-                <Paragraph style={{ textAlign: 'center' }}>{feature.description}</Paragraph>
+                <Paragraph>{feature.description}</Paragraph>
               </div>
             </Card>
           </Col>
