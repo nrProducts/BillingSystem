@@ -9,6 +9,15 @@
   }
 }
 
+.billing-image {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 32px;
+}
+
+
 .home-title {
   margin-bottom: 12px;
   text-align: center;
@@ -19,6 +28,7 @@
   max-width: 800px;
   margin: 0 auto 24px auto;
   text-align: center;
+  color: #f0f0f0
 }
 
 .feature-card {
