@@ -53,7 +53,7 @@ export async function getBills({ page, pageSize, sortField, sortOrder, startDate
             .join(', ') || '';
         return { ...bill, item_names: itemNames };
     });
-console.info(transformedData, 'transformedData' )
+
     return {
         data: transformedData,
         page,
@@ -65,13 +65,11 @@ console.info(transformedData, 'transformedData' )
 
 export const getBillSummary = async () => {
     const { data, error } = await supabase
-        .from('bills')
-        .select('id, created, total_gst, grand_total')
-        .order('created', { ascending: false });
-
+      .rpc('get_daily_bill_summary');
+    
     if (error) throw error;
     return data;
-};
+  };
 
 export const getSalesByCategory = async () => {
     const { data, error } = await supabase
