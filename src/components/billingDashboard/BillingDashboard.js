@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Table } from 'antd';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, PieChart, Pie, Cell, Legend, ResponsiveContainer } from 'recharts';
 import { getBillSummary, getSalesByCategory } from '../../api/bills';
 import './BillingDashboard.css';

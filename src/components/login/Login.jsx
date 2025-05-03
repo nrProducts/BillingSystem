@@ -14,6 +14,7 @@ const Login = () => {
     } = supabase.auth.onAuthStateChange((event, session) => {
       if (session) {
         sessionStorage.setItem('userId', session?.user?.id);
+        sessionStorage.setItem('emailId', session?.user?.email);
         // ✅ Redirect when session is present (login or signup)
         navigate('/')
       }
