@@ -40,6 +40,7 @@ const ManageItems = ({
           categoryList={categoryList}
           handleUpdate={handleUpdate}
           handleAdd={handleAdd}
+          loader = {loader}
         />
       )}
       <div className="shared-layout-container">

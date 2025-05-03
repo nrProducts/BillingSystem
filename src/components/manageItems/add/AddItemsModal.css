@@ -64,4 +64,9 @@
       font-size: 12px !important;
     }
   }
+
+  .custom-select .ant-select-selection-search {
+    font-size: 10px !important;
+  }
+
   

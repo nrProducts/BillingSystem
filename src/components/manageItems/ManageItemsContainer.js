@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { fetchItems, addItem, updateItem, deleteItem } from '../../api/items'
 import { fetchCategory, addCategory } from '../../api/category'
-import { Button, Dropdown, Menu, Tag } from 'antd';
+import { Button, Dropdown, Menu, notification, Tag } from 'antd';
 import { EllipsisOutlined } from '@ant-design/icons';
 import ManageItems from './ManageItems';
 import { v4 as uuidv4 } from "uuid";
@@ -19,8 +19,7 @@ const ManageItemsContainer = () => {
     const [addCategoryForm, setAddCategoryForm] = useState(false);
     const [newCategory, setNewCategory] = useState('');
     const [categoryError, SetCategoryError] = useState('');
-
-
+    
     useEffect(() => {
         loadItems();
         loadCategory();
@@ -30,6 +29,11 @@ const ManageItemsContainer = () => {
         setLoader(true);
         await addItem(item);
         await loadItems();
+        notification.success({
+            message: "Success",
+            description: "Items added successfully.",
+            placement: "topRight",
+        });
         setLoader(false);
         setVisibleForm(false);
         setFormItems([]);
@@ -40,6 +44,11 @@ const ManageItemsContainer = () => {
         setLoader(true);
         await updateItem(item.id, item)
         await loadItems()
+        notification.success({
+            message: "Success",
+            description: "Items edited successfully.",
+            placement: "topRight",
+        });
         setLoader(false);
         setVisibleForm(false);
         setFormItems([]);

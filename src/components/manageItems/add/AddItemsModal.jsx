@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Input, InputNumber, Select, Button, Table, message } from "antd";
+import { Modal, Input, InputNumber, Select, Button, Table, message, Spin } from "antd";
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import { v4 as uuidv4 } from "uuid";
 
@@ -8,19 +8,21 @@ const { Option } = Select;
 const AddItemsModal = (props) => {
 
   const userId = sessionStorage.getItem('userId');
-  
+  const [saveDisable, setSaveDisable] = useState(false);
+
+
   const handleAddRow = () => {
     props?.setFormItems((prev) => [
       ...prev,
       {
         id: uuidv4(),
-        user_id : userId,
-        category_id : "",
-        name : "",
-        price : null,
-        gst_rate : null,
-        hsn_code : "",
-        error : {},
+        user_id: userId,
+        category_id: "",
+        name: "",
+        price: null,
+        gst_rate: null,
+        hsn_code: "",
+        error: {},
       },
     ]);
   };
@@ -31,17 +33,55 @@ const AddItemsModal = (props) => {
 
 
   const handleChange = (id, field, value) => {
-    props?.setFormItems((prev) => //props?.formItems
-      prev.map((item) =>
-        item.id === id
-          ? {
-            ...item,
-            [field]: value,
-            error: { ...item.error, [field]: null },
-          }
-          : item
-      )
+    props?.setFormItems((prev) =>
+      prev.map((item) => {
+        if (item.id !== id) return item;
+
+        // Start with existing errors
+        const updatedError = { ...item.error };
+
+        // Field-specific validation logic
+        switch (field) {
+          case "category_id":
+            updatedError.category_id = value ? null : "Required";
+            break;
+          case "name":
+            updatedError.name = value?.trim() ? null : "Required";
+            break;
+          case "price":
+            const hasLetters = /[a-zA-Z]/.test(value);
+            const isNumber = value !== null && !isNaN(value);
+            if (hasLetters) {
+              updatedError.price = "Only numbers";
+            } else if (!isNumber) {
+              updatedError.price = "Required";
+            } else {
+              updatedError.price = null;
+            }
+            break;
+          case "gst_rate":
+            const num = parseFloat(value);
+            if (value === "") {
+              updatedError.gst_rate = null;
+            } else if (isNaN(num) || num < 0 || num > 100) {
+              updatedError.gst_rate = "Please enter a valid GST rate (0–100%)";
+            } else {
+              updatedError.gst_rate = null;
+            }
+            break;
+          // Add more field-level validations here if needed
+          default:
+            break;
+        }
+
+        return {
+          ...item,
+          [field]: value,
+          error: updatedError,
+        };
+      })
     );
+    setSaveDisable(true);
   };
 
   const validateItems = () => {
@@ -56,7 +96,7 @@ const AddItemsModal = (props) => {
         error.name = "Required";
         isValid = false;
       }
-      if (item.price === null || isNaN(item.price)) {
+      if (!item.price) {
         error.price = "Required";
         isValid = false;
       }
@@ -74,12 +114,14 @@ const AddItemsModal = (props) => {
     }
 
     const isEdit = props?.formItems?.[0]?.isEdit ?? false;
-    if(isEdit){
+    if (isEdit) {
       const cleanedForEdit = props?.formItems.map(({ error, category, isEdit, ...rest }) => rest);
       props?.handleUpdate(cleanedForEdit?.[0]);
-    }else{
+      setSaveDisable(false)
+    } else {
       const cleanedForAdd = props?.formItems.map(({ id, error, category, ...rest }) => rest);
       props?.handleAdd(cleanedForAdd);
+      setSaveDisable(false)
     }
   };
 
@@ -89,13 +131,14 @@ const AddItemsModal = (props) => {
       dataIndex: "category",
       width: 200,
       render: (_, record) => (
-        <div style={{ display: "flex", flexDirection: "column" }}>
+        <div style={{ display: "flex", fontSize: 12, flexDirection: "column" }}>
           <Select
             value={record.category || undefined}
             placeholder="Select category"
-            style={{ width: "100%", height: 40 }}
-            onChange={(val,opt) => handleChange(record.id, "category_id", opt?.key)}
-            
+            className="custom-select"
+            style={{ width: "100%", height: 40, margin: '10px 0' }}
+            onChange={(val, opt) => handleChange(record.id, "category_id", opt?.key)}
+            allowClear
           >
             {props?.categoryList.map((cat) => (
               <Option key={cat.id} value={cat.name}>
@@ -103,9 +146,9 @@ const AddItemsModal = (props) => {
               </Option>
             ))}
           </Select>
-          {record.error?.category && (
-            <div style={{ color: "red", fontSize: 12 }}>{record.error.category}</div>
-          )}
+          {Object.keys(record?.error)?.length > 0 ? record.error?.category_id ? (
+            <div style={{ color: "red", fontSize: 10 }}>{record.error.category_id}</div>
+          ) : <div style={{ height: 20 }}> </div> : null}
         </div>
       ),
     },
@@ -121,9 +164,9 @@ const AddItemsModal = (props) => {
             style={{ height: 40 }}
             onChange={(e) => handleChange(record.id, "name", e.target.value)}
           />
-          {record.error?.name && (
-            <div style={{ color: "red", fontSize: 12 }}>{record.error.name}</div>
-          )}
+          {Object.keys(record?.error)?.length > 0 ? record.error?.name ? (
+            <div style={{ color: "red", fontSize: 10 }}>{record.error.name}</div>
+          ) : <div style={{ height: 20 }}> </div> : null}
         </div>
       ),
     },
@@ -139,64 +182,34 @@ const AddItemsModal = (props) => {
             style={{ height: 40 }}
             onChange={(e) => handleChange(record.id, "price", e.target.value)}
           />
-          {record.error?.price && (
-            <div style={{ color: "red", fontSize: 12 }}>{record.error.price}</div>
-          )}
+          {Object.keys(record?.error)?.length > 0 ? record.error?.price ? (
+            <div style={{ color: "red", fontSize: 10 }}>{record.error.price}</div>
+          ) : <div style={{ height: 20 }}> </div> : null}
         </div>
       ),
     },
     {
       title: "GST Rate (%)",
       dataIndex: "gst_rate",
-      width: 200,
+      width: 300,
       render: (_, record) => (
         <div style={{ display: "flex", flexDirection: "column" }}>
           <Input
             value={record.gst_rate}
             placeholder="Enter GST Rate"
             style={{ height: 40 }}
-            onChange={(e) => {
-              const value = e.target.value;
-    
-              // Allow only numbers and optional decimal
-              const numberRegex = /^\d{0,3}(\.\d{0,2})?$/;
-    
-              if (value === '' || numberRegex.test(value)) {
-                let numeric = parseFloat(value);
-                if (!isNaN(numeric) && (numeric < 0 || numeric > 100)) {
-                  handleChange(record.id, "error", {
-                    ...record.error,
-                    gst_rate: "GST must be between 0 and 100",
-                  });
-                } else {
-                  handleChange(record.id, "gst_rate", value);
-                  handleChange(record.id, "error", {
-                    ...record.error,
-                    gst_rate: "", // Clear error
-                  });
-                }
-              }
-            }}
-            onBlur={() => {
-              const numeric = parseFloat(record.gst_rate);
-              if (isNaN(numeric) || numeric < 0 || numeric > 100) {
-                handleChange(record.id, "error", {
-                  ...record.error,
-                  gst_rate: "Please enter a valid GST rate (0–100%)",
-                });
-              }
-            }}
+            onChange={(e) => handleChange(record.id, "gst_rate", e.target.value)}
           />
-          {record.error?.gst_rate && (
-            <div style={{ color: "red", fontSize: 12 }}>{record.error.gst_rate}</div>
-          )}
+          {Object.keys(record?.error)?.length > 0 ? record.error?.gst_rate ? (
+            <div style={{ color: "red", fontSize: 10 }}>{record.error.gst_rate}</div>
+          ) : <div style={{ height: 20 }}> </div> : null}
         </div>
       ),
-    },      
+    },
     {
       title: "HSN Code",
       dataIndex: "hsn_code",
-      width: 400,
+      width: 300,
       render: (_, record) => (
         <div style={{ display: "flex", flexDirection: "column" }}>
           <Input
@@ -206,8 +219,11 @@ const AddItemsModal = (props) => {
             onChange={(e) => handleChange(record.id, "hsn_code", e.target.value)}
           />
           {record.error?.hsn_code && (
-            <div style={{ color: "red", fontSize: 12 }}>{record.error.hsn_code}</div>
+            <div style={{ color: "red", fontSize: 10 }}>{record.error.hsn_code}</div>
           )}
+          {Object.keys(record?.error)?.length > 0 ? record.error?.hsn_code ? (
+            <div style={{ color: "red", fontSize: 10 }}>{record.error.hsn_code}</div>
+          ) : <div style={{ height: 20 }}> </div> : null}
         </div>
       ),
     },
@@ -235,6 +251,7 @@ const AddItemsModal = (props) => {
     },
   ];
 
+
   return (
     <>
       <Modal
@@ -242,25 +259,30 @@ const AddItemsModal = (props) => {
         open={props?.visibleForm}
         onCancel={() => props?.setVisibleForm(false)}
         onOk={handleSubmit}
-        width={1500}
+        width={1200}
         okText="Submit"
+        okButtonProps={{
+          disabled: !saveDisable,
+        }}
       >
-        <Table
-          dataSource={props?.formItems}
-          columns={columns}
-          pagination={false}
-          rowKey="id"
-        />
-        {props?.formItems?.[0]?.isEdit ? <></> : <Button
-          onClick={handleAddRow}
-          type="dashed"
-          icon={<PlusOutlined />}
-          block
-          style={{ marginTop: 20 }}
-        >
-          Add Item Row
-        </Button>}
+        <Spin spinning={props?.loader} tip={"Loading..."}>
+          <Table
+            dataSource={props?.formItems}
+            columns={columns}
+            pagination={false}
+            rowKey="id"
+          />
+          {props?.formItems?.[0]?.isEdit ? <></> : <Button
+            onClick={handleAddRow}
+            type="dashed"
+            icon={<PlusOutlined />}
+            block
+            style={{ marginTop: 20 }}
+          >
+            Add Item Row
+          </Button>}
 
+        </Spin>
       </Modal>
     </>
   );
