@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "concurrently \"npm run start:src\" \"npm run start:backend\"",
+    "start": "npm run start:src",
     "start:src": "react-scripts start",
     "start:backend": "node backend/server.js",
     "install:src": "npm install --prefix src",
