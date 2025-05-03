@@ -24,6 +24,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "escpos": "^2.4.11",
+    "escpos-usb": "^3.0.0-alpha.4",
     "express": "^4.21.2",
     "install": "^0.13.0",
     "jsonwebtoken": "^9.0.2",

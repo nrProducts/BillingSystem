@@ -45,6 +45,72 @@ const BillContainer = (props) => {
         }
     };
 
+    // Generate bill content for printing
+    const printBillWindow = (bill, selectedItems, gstAmount, grandTotal) => {
+        const newWindow = window.open('', '_blank', 'width=800,height=600');
+        if (!newWindow) return;
+
+        const billHtml = `
+            <html>
+            <head>
+                <title>Bill Receipt</title>
+                <style>
+                    body { font-family: Arial, sans-serif; padding: 20px; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+                    th { background-color: #f0f0f0; }
+                </style>
+            </head>
+            <body>
+                <h2>Bill ID: ${bill.id}</h2>
+                <p><strong>Total GST:</strong> ₹${gstAmount.toFixed(2)}</p>
+                <p><strong>Grand Total:</strong> ₹${grandTotal.toFixed(2)}</p>
+    
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Qty</th>
+                            <th>Price</th>
+                            <th>GST %</th>
+                            <th>GST Amt</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${selectedItems.map(item => {
+            const itemTotal = item.price * item.quantity;
+            const gstAmt = item.gst_rate ? itemTotal * (item.gst_rate / 100) : 0;
+            const totalAmt = itemTotal + gstAmt;
+            return `
+                                <tr>
+                                    <td>${item.name}</td>
+                                    <td>${item.quantity}</td>
+                                    <td>₹${item.price.toFixed(2)}</td>
+                                    <td>${item.gst_rate ?? 0}%</td>
+                                    <td>₹${gstAmt.toFixed(2)}</td>
+                                    <td>₹${totalAmt.toFixed(2)}</td>
+                                </tr>
+                            `;
+        }).join('')}
+                    </tbody>
+                </table>
+                <script>
+                    window.onload = function() {
+                        window.print();
+                        window.onafterprint = function() { window.close(); };
+                    };
+                </script>
+            </body>
+            </html>
+        `;
+
+        newWindow.document.open();
+        newWindow.document.write(billHtml);
+        newWindow.document.close();
+    };
+
+
     const handleGenerateBill = async () => {
         if (selectedItems.length === 0) return;
 
@@ -84,9 +150,8 @@ const BillContainer = (props) => {
                 placement: "topRight",
             });
 
-            // Call backend to print the bill
-            await printBillFromBackend(bill, selectedItems);
 
+            printBillWindow(bill, selectedItems, gstAmount, grandTotal)
             setSelectedItems([]);
         } catch (error) {
             console.error("Billing Error:", error);
@@ -99,7 +164,6 @@ const BillContainer = (props) => {
             setLoader(false);
         }
     };
-
 
 
 

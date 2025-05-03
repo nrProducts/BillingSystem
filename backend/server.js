@@ -17,10 +17,16 @@ app.post('/print', async (req, res) => {
     }
 
     try {
-        const printerIp = '192.168.1.6';  // Sample IP address of the printer
-        //192.168.1.6
-        const printerPort = 9100;
-        await printBill(printerIp, printerPort, bill, items);
+
+        // For network
+        //await printBill('network', { ip: '192.168.0.100', port: 9100 }, bill, items);
+
+        // For USB
+        await printBill('usb', {}, bill, items);
+
+        // For Bluetooth
+        //await printBill('bluetooth', { address: '01:23:45:67:89:AB' }, bill, items);
+
         res.status(200).send('Printing started successfully');
     } catch (err) {
         console.error('Printing Error:', err);
