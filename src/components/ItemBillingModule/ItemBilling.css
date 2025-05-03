@@ -121,7 +121,8 @@ input[type="text"]:focus {
 
 /* Target scrollbars in webkit-based browsers */
 .ant-table-body::-webkit-scrollbar {
-  width: 6px; /* reduces width */
+  width: 6px;
+  /* reduces width */
 }
 
 .ant-table-body::-webkit-scrollbar-track {
@@ -139,7 +140,8 @@ input[type="text"]:focus {
 }
 
 .ant-table-body {
-  scrollbar-width: thin;       /* makes scrollbar thinner */
+  scrollbar-width: thin;
+  /* makes scrollbar thinner */
   scrollbar-color: #c1c1c1 #f1f1f1;
 }
 
@@ -304,4 +306,62 @@ button:disabled {
 .bill-generate-btn {
   margin-top: 0.5rem;
   font-size: 12px
+}
+
+/* ItemBilling.css */
+.item-grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  /* 4 items per row */
+  gap: 20px;
+  padding: 20px;
+  justify-items: center;
+}
+
+.item-card {
+  width: 240px;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.item-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.item-icon-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.blue-header-card .ant-card-head {
+  background-color: #a1c5ec;
+  color: white;
+  border-bottom: none;
+  font-weight: bold;
+}
+
+
+.item-icon {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+.item-card .ant-card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px;
+}
+
+.tag-button-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
 }

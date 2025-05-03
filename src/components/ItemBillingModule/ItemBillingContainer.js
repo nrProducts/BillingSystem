@@ -10,6 +10,7 @@ const ItemBillingContainer = () => {
     const [selectedItems, setSelectedItems] = useState([]);
     const [search, setSearch] = useState('');
     const [loader, setLoader] = useState(false);
+    const [viewMode, setViewMode] = useState('table'); 
 
     useEffect(() => {
         loadItems()
@@ -155,6 +156,9 @@ const ItemBillingContainer = () => {
             setSearch={setSearch}
             selectedItems={selectedItems}
             loader={loader}
+            setViewMode = {setViewMode}
+            viewMode={viewMode}
+            getMenu = {getMenu}
         />
     </div>
 
