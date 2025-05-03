@@ -48,7 +48,6 @@ const ManageItems = ({
           loader={loader}
         />
       )}
-      import {Modal} from 'antd';
 
       <Modal
         title="Are you sure you want to delete this item?"
