@@ -18,9 +18,9 @@ const BillingDashboard = () => {
 
       setBillData(
         bills.map((b) => ({
-          date: new Date(b.created).toLocaleDateString(),
-          total: parseFloat(b.grand_total),
-          gst: parseFloat(b.total_gst),
+          date: new Date(b.date).toLocaleDateString(),
+          total: parseFloat(b.total),
+          gst: parseFloat(b.gst),
         }))
       );
 
@@ -35,9 +35,6 @@ const BillingDashboard = () => {
     fetchData();
   }, []);
 
-  console.info(billData,
-    'categorySales'
-  )
 
   return (
     <>

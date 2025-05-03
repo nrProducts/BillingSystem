@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, NavLink } from 'react-router-dom';
 import { supabase } from '../../supabase/client';
 import './Nav.css';
+import { Modal } from 'antd';
 
 const Navbar = () => {
   const [session, setSession] = useState(null);
@@ -23,9 +24,20 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = async () => {
+    setIsModalVisible(false);
     await supabase.auth.signOut();
     sessionStorage.removeItem('userId');
     navigate('/login');
+  };
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showLogoutModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
   };
 
   return (
@@ -55,8 +67,18 @@ const Navbar = () => {
                 </NavLink>
               </li>
               <li>
-                <NavLink onClick={handleLogout} className="nav-link logout-btn">Logout</NavLink>
+                <NavLink onClick={showLogoutModal} className="nav-link logout-btn">Logout</NavLink>
               </li>
+              <Modal
+                title="Confirm Logout"
+                open={isModalVisible}
+                onOk={handleLogout}
+                onCancel={handleCancel}
+                okText="Yes, Logout"
+                cancelText="Cancel"
+              >
+                <p>Are you sure you want to logout?</p>
+              </Modal>
             </>
           ) : (
             <li>
