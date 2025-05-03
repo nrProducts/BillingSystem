@@ -1,6 +1,6 @@
 import React from "react";
 import AddItemsModal from "./add/AddItemsModal";
-import { Table, Input, Spin, Button } from "antd";
+import { Modal, Input, Button, Table, Spin } from "antd";
 import "./ManageItems.css"; // Import external CSS
 import { PlusOutlined, CheckOutlined } from '@ant-design/icons';
 import { Label } from "@fluentui/react";
@@ -27,7 +27,12 @@ const ManageItems = ({
   submitCategory,
   setAddCategoryForm,
   categoryError,
-  SetCategoryError
+  SetCategoryError,
+  showPopconfirm,
+  setShowPopconfirm,
+  itemToDelete,
+  handleDelete,
+  setLoader
 }) => {
   return (
     <div>
@@ -40,9 +45,25 @@ const ManageItems = ({
           categoryList={categoryList}
           handleUpdate={handleUpdate}
           handleAdd={handleAdd}
-          loader = {loader}
+          loader={loader}
         />
       )}
+      import {Modal} from 'antd';
+
+      <Modal
+        title="Are you sure you want to delete this item?"
+        open={showPopconfirm}
+        onOk={() => handleDelete(itemToDelete)}
+        onCancel={() => {
+          setShowPopconfirm(false);
+          setLoader(false);
+        }}
+        okText="Yes"
+        cancelText="No"
+      >
+        <p>This action cannot be undone.</p>
+      </Modal>
+
       <div className="shared-layout-container">
         <div className="shared-table-section">
           <div className="manage-items-container">

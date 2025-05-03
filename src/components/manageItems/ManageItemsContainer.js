@@ -19,7 +19,9 @@ const ManageItemsContainer = () => {
     const [addCategoryForm, setAddCategoryForm] = useState(false);
     const [newCategory, setNewCategory] = useState('');
     const [categoryError, SetCategoryError] = useState('');
-    
+    const [showPopconfirm, setShowPopconfirm] = useState(false)
+    const [itemToDelete, setItemToDelete] = useState(null);
+
     useEffect(() => {
         loadItems();
         loadCategory();
@@ -55,12 +57,12 @@ const ManageItemsContainer = () => {
     }
 
     const handleDelete = async (id) => {
-        if (window.confirm('Delete this item?')) {
-            setLoader(true);
-            await deleteItem(id)
-            await loadItems()
-            setLoader(false);
-        }
+        setLoader(true);
+        await deleteItem(id)
+        await loadItems()
+        setLoader(false);
+        setItemToDelete(null)
+        setShowPopconfirm(false)
     }
 
     const loadItems = async () => {
@@ -87,6 +89,7 @@ const ManageItemsContainer = () => {
         }
     }
 
+
     const manageItems = async (record, value) => {
         try {
             setLoader(true);
@@ -95,7 +98,8 @@ const ManageItemsContainer = () => {
                 setFormItems([{ ...record, isEdit: true }]);
                 setLoader(false);
             } else if (value == 'Remove') {
-                await handleDelete(record?.id);
+                setShowPopconfirm(true)
+                setItemToDelete(record?.id);
             } else {
                 const isActive = value !== 'Inactive';
                 const updatedData = { ...record, is_active: isActive };
@@ -234,6 +238,11 @@ const ManageItemsContainer = () => {
                 submitCategory={submitCategory}
                 categoryError={categoryError}
                 SetCategoryError={SetCategoryError}
+                showPopconfirm={showPopconfirm}
+                setShowPopconfirm={setShowPopconfirm}
+                itemToDelete={itemToDelete}
+                handleDelete={handleDelete}
+                setLoader={setLoader}
             />
         </div>
     )
