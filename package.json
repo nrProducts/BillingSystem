@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "npm run start:src",
+    "build": "react-scripts build",
     "start:src": "react-scripts start",
     "start:backend": "node backend/server.js",
     "install:src": "npm install --prefix src",
