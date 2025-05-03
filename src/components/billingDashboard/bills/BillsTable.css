@@ -1,0 +1,31 @@
+.search-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* spacing between input and button */
+    margin-bottom: 16px;
+  }
+  
+  .search-input {
+    flex: 1;
+    max-width: 300px;
+  }
+  
+  .search-button {
+    padding: 8px 12px;
+    background-color: #1890ff;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+  }
+  
+.bill_table{
+  min-width: 0;
+  /* height: 75vh; */
+  height: auto;
+  background: #fff;
+  padding: 15px;
+  border-radius: 0.5rem;
+  box-shadow: 2px 4px 8px rgb(0 0 0 / 0.1);
+  overflow: auto;
+}

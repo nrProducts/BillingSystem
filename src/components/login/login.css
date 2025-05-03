@@ -1,0 +1,80 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Poppins', sans-serif !important;
+  }
+  
+  
+  .container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    flex-direction: row;
+  }
+  
+  .image-side {
+    flex: 3;
+    background: url('https://www.goodsign.com/hubfs/10%20IT%20Service_partner.png') no-repeat center center;
+    background-size: cover;
+  }
+  
+  .form-side {
+    flex: 2;
+    background-color: #f9fafb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+  }
+  
+  .login-box {
+    background-color: white;
+    padding: 2rem 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 435px;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column;
+    }
+  
+    .image-side {
+      height: 40vh;
+      flex: none;
+    }
+  
+    .form-side {
+      height: 60vh;
+      flex: none;
+      padding: 1.5rem;
+    }
+  
+    .login-box {
+      max-width: 100%;
+      padding: 1.5rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .image-side {
+      height: 35vh;
+    }
+  
+    .form-side {
+      height: 65vh;
+    }
+  
+    .login-box {
+      padding: 1rem;
+    }
+  }
+  

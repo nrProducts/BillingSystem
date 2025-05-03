@@ -3,7 +3,8 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+  font-family: 'Poppins', sans-serif !important;
   background: linear-gradient(to right, #396afc, #2948ff);
   /* background: linear-gradient(to right, #8e2de2, #4a00e0); */
   /* background: linear-gradient(to right, #f12711, #f5af19); */
@@ -43,7 +44,7 @@ body {
   margin: 10px 0;
   border: 1px solid #ccc;
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 12px;
   transition: border 0.3s;
 }
 
@@ -59,7 +60,7 @@ body {
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 12px;
   cursor: pointer;
   transition: background-color 0.3s;
   margin-top: 10px;
@@ -72,7 +73,7 @@ body {
 .link {
   margin-top: 15px;
   text-align: center;
-  font-size: 14px;
+  font-size: 12px;
   color: #555;
 }
 

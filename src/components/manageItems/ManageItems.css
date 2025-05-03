@@ -1,0 +1,224 @@
+/* Ensure proper margin and padding for input and button elements */
+input,
+button {
+  margin: 5px;
+  padding: 5px;
+}
+
+/* Shared layout container */
+.shared-layout-container {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  padding: 20px;
+}
+
+/* Table section - 80% */
+.shared-table-section {
+  flex: 4;
+  min-width: 0;
+  height: calc(100vh - 70px - 50px);
+  background: #fff;
+  padding: 15px;
+  border-radius: 0.5rem;
+  box-shadow: 2px 4px 8px rgb(0 0 0 / 0.1);
+  overflow-y: auto;
+}
+
+/* Side section - 20% */
+.shared-side-section {
+  flex: 1;
+  min-width: 0;
+  height: calc(100vh - 70px - 50px);
+  background: #fff;
+  padding: 15px;
+  border-radius: 0.5rem;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+/* Item Table Section (left panel) */
+.item-table-section {
+  flex: 3;
+  min-width: 350px;
+  background: #ffffff;
+}
+
+.title{
+  margin: 0 0 0 0;
+}
+
+.table-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 1rem;
+}
+.table-controls input {
+  flex: 1;
+}
+
+/* Card container inside the category panel */
+.category-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Header row: title + add button */
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.category-header h3 {
+  font-size: 12px;
+  font-weight: 600;
+  margin: 0;
+}
+
+
+/* Category list styling */
+.category-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.category-item {
+  padding: 10px 14px;
+  background-color: #f9f9f9;
+  border: 1px solid #f0f0f0;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.category-item:hover {
+  background-color: #e6f7ff;
+  cursor: pointer;
+}
+
+/* Empty state */
+.no-categories {
+  color: #999;
+  font-style: italic;
+  padding: 12px 0;
+  text-align: center;
+}
+
+.inactive-row {
+  opacity: 0.6;
+}
+
+input[type="text"] {
+  margin: 10px 0;
+  padding: 10px;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease-in-out;
+}
+
+/* General input and button styling for better appearance */
+
+
+/* Add button styling */
+.floating-add-box button {
+  background-color: #1890ff;
+  /* Primary blue color */
+  color: white;
+  /* White text for contrast */
+  border: none;
+  cursor: pointer;
+  /* Pointer on hover */
+  transition: background-color 0.3s ease;
+  padding: 8px 16px;
+  /* Adjust button padding */
+  border-radius: 8px;
+  /* Rounded corners */
+}
+
+/* Hover effect for add button */
+.floating-add-box button:hover {
+  background-color: #40a9ff;
+  /* Slightly lighter blue on hover */
+}
+
+
+/* Add button at the bottom-right of the category panel */
+.fab-button {
+  transition: transform 0.3s ease;
+  background-color: '#1890ff',
+}
+
+.fab-button.rotated {
+  transform: rotate(45deg);
+}
+
+.category-save-button:hover {
+  background-color: #40a9ff;
+}
+
+
+/* Input hover effect */
+.category-input:hover {
+  border-color: #40a9ff;
+}
+
+.parent {
+  width: 100%;
+  background-color: #f9f9f9;
+  border: 1px solid #e5e7eb; /* Light border */
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.parent:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.child2 {
+  flex: 1;
+  display: flex;
+}
+
+.child2 input {
+  width: 100%;
+  height: 32px;
+  padding: 4px 10px;
+  font-size: 12px;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+}
+
+.child3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.child3 .check-icon {
+  color: #fff;
+  background-color: #1890ff;
+  font-size: 18px;
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.child3 .check-icon:hover {
+  background-color: #1677c7;
+}
+

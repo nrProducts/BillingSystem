@@ -1,0 +1,46 @@
+.shared-layout-container-dash {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+}
+
+/* Row for sections 1 and 2 */
+.shared-row-dash {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+/* Section 1 (table) */
+.shared-table-section-dash {
+  flex: 2.5;
+  min-width: 0;
+  /* height: calc(100vh - 500px); */
+  background: #fff;
+  padding: 15px;
+  border-radius: 0.5rem;
+  box-shadow: 2px 4px 8px rgb(0 0 0 / 0.1);
+  overflow: auto;
+}
+
+/* Section 2 (side) */
+.shared-side-section-dash {
+  flex: 2.5;
+  min-width: 0;
+  /* height: calc(100vh - 500px); */
+  background: #fff;
+  padding: 15px;
+  border-radius: 0.5rem;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+/* Section 3 (full width) */
+.full-width-section-dash {
+  width: 100%;
+  background: #f5f5f5;
+  padding: 15px;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}

@@ -1,0 +1,72 @@
+/* AddItemsModal.css */
+.container {
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  /* Table styling for mobile and small screens */
+  .ant-table {
+    width: 100%;
+  }
+  
+  
+  .ant-table-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .table-wrapper {
+    overflow-x: auto;
+  }
+  
+  /* Add responsive styles for smaller screens */
+  @media (max-width: 768px) {
+    .modal-form {
+      padding: 10px;
+    }
+  
+    .ant-table {
+      width: 100%;
+      overflow-x: auto;
+    }
+  
+    .ant-input,
+    .ant-select,
+    .ant-input-number {
+      height: 40px;
+    }
+  
+    .ant-btn {
+      height: 40px;
+      width: 100%;
+      font-size: 12px;
+    }
+  
+    .ant-modal-content {
+      padding: 0;
+      width: 100%;
+      max-width: 500px;
+    }
+  
+    .ant-table-row {
+      display: block;
+      margin-bottom: 10px;
+    }
+  
+    .ant-table-cell {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      font-size: 12px !important;
+    }
+  }
+
+  .custom-select .ant-select-selection-search {
+    font-size: 10px !important;
+  }
+
+  
