@@ -24,7 +24,7 @@ const ItemBilling = ({ filteredItems, loader, itemColumns, selectedItems, search
           <Input
             placeholder="Search items..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => setSearch(e?.target?.value)}
             style={{ margin: '20px 0', width: 300 }}
           />
 
@@ -40,7 +40,7 @@ const ItemBilling = ({ filteredItems, loader, itemColumns, selectedItems, search
             <div className="item-grid-container">
               {filteredItems.map((item) => (
                 <Card
-                  key={item.id}
+                  key={item?.id}
                   className="item-card blue-header-card"
                   title={null}
                   extra={(
@@ -49,7 +49,7 @@ const ItemBilling = ({ filteredItems, loader, itemColumns, selectedItems, search
                     </Dropdown>
                   )}
                   style={{
-                    opacity: item.is_active ? 1 : 0.5,
+                    opacity: item?.is_active ? 1 : 0.5,
                   }}
                 >
                   <div className="item-icon-wrapper">
@@ -59,24 +59,24 @@ const ItemBilling = ({ filteredItems, loader, itemColumns, selectedItems, search
                       className="item-icon"
                     />
                   </div>
-                  <h3 style={{ marginBottom: 0 }}>{item.name}</h3>
+                  <h3 style={{ marginBottom: 0 }}>{item?.name}</h3>
                   <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px' }}>
-                    <p style={{ marginBottom: 0 }}><strong>Category:</strong> {item.category ?? '-'}</p>
-                    <p style={{ marginBottom: 0 }}><strong>Price:</strong> ${item.price?.toFixed(2)}</p>
+                    <p style={{ marginBottom: 0 }}><strong>Category:</strong> {item?.category ?? '-'}</p>
+                    <p style={{ marginBottom: 0 }}><strong>Price:</strong> ${item?.price?.toFixed(2)}</p>
                   </div>
 
                   <div className="tag-button-row">
                     <Tag
-                      color={item.is_active ? '#28a745' : '#dc3545'}
+                      color={item?.is_active ? '#28a745' : '#dc3545'}
                       style={{ color: 'white', fontSize: '12px', marginBottom: 0 }}
                     >
-                      {item.is_active ? 'Active' : 'Sold Out'}
+                      {item?.is_active ? 'Active' : 'Sold Out'}
                     </Tag>
                     <Button
                       type="primary"
                       className="bounce-button"
                       onClick={() => handleAddToBill(item)}
-                      disabled={!item.is_active}
+                      disabled={!item?.is_active}
                       size="small"
                     >
                       Add to Bill
@@ -85,8 +85,6 @@ const ItemBilling = ({ filteredItems, loader, itemColumns, selectedItems, search
                 </Card>
               ))}
             </div>
-
-
           )}
 
         </Spin>

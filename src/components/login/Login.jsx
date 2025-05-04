@@ -11,7 +11,7 @@ const Login = () => {
   useEffect(() => {
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
+    } = supabase.auth?.onAuthStateChange((event, session) => {
       if (session) {
         sessionStorage.setItem('userId', session?.user?.id);
         // ✅ Redirect when session is present (login or signup)

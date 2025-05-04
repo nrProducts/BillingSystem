@@ -62,9 +62,9 @@ const BillContainer = (props) => {
                 </style>
             </head>
             <body>
-                <h2>Bill ID: ${bill.id}</h2>
-                <p><strong>Total GST:</strong> ₹${gstAmount.toFixed(2)}</p>
-                <p><strong>Grand Total:</strong> ₹${grandTotal.toFixed(2)}</p>
+                <h2>Bill ID: ${bill?.id}</h2>
+                <p><strong>Total GST:</strong> ₹${gstAmount?.toFixed(2)}</p>
+                <p><strong>Grand Total:</strong> ₹${grandTotal?.toFixed(2)}</p>
     
                 <table>
                     <thead>
@@ -79,17 +79,17 @@ const BillContainer = (props) => {
                     </thead>
                     <tbody>
                         ${selectedItems.map(item => {
-            const itemTotal = item.price * item.quantity;
+            const itemTotal = item?.price * item?.quantity;
             const gstAmt = item.gst_rate ? itemTotal * (item.gst_rate / 100) : 0;
             const totalAmt = itemTotal + gstAmt;
             return `
                                 <tr>
-                                    <td>${item.name}</td>
-                                    <td>${item.quantity}</td>
-                                    <td>₹${item.price.toFixed(2)}</td>
-                                    <td>${item.gst_rate ?? 0}%</td>
-                                    <td>₹${gstAmt.toFixed(2)}</td>
-                                    <td>₹${totalAmt.toFixed(2)}</td>
+                                    <td>${item?.name}</td>
+                                    <td>${item?.quantity}</td>
+                                    <td>₹${item?.price?.toFixed(2)}</td>
+                                    <td>${item?.gst_rate ?? 0}%</td>
+                                    <td>₹${gstAmt?.toFixed(2)}</td>
+                                    <td>₹${totalAmt?.toFixed(2)}</td>
                                 </tr>
                             `;
         }).join('')}
@@ -112,7 +112,7 @@ const BillContainer = (props) => {
 
 
     const handleGenerateBill = async () => {
-        if (selectedItems.length === 0) return;
+        if (selectedItems?.length === 0) return;
 
         try {
             setLoader(true);
@@ -127,15 +127,15 @@ const BillContainer = (props) => {
             if (billError) throw new Error(billError || "Failed to create bill");
 
             const billItemsPayload = selectedItems.map((item) => {
-                const itemTotal = item.price * item.quantity;
-                const gstAmount = item.gst_rate ? itemTotal * (item.gst_rate / 100) : 0;
+                const itemTotal = item?.price * item?.quantity;
+                const gstAmount = item?.gst_rate ? itemTotal * (item?.gst_rate / 100) : 0;
 
                 return {
-                    bill_id: bill.id,
-                    item_id: item.id,
-                    quantity: item.quantity,
-                    price: item.price,
-                    gst_rate: item.gst_rate ?? 0,
+                    bill_id: bill?.id,
+                    item_id: item?.id,
+                    quantity: item?.quantity,
+                    price: item?.price,
+                    gst_rate: item?.gst_rate ?? 0,
                     gst_amount: gstAmount,
                     total_amount: itemTotal + gstAmount,
                 };

@@ -125,6 +125,8 @@ const AddItemsModal = (props) => {
     }
   };
 
+  console.info(Object.values(props?.formItems?.[0]?.error), 'cate')
+
   const columns = [
     {
       title: "Category",
@@ -133,22 +135,26 @@ const AddItemsModal = (props) => {
       render: (_, record) => (
         <div style={{ display: "flex", fontSize: 12, flexDirection: "column" }}>
           <Select
-            value={record.category || undefined}
+            value={record?.category || undefined}
             placeholder="Select category"
             className="custom-select"
             style={{ width: "100%", height: 40, margin: '10px 0' }}
-            onChange={(val, opt) => handleChange(record.id, "category_id", opt?.key)}
+            onChange={(val, opt) => handleChange(record?.id, "category_id", opt?.key)}
             allowClear
           >
-            {props?.categoryList.map((cat) => (
-              <Option key={cat.id} value={cat.name}>
-                {cat.name}
+            {props?.categoryList?.map((cat) => (
+              <Option key={cat?.id} value={cat?.name}>
+                {cat?.name}
               </Option>
             ))}
           </Select>
-          {Object.keys(record?.error)?.length > 0 ? record.error?.category_id ? (
-            <div style={{ color: "red", fontSize: 10 }}>{record.error.category_id}</div>
-          ) : <div style={{ height: 20 }}> </div> : null}
+          {record?.error && Object.values(record?.error)?.filter(Boolean).length > 0 ? (
+            record?.error?.category_id ? (
+              <div style={{ color: "red", fontSize: 10 }}>{record?.error?.category_id}</div>
+            ) : (
+              <div style={{ height: 20 }}> </div>
+            )
+          ) : null}
         </div>
       ),
     },
@@ -159,13 +165,13 @@ const AddItemsModal = (props) => {
       render: (_, record) => (
         <div style={{ display: "flex", flexDirection: "column" }}>
           <Input
-            value={record.name}
+            value={record?.name}
             placeholder="Enter item name"
             style={{ height: 40 }}
-            onChange={(e) => handleChange(record.id, "name", e.target.value)}
+            onChange={(e) => handleChange(record?.id, "name", e.target.value)}
           />
-          {Object.keys(record?.error)?.length > 0 ? record.error?.name ? (
-            <div style={{ color: "red", fontSize: 10 }}>{record.error.name}</div>
+          {record?.error && Object.values(record?.error)?.filter(Boolean)?.length > 0 ? record?.error?.name ? (
+            <div style={{ color: "red", fontSize: 10 }}>{record?.error.name}</div>
           ) : <div style={{ height: 20 }}> </div> : null}
         </div>
       ),
@@ -177,13 +183,13 @@ const AddItemsModal = (props) => {
       render: (_, record) => (
         <div style={{ display: "flex", flexDirection: "column" }}>
           <Input
-            value={record.price}
+            value={record?.price}
             placeholder="Enter price"
             style={{ height: 40 }}
-            onChange={(e) => handleChange(record.id, "price", e.target.value)}
+            onChange={(e) => handleChange(record?.id, "price", e.target.value)}
           />
-          {Object.keys(record?.error)?.length > 0 ? record.error?.price ? (
-            <div style={{ color: "red", fontSize: 10 }}>{record.error.price}</div>
+          {record?.error && Object.values(record?.error)?.filter(Boolean)?.length > 0 ? record?.error?.price ? (
+            <div style={{ color: "red", fontSize: 10 }}>{record?.error.price}</div>
           ) : <div style={{ height: 20 }}> </div> : null}
         </div>
       ),
@@ -195,13 +201,13 @@ const AddItemsModal = (props) => {
       render: (_, record) => (
         <div style={{ display: "flex", flexDirection: "column" }}>
           <Input
-            value={record.gst_rate}
+            value={record?.gst_rate}
             placeholder="Enter GST Rate"
             style={{ height: 40 }}
-            onChange={(e) => handleChange(record.id, "gst_rate", e.target.value)}
+            onChange={(e) => handleChange(record?.id, "gst_rate", e.target.value)}
           />
-          {Object.keys(record?.error)?.length > 0 ? record.error?.gst_rate ? (
-            <div style={{ color: "red", fontSize: 10 }}>{record.error.gst_rate}</div>
+          {record?.error && Object.values(record?.error)?.filter(Boolean)?.length > 0 ? record?.error?.gst_rate ? (
+            <div style={{ color: "red", fontSize: 10 }}>{record?.error.gst_rate}</div>
           ) : <div style={{ height: 20 }}> </div> : null}
         </div>
       ),
@@ -213,16 +219,16 @@ const AddItemsModal = (props) => {
       render: (_, record) => (
         <div style={{ display: "flex", flexDirection: "column" }}>
           <Input
-            value={record.hsn_code}
+            value={record?.hsn_code}
             placeholder="Enter HSN Code"
             style={{ height: 40 }}
-            onChange={(e) => handleChange(record.id, "hsn_code", e.target.value)}
+            onChange={(e) => handleChange(record?.id, "hsn_code", e.target.value)}
           />
-          {record.error?.hsn_code && (
-            <div style={{ color: "red", fontSize: 10 }}>{record.error.hsn_code}</div>
+          {record?.error?.hsn_code && (
+            <div style={{ color: "red", fontSize: 10 }}>{record?.error.hsn_code}</div>
           )}
-          {Object.keys(record?.error)?.length > 0 ? record.error?.hsn_code ? (
-            <div style={{ color: "red", fontSize: 10 }}>{record.error.hsn_code}</div>
+          {record?.error && Object.values(record?.error)?.filter(Boolean)?.length > 0 ? record?.error?.hsn_code ? (
+            <div style={{ color: "red", fontSize: 10 }}>{record?.error.hsn_code}</div>
           ) : <div style={{ height: 20 }}> </div> : null}
         </div>
       ),
@@ -231,12 +237,12 @@ const AddItemsModal = (props) => {
       title: "Action",
       width: 100,
       render: (_, record) => (
-        <div style={{ display: "flex", alignItems: "center", height: "100%" }}>
+        <div style={{ display: "flex", alignItems: "center",flexDirection: "column"  }}>
           <Button
             danger
             icon={<DeleteOutlined />}
             disabled={props?.formItems?.length === 1}
-            onClick={() => handleRemoveRow(record.id)}
+            onClick={() => handleRemoveRow(record?.id)}
             style={{
               height: 40,
               width: 40,
@@ -246,6 +252,7 @@ const AddItemsModal = (props) => {
               padding: 0,
             }}
           />
+          {record?.error && Object.values(record?.error)?.filter(Boolean)?.length > 0 ? <div style={{ height: 20 }}> </div> : null}
         </div>
       ),
     },

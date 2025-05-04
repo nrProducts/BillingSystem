@@ -59,17 +59,17 @@ const ItemBillingContainer = () => {
             prev
                 ?.map(i =>
                     i?.id === id
-                        ? { ...i, quantity: i.quantity - 1 }
+                        ? { ...i, quantity: i?.quantity - 1 }
                         : i
                 )
-                .filter(i => i.quantity > 0) // Remove item if quantity becomes 0
+                .filter(i => i?.quantity > 0) // Remove item if quantity becomes 0
         );
     };
 
     
 
     const filteredItems = items?.filter(i =>
-        i?.name.toLowerCase().includes(search?.toLowerCase())
+        i?.name?.toLowerCase().includes(search?.toLowerCase())
     );
 
     const menuItems = (record) => {
@@ -138,7 +138,7 @@ const ItemBillingContainer = () => {
                         type="primary"
                         onClick={() => handleAddToBill(record)}
                         className="bounce-button"
-                        disabled={record.is_active === false} // Disable button if inactive
+                        disabled={record?.is_active === false} // Disable button if inactive
                     >
                         Add to Bill
                     </Button>
