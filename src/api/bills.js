@@ -91,4 +91,20 @@ export const getSalesByCategory = async () => {
     return totals;
 };
 
+export const fetchReportData = async (from, to) => {
+    const { data, error } = await supabase
+        .from('bills')
+        .select(`
+        id, created, total_gst, grand_total,
+        bill_items(
+          quantity, price, gst_rate, gst_amount, total_amount,
+          items(name)
+        )
+      `)
+        .gte('created', from)
+        .lte('created', to);
+
+    if (error) throw error;
+    return data;
+};
 

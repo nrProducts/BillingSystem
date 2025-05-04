@@ -18,6 +18,7 @@ const Navbar = () => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       sessionStorage.setItem('userId', session?.user?.id);
+      sessionStorage.setItem('emailId', session?.user?.email);
     });
 
     return () => subscription.unsubscribe();
@@ -27,6 +28,7 @@ const Navbar = () => {
     setIsModalVisible(false);
     await supabase.auth.signOut();
     sessionStorage.removeItem('userId');
+    sessionStorage.removeItem('emailId');
     navigate('/login');
   };
 

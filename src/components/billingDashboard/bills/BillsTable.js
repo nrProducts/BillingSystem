@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Input, DatePicker, Space } from 'antd';
+import { Table, Input, DatePicker, Space, Modal, Button } from 'antd';
 import dayjs from 'dayjs';
 import { getBills } from '../../../api/bills';
-
+import GenerateReport from '../generateReport/GenerateReport';
 
 
 const BillsTable = () => {
@@ -11,6 +11,7 @@ const BillsTable = () => {
   const [loading, setLoading] = useState(false);
   const [sorter, setSorter] = useState({});
   const [dateRange, setDateRange] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
 
 
   const fetchData = async (params = {}) => {
@@ -20,7 +21,7 @@ const BillsTable = () => {
       pageSize: params.pagination?.pageSize || 5,
       sortField: params.sorter?.field,
       sortOrder: params.sorter?.order,
-      search: params.search,
+      // search: params.search,
       startDate: params.startDate,
       endDate: params.endDate,
     });
@@ -121,16 +122,24 @@ const BillsTable = () => {
 
   return (
     <div className=".bill_table">
-      <h3 style={{margin : 0}}>Bill Details</h3>
-      <Space style={{marginTop : 10, marginBottom: 15, flexWrap: 'wrap' }}>
+      <h3 style={{ margin: 0 }}>Bill Details</h3>
+      <Space style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 10, marginBottom: 15, flexWrap: 'wrap' }}>
         <DatePicker.RangePicker
           value={dateRange}
           onChange={handleDateChange}
           format="YYYY-MM-DD"
           allowClear
-          style={{ marginbottom: 20}}
+          style={{ minWidth: 250 }}
         />
+        <Button
+          type="primary"
+          onClick={() => setModalOpen(true)}
+          style={{ marginTop: 8, height: 40}}
+        >
+          Generate Report
+        </Button>
       </Space>
+
 
       <Table
         columns={columns}
@@ -140,6 +149,14 @@ const BillsTable = () => {
         loading={loading}
         onChange={handleTableChange}
       />
+      <Modal
+        title="Generate Report"
+        open={modalOpen}
+        onCancel={() => setModalOpen(false)}
+        footer={null}
+      >
+        <GenerateReport setModalOpen={setModalOpen} />
+      </Modal>
     </div>
   );
 };
