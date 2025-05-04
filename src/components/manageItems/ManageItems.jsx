@@ -3,7 +3,6 @@ import AddItemsModal from "./add/AddItemsModal";
 import { Modal, Input, Button, Table, Spin } from "antd";
 import "./ManageItems.css"; // Import external CSS
 import { PlusOutlined, CheckOutlined } from '@ant-design/icons';
-import { Label } from "@fluentui/react";
 
 const ManageItems = ({
   filteredItems,
@@ -28,8 +27,8 @@ const ManageItems = ({
   setAddCategoryForm,
   categoryError,
   SetCategoryError,
-  showPopconfirm,
-  setShowPopconfirm,
+  showPopConfirm,
+  setShowPopConfirm,
   itemToDelete,
   handleDelete,
   setLoader
@@ -51,10 +50,10 @@ const ManageItems = ({
 
       <Modal
         title="Are you sure you want to delete this item?"
-        open={showPopconfirm}
+        open={showPopConfirm}
         onOk={() => handleDelete(itemToDelete)}
         onCancel={() => {
-          setShowPopconfirm(false);
+          setShowPopConfirm(false);
           setLoader(false);
         }}
         okText="Yes"

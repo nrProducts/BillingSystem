@@ -62,7 +62,7 @@ const GenerateReport = ({ setModalOpen }) => {
             const to = dayjs(endDate).endOf('day').toISOString();
 
             const data = await fetchReportData(from, to);
-            const csvContent = generateCSV(data);
+            const csvContent = generateCSV(data?.data);
 
             if (action === 'download') {
                 downloadCSV(csvContent, type);

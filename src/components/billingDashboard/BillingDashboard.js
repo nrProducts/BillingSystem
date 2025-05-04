@@ -12,11 +12,11 @@ const BillingDashboard = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const bills = await getBillSummary();
-      const categorySummary = await getSalesByCategory();
+      const billResult = await getBillSummary();
+      const SalesByCategoryResult = await getSalesByCategory();
 
       setBillData(
-        bills.map((b) => ({
+        billResult?.data?.map((b) => ({
           date: new Date(b.date).toLocaleDateString(),
           total: parseFloat(b.total),
           gst: parseFloat(b.gst),
@@ -24,7 +24,7 @@ const BillingDashboard = () => {
       );
 
       setCategorySales(
-        Object.entries(categorySummary).map(([name, value]) => ({
+        Object.entries(SalesByCategoryResult?.data).map(([name, value]) => ({
           name,
           value: parseFloat(value),
         }))

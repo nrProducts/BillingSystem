@@ -19,8 +19,10 @@ const ItemBillingContainer = () => {
     const loadItems = async () => {
         try {
             setLoader(true);
-            const data = await fetchItems()
-            setItems(data?.data ?? [])
+            const result = await fetchItems()
+            if(result.success){
+                setItems(result?.data ?? [])
+            }
             setLoader(false);
         } catch (err) {
             setLoader(false);
@@ -33,7 +35,7 @@ const ItemBillingContainer = () => {
             setLoader(true);
             const updatedData = { ...record, is_active: value }
             const {category, ...sanitizedData } = updatedData
-            await updateItem(record?.id, sanitizedData );
+            const result = await updateItem(record?.id, sanitizedData );
             await loadItems();
         } catch (err) {
             setLoader(false);

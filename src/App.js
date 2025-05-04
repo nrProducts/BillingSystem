@@ -11,6 +11,7 @@ import Home from "./components/home/Home";
 import Header from "./components/layout/header";
 import Footer from "./components/layout/footer";
 import BillingDashboard from "./components/billingDashboard/BillingDashboard";
+import UserManagement from "./components/userManagement/UserContainer";
 
 const App = () => {
   return (
@@ -28,9 +29,10 @@ const App = () => {
                   <div className="page-content">
                     <Routes>
                       <Route path="/" element={<Home />} />
+                      <Route path="/user" element={<UserManagement />} />
                       <Route path="/itemBilling" element={<ItemBilling />} />
                       <Route path="/items" element={<ManageItems />} />
-                      <Route path="/billingdashboard" element={<BillingDashboard />} />
+                      <Route path="/billingDashboard" element={<BillingDashboard />} />
                     </Routes>
                   </div>
                   <Footer />

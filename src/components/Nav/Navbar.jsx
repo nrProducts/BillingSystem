@@ -54,8 +54,13 @@ const Navbar = () => {
           {session ? (
             <>
               <li>
-                <NavLink to="/billingdashboard" className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`}>
+                <NavLink to="/billingDashboard" className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`}>
                   Dashboard
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/user" className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`}>
+                  User Management
                 </NavLink>
               </li>
               <li>

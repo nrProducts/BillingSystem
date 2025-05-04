@@ -10,10 +10,10 @@ export const createBills = async (bill) => {
 
     if (error) {
         console.error('Error adding Bills:', error.message);
-        return { data: [], message: error?.message, error };
+        return { data: [], message: error?.message, error, success: false };
     }
 
-    return { data: data, message: 'Bills added successfully', error: null };
+    return { data: data, message: 'Bill created successfully', error: null, success: true };
 };
 
 
@@ -29,10 +29,6 @@ export async function getBills({ page, pageSize, sortField, sortOrder, startDate
             )`, { count: 'exact' }
         );
 
-    // if (search) {
-    //     query = query.ilike('id', `%${search}%`);
-    // }
-
     if (startDate && endDate) {
         query = query.gte('created', startDate).lte('created', endDate);
     }
@@ -44,7 +40,10 @@ export async function getBills({ page, pageSize, sortField, sortOrder, startDate
     query = query.range((page - 1) * pageSize, page * pageSize - 1);
 
     const { data, count, error } = await query;
-    if (error) throw error;
+    if (error) {
+        console.error('Error fetching bills:', error.message);
+        return { data: [], message: error?.message, error, success: false };
+    }
 
     const transformedData = data.map((bill) => {
         const itemNames = bill.bill_items
@@ -59,17 +58,21 @@ export async function getBills({ page, pageSize, sortField, sortOrder, startDate
         page,
         pageSize,
         total: count,
+        success: true
     };
 }
 
 
 export const getBillSummary = async () => {
     const { data, error } = await supabase
-      .rpc('get_daily_bill_summary');
-    
-    if (error) throw error;
-    return data;
-  };
+        .rpc('get_daily_bill_summary');
+
+    if (error) {
+        console.error('Error fetching billSummary:', error.message);
+        return { data: [], message: error?.message, error, success: false };
+    }
+    return { data: data, message: 'BillItems added successfully', error: null, success : true  };
+};
 
 export const getSalesByCategory = async () => {
     const { data, error } = await supabase
@@ -79,7 +82,10 @@ export const getSalesByCategory = async () => {
         items ( category_id, category:category_id(name) )
       `);
 
-    if (error) throw error;
+    if (error) {
+        console.error('Error fetching:', error.message);
+        return { data: [], message: error?.message, error, success: false };
+    }
 
     // Aggregate totals by category
     const totals = {};
@@ -87,8 +93,7 @@ export const getSalesByCategory = async () => {
         const category = item.items?.category?.name || 'Unknown';
         totals[category] = (totals[category] || 0) + parseFloat(item.total_amount);
     });
-
-    return totals;
+    return { data: totals, message: 'Sales Category added successfully', error: null, success : true  };
 };
 
 export const fetchReportData = async (from, to) => {
@@ -104,7 +109,10 @@ export const fetchReportData = async (from, to) => {
         .gte('created', from)
         .lte('created', to);
 
-    if (error) throw error;
-    return data;
+    if (error) {
+        console.error('Error fetching:', error.message);
+        return { data: [], message: error?.message, error, success: false };
+    }
+    return { data: data, message: 'Report Data fetched successfully', error: null, success : true  };
 };
 
