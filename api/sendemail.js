@@ -11,7 +11,7 @@ export default async (req, res) => {
 
     try {
         const emailData = {
-            from: 'noreply@onresend.com',
+            from: 'Billing Reports <onboarding@resend.dev>',
             to,
             subject,
             html: `<div>${message}</div>`,
