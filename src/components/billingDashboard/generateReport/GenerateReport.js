@@ -67,14 +67,39 @@ const GenerateReport = ({ setModalOpen }) => {
             if (action === 'download') {
                 downloadCSV(csvContent, type);
             } else if (action === 'email') {
-                await sendReportByEmail(csvContent);
+                const blob = new Blob([csvContent], { type: 'text/csv' });
+                const reader = new FileReader();
+
+                reader.onloadend = async () => {
+                    const base64String = reader.result.split(',')[1];
+
+                    const body = {
+                        to: 'nrofficialproducts@gmail.com',
+                        subject: `Your Billing Report for ${new Date().toLocaleString('default', { month: 'long', year: 'numeric' })}`,
+                        message: `
+                      <p>Dear Customer,</p>
+                      <p>Please find attached your billing report for the selected period.</p>
+                      <p>If you have any questions regarding this report, feel free to reach out to our support team.</p>
+                      <p>Best regards,<br/>The NRproducts Team</p>
+                    `,
+                        attachment: {
+                            filename: 'report.csv',
+                            content: base64String,
+                        },
+                    };
+
+                    await sendReportByEmail(body);
+                };
+
+                reader.readAsDataURL(blob);
             }
+
 
             message.success('Report generated successfully!');
             resetInputs();
             setModalOpen(false);
         } catch (err) {
-            console.error(err);
+            console.info(err);
             message.error('Failed to generate report');
         } finally {
             setLoading(false);
@@ -151,7 +176,7 @@ const GenerateReport = ({ setModalOpen }) => {
                         style={{ width: '100%' }}
                     >
                         <Option value="download">Download</Option>
-                        {/* <Option value="email">Send to Email</Option> */}
+                        <Option value="email">Send to Email</Option>
                     </Select>
                 </div>
 
