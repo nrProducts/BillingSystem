@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { supabase } from '../../supabase/client'
 import { EllipsisOutlined } from "@ant-design/icons";
 import { Button, Dropdown } from "antd";
-import User from "./User";
+import User from "./UserManagement";
 
 const UserContainer = () => {
     const [userList, setUserList] = useState([]);

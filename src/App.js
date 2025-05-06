@@ -11,7 +11,7 @@ import Home from "./components/home/Home";
 import Header from "./components/layout/header";
 import Footer from "./components/layout/footer";
 import BillingDashboard from "./components/billingDashboard/BillingDashboard";
-import UserManagement from "./components/userManagement/UserContainer";
+import UserManagement from "./components/userManagement/UserManagementContainer";
 
 const App = () => {
   return (
