@@ -11,23 +11,24 @@
     "install:backend": "npm install --prefix backend"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.0.1",
     "@fluentui/react": "^8.96.0",
     "@supabase/auth-ui-react": "^0.4.7",
     "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/supabase-js": "^2.49.4",
+    "@testing-library/jest-dom": "^6.1.3",
+    "@testing-library/react": "^14.2.1",
     "antd": "^5.24.8",
+    "dayjs": "^1.11.10",
     "npm": "^11.0.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.5.1",
     "recharts": "^2.15.3",
-    "web-vitals": "^4.2.4",
-    "@ant-design/icons": "^5.0.1",
-    "@testing-library/jest-dom": "^6.1.3",
-    "@testing-library/react": "^14.2.1",
+    "resend": "^4.5.1",
     "uuid": "^9.0.1",
-    "dayjs": "^1.11.10"
+    "web-vitals": "^4.2.4"
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
