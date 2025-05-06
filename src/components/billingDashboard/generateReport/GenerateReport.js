@@ -80,7 +80,7 @@ const GenerateReport = ({ setModalOpen }) => {
                       <p>Dear Customer,</p>
                       <p>Please find attached your billing report for the selected period.</p>
                       <p>If you have any questions regarding this report, feel free to reach out to our support team.</p>
-                      <p>Best regards,<br/>The [Your App Name] Team</p>
+                      <p>Best regards,<br/>The NRproducts Team</p>
                     `,
                         attachment: {
                             filename: 'report.csv',
