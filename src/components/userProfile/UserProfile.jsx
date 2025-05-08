@@ -17,9 +17,9 @@ const UserProfile = ({
     useEffect(() => {
         if (formData) {
             form.setFieldsValue({
-                name: formData.name || '',
-                contact: formData.contact || '',
-                location: formData.location || '',
+                name: formData?.name || '',
+                contact: formData?.contact || '',
+                location: formData?.location || '',
             });
         }
     }, [formData, form]);

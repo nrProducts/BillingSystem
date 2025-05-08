@@ -11,6 +11,9 @@ const { Option } = Select;
 const { RangePicker } = DatePicker;
 
 const GenerateReport = ({ setModalOpen }) => {
+
+    const emailId = sessionStorage.getItem('emailId');
+
     const [loading, setLoading] = useState(false);
     const [type, setType] = useState(null);
     const [range, setRange] = useState([]);
@@ -74,7 +77,8 @@ const GenerateReport = ({ setModalOpen }) => {
                     const base64String = reader.result.split(',')[1];
 
                     const body = {
-                        to: 'nrofficialproducts@gmail.com',
+                        to: emailId,
+                        // cc
                         subject: `Your Billing Report for ${new Date().toLocaleString('default', { month: 'long', year: 'numeric' })}`,
                         message: `
                       <p>Dear Customer,</p>
