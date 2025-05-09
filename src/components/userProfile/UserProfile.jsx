@@ -39,7 +39,7 @@ const UserProfile = ({
                 layout="vertical"
                 form={form}
                 className="user-profile-form"
-                onFinish={handleSave}
+                onFinish={() => handleSave()}
             >
                 <Form.Item
                     label="Display Name"
@@ -48,7 +48,7 @@ const UserProfile = ({
                 >
                     <Input
                         name="name"
-                        onChange={handleChange}
+                        onChange={() => handleChange()}
                         className="custom-input"
                     />
                 </Form.Item>
@@ -62,7 +62,7 @@ const UserProfile = ({
                 >
                     <Input
                         name="contact"
-                        onChange={handleChange}
+                        onChange={() => handleChange()}
                         className="custom-input"
                     />
                 </Form.Item>
@@ -73,7 +73,7 @@ const UserProfile = ({
                 >
                     <Input
                         name="location"
-                        onChange={handleChange}
+                        onChange={() => handleChange()}
                         className="custom-input"
                     />
                 </Form.Item>

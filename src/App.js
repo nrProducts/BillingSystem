@@ -12,6 +12,7 @@ import Header from "./components/layout/header";
 import Footer from "./components/layout/footer";
 import BillingDashboard from "./components/billingDashboard/BillingDashboard";
 import UserManagement from "./components/userManagement/UserManagementContainer";
+import TableManager from "./components/tableManager/tableManager";
 
 const App = () => {
   return (
@@ -30,7 +31,9 @@ const App = () => {
                     <Routes>
                       <Route path="/" element={<Home />} />
                       <Route path="/user" element={<UserManagement />} />
-                      <Route path="/itemBilling" element={<ItemBilling />} />
+                      <Route path="/itemBilling/:tableId" element={<ItemBilling />} />
+                      {/* <Route path="/itemBilling" element={<ItemBilling />} /> */}
+                      <Route path="/tableManager" element={<TableManager />} />
                       <Route path="/items" element={<ManageItems />} />
                       <Route path="/billingDashboard" element={<BillingDashboard />} />
                     </Routes>

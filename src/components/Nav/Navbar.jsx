@@ -64,7 +64,12 @@ const Navbar = () => {
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/itemBilling" className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`}>
+                <NavLink to="/tableManager" className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`}>
+                  Table Manager
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/itemBilling/:tableId" className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`}>
                   Item Billing
                 </NavLink>
               </li>

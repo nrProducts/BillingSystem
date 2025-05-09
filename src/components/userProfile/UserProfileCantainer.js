@@ -8,11 +8,13 @@ const UserProfileContainer = ({ isOpen, onSave, userDetails, setOpenUserPopup })
     const [formData, setFormData] = useState({});
 
     useEffect(() => {
-        if(isOpen)
-        setFormData(userDetails)
+        if (isOpen) {
+            setFormData(userDetails)
+            console.info(isOpen, 'use');
+        }
     }, [isOpen])
 
-    console.info(isOpen,'isOpen');
+    console.info(isOpen, 'isOpen');
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -34,7 +36,7 @@ const UserProfileContainer = ({ isOpen, onSave, userDetails, setOpenUserPopup })
         onSave(formData);
     };
 
-    return <UserProfile setOpenUserPopup = {setOpenUserPopup} isOpen={isOpen} handleSave={handleSave} handleFileChange={handleFileChange} handleChange={handleChange} formData={formData} />;
+    return <UserProfile setOpenUserPopup={setOpenUserPopup} isOpen={isOpen} handleSave={handleSave} handleFileChange={handleFileChange} handleChange={handleChange} formData={formData} />;
 };
 
 export default UserProfileContainer;

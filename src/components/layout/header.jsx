@@ -129,12 +129,14 @@ const Header = () => {
             </header>
 
             {/* UserProfile Modal */}
-            <UserProfile
-                isOpen={openUserPopup}
-                onSave={handleSaveUserDetails}
-                userDetails={userDetails}
-                setOpenUserPopup={setOpenUserPopup}
-            />
+            {openUserPopup &&
+                <UserProfile
+                    isOpen={openUserPopup}
+                    onSave={handleSaveUserDetails}
+                    userDetails={userDetails}
+                    setOpenUserPopup={setOpenUserPopup}
+                />
+            }
         </>
     );
 };
