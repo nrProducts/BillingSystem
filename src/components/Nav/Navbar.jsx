@@ -46,8 +46,7 @@ const Navbar = () => {
 
   return (
     <aside className="sidebar">
-       <img alt="Logo" className="logo" width='200px' height='50px' ty/>
-       
+       <img src={billTime} alt="Logo" className="logo" width='200px' height='50px' ty/>
       <nav>
         <ul>
           <li>
