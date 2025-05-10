@@ -2,7 +2,7 @@ import { Card, Button, Divider, Spin } from 'antd';
 import { MinusCircleOutlined } from '@ant-design/icons';
 
 const BillHeader = () => (
-  <h3 className="bill-title">🧾 Bill Preview</h3>
+  <h3 className="bill-title">Bill Preview</h3>
 );
 
 export const BillPreview = ({ selectedItems, handleRemove, billingDetails, handleGenerateBill, loader }) => {
@@ -69,7 +69,7 @@ export const BillPreview = ({ selectedItems, handleRemove, billingDetails, handl
           onClick={handleGenerateBill}
           className="bill-generate-btn"
         >
-          ✅ Generate Bill
+        Generate Bill
         </Button>
       </div>
     </div>

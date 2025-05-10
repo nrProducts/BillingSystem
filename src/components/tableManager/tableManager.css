@@ -10,13 +10,13 @@
 }
 
 .takeaway {
-  background-color: #ff5733; /* Color for 'Take Away' button */
+  background-color: #a6a9aa; /* Color for 'Take Away' button */
   color: white;
   margin-left: 10px;
 }
 
 .add-table {
-  background-color: #1677ff; /* Color for 'Add Table' button */
+  background-color: #d6085e; /* Color for 'Add Table' button */
   color: white;
   margin-left: 10px;
 }
@@ -65,7 +65,7 @@
 }
 
 .ac-zone .table-card {
-  background-color: #e6f7ff; /* light blue for AC */
+  background-color: #f1f1f1 !important; /* light blue for AC */
 }
 
 .nonac-zone .table-card {

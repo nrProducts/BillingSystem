@@ -3,6 +3,8 @@ import { Link, useNavigate, NavLink } from 'react-router-dom';
 import { supabase } from '../../supabase/client';
 import './Nav.css';
 import { Modal } from 'antd';
+import billTime from '../../asserts/images/billTime.png'
+import billTime1 from '../../asserts/images/billTime1.png'
 
 const Navbar = () => {
   const [session, setSession] = useState(null);
@@ -44,6 +46,8 @@ const Navbar = () => {
 
   return (
     <aside className="sidebar">
+       <img alt="Logo" className="logo" width='200px' height='50px' ty/>
+       
       <nav>
         <ul>
           <li>

@@ -93,7 +93,7 @@ const UserProfile = ({
                         }}
                         className="custom-upload"
                     >
-                        <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                        <Button style={{backgroundColor : '#a6a9aa'}} icon={<UploadOutlined />}>Click to Upload</Button>
                     </Upload>
                 </Form.Item>
                 <Form.Item>

@@ -237,11 +237,19 @@ const ManageItemsContainer = () => {
             key: 'is_active',
             render: (isActive) => (
                 <Tag
-                    color={isActive ? '#28a745' : '#dc3545'}
-                    style={{ color: 'white', fontSize: '12px', padding: '0 8px' }}
+                    color={isActive ? '#d4edda' : '#f8d7da'} // Light background colors
+                    style={{
+                        color: isActive ? '#155724' : '#721c24',
+                        fontSize: '12px',
+                        padding: '0 8px',
+                        borderRadius : '50px'
+                        // width: '100px',  // Fixed width
+                        //textAlign: 'center'  // To center the text within the tag
+                    }}
                 >
                     {isActive ? 'Active' : 'Sold Out'}
                 </Tag>
+
             ),
         },
 

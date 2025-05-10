@@ -7,6 +7,10 @@ import {
   AreaChartOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import imgHome from '../../asserts/images/pexels-karolina-grabowska-7680682.jpg'
+import imgHome1 from '../../asserts/images/homeImg1.jpg'
+import imgHome2 from '../../asserts/images/homeImg2.jpg'
+import imgHome3 from '../../asserts/images/homeImg3.jpg'
 
 const { Title, Paragraph } = Typography;
 
@@ -56,9 +60,26 @@ const Home = () => {
     <div className="home-container">
       <div style={{ position: "relative", marginBottom: "40px" }}>
         <img
-          src="https://images.pexels.com/photos/12935080/pexels-photo-12935080.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+          src={imgHome2}
           alt="Billing System"
           className="billing-image"
+          style={{
+            width: "100%",
+            height: "auto",
+            objectFit: "cover",
+          }}
+        />
+
+        <div
+          style={{
+            position: "absolute",
+            top: "0",
+            left: "0",
+            width: "100%",
+            height: " 89%", // Apply gradient only to the bottom 70% of the image
+            background: "linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%)",
+            borderRadius: "12px",
+          }}
         />
 
         <div
@@ -89,6 +110,8 @@ const Home = () => {
           </Paragraph>
         </div>
       </div>
+
+
 
       {/* <Button type="primary" size="large" style={{ marginBottom: '40px' }} onClick={() => navigate('/billing')}>
         Start Billing

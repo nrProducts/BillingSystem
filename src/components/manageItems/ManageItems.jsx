@@ -79,7 +79,7 @@ const ManageItems = ({
                   <Button
                     type="primary"
                     onClick={onAddClicked}
-                    style={{ marginLeft: "1rem" }}
+                    style={{ marginLeft: "1rem", backgroundColor : "#d6085e", color : 'white' }}
                   >
                     Bulk Add Items
                   </Button>
@@ -104,12 +104,13 @@ const ManageItems = ({
           <div className="category-preview-section">
             <div className="category-card">
               <div className="category-header">
-                <h3>📁 Category List</h3>
+                <h3>Category List</h3>
                 <Button
                   className={`fab-button ${addCategoryForm ? "rotated" : ""}`}
                   type="primary"
                   shape="circle"
                   icon={<PlusOutlined />}
+                  style={{backgroundColor : "#d6085e", color : 'white'}}
                   onClick={() => { setAddCategoryForm(!addCategoryForm), SetCategoryError('') }}
                 />
               </div>

@@ -189,7 +189,7 @@ const GenerateReport = ({ setModalOpen }) => {
                     onClick={handleGenerate}
                     loading={loading}
                     block
-                    style={{ marginTop: 12 }}
+                    style={{ marginTop: 12, backgroundColor : "#d6085e", color : 'white' }}
                 >
                     Generate
                 </Button>

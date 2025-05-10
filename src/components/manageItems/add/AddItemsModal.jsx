@@ -237,7 +237,7 @@ const AddItemsModal = (props) => {
       title: "Action",
       width: 100,
       render: (_, record) => (
-        <div style={{ display: "flex", alignItems: "center",flexDirection: "column"  }}>
+        <div style={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
           <Button
             danger
             icon={<DeleteOutlined />}
@@ -269,7 +269,11 @@ const AddItemsModal = (props) => {
         width={1200}
         okText="Submit"
         okButtonProps={{
-          disabled: !saveDisable,
+          disabled: !saveDisable, 
+          style: {
+            backgroundColor: !saveDisable ? '' : '#d6085e', // Set the desired background color
+            color: !saveDisable ? '' : 'white', // Set the text color (optional)
+          },
         }}
       >
         <Spin spinning={props?.loader} tip={"Loading..."}>
@@ -284,7 +288,7 @@ const AddItemsModal = (props) => {
             type="dashed"
             icon={<PlusOutlined />}
             block
-            style={{ marginTop: 20 }}
+            style={{ marginTop: 20, backgroundColor: "#a6a9aa", color: 'white' }}
           >
             Add Item Row
           </Button>}

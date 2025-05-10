@@ -130,7 +130,7 @@ input[type="text"] {
 
 /* Add button styling */
 .floating-add-box button {
-  background-color: #1890ff;
+  background-color: #d6085e;
   /* Primary blue color */
   color: white;
   /* White text for contrast */
@@ -154,21 +154,24 @@ input[type="text"] {
 /* Add button at the bottom-right of the category panel */
 .fab-button {
   transition: transform 0.3s ease;
-  background-color: '#1890ff',
+  background-color: '#d6085e' !important;
+  color: white;
 }
 
 .fab-button.rotated {
   transform: rotate(45deg);
+   background-color: '#d6085e' !important;
+  color: white;
 }
 
 .category-save-button:hover {
-  background-color: #40a9ff;
+  background-color: #d86f9b;
 }
 
 
 /* Input hover effect */
 .category-input:hover {
-  border-color: #40a9ff;
+  border-color: #d86f9b;
 }
 
 .parent {
@@ -210,7 +213,7 @@ input[type="text"] {
 
 .child3 .check-icon {
   color: #fff;
-  background-color: #1890ff;
+  background-color: #d6085e;
   font-size: 18px;
   padding: 6px;
   border-radius: 6px;
@@ -219,6 +222,6 @@ input[type="text"] {
 }
 
 .child3 .check-icon:hover {
-  background-color: #1677c7;
+  background-color: #d86f9b;
 }
 

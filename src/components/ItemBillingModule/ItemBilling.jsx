@@ -14,6 +14,7 @@ const ItemBilling = ({ filteredItems, loader, itemColumns, selectedItems, search
           <Button
             icon={viewMode === 'grid' ? <AppstoreOutlined /> : <TableOutlined />}
             onClick={() => setViewMode(viewMode === 'grid' ? 'table' : 'grid')}
+            style={{ backgroundColor: viewMode === 'grid' ? "#a6a9aa" : "#d6085e", color: 'white' }}
           >
             {viewMode === 'grid' ? 'Switch to Table' : 'Switch to Grid'}
           </Button>
@@ -61,23 +62,32 @@ const ItemBilling = ({ filteredItems, loader, itemColumns, selectedItems, search
                   </div>
                   <h3 style={{ marginBottom: 0 }}>{item?.name}</h3>
                   <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px' }}>
-                    <p style={{ marginBottom: 0 }}><strong>Category:</strong> {item?.category ?? '-'}</p>
-                    <p style={{ marginBottom: 0 }}><strong>Price:</strong> ${item?.price?.toFixed(2)}</p>
+                    <p style={{ marginBottom: 0 }}><strong><p style={{ margin: 0 }}>Category:</p></strong> {item?.category ?? '-'}</p>
+                    <p style={{ marginBottom: 0 }}><strong><p style={{ margin: 0 }}>Price:</p></strong> ${item?.price?.toFixed(2)}</p>
                   </div>
 
                   <div className="tag-button-row">
                     <Tag
-                      color={item?.is_active ? '#28a745' : '#dc3545'}
-                      style={{ color: 'white', fontSize: '12px', marginBottom: 0 }}
+                      color={item?.is_active ? '#d4edda' : '#f8d7da'} // Light background colors
+                      style={{
+                        color: item?.is_active ? '#155724' : '#721c24',
+                        fontSize: '12px',
+                        padding: '0 8px',
+                        borderRadius : '50px'
+                        //width: '100px',  // Fixed width
+                        //textAlign: 'center'  // To center the text within the tag
+                      }}
                     >
                       {item?.is_active ? 'Active' : 'Sold Out'}
                     </Tag>
+
                     <Button
                       type="primary"
                       className="bounce-button"
                       onClick={() => handleAddToBill(item)}
                       disabled={!item?.is_active}
                       size="small"
+
                     >
                       Add to Bill
                     </Button>

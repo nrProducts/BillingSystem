@@ -276,7 +276,7 @@ const TableManager = () => {
             </div>
           ) : (
             <div className="no-tables-message">
-              No tables found. Click the <strong>Add Table</strong> button to create your first table.
+              No tables found. Click the <bold style={{color:"#d6085e"}}>Add Table</bold> button to create your first table.
             </div>
           )}
         </Spin>

@@ -49,10 +49,10 @@
     height: 38px;
     font-size: 12px;
     width: 345px !important;
-    background-color: #8ab1e7;
+    background-color: #d6085e;
     border: none;
 }
 
 .save-button:hover {
-    background-color: #155fc1;
+    background-color: #d86f9b;
 }

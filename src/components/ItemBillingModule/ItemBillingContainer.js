@@ -10,7 +10,7 @@ const ItemBillingContainer = () => {
     const [selectedItems, setSelectedItems] = useState([]);
     const [search, setSearch] = useState('');
     const [loader, setLoader] = useState(false);
-    const [viewMode, setViewMode] = useState('table'); 
+    const [viewMode, setViewMode] = useState('table');
 
     useEffect(() => {
         loadItems()
@@ -20,7 +20,7 @@ const ItemBillingContainer = () => {
         try {
             setLoader(true);
             const result = await fetchItems()
-            if(result.success){
+            if (result.success) {
                 setItems(result?.data ?? [])
             }
             setLoader(false);
@@ -34,8 +34,8 @@ const ItemBillingContainer = () => {
         try {
             setLoader(true);
             const updatedData = { ...record, is_active: value }
-            const {category, ...sanitizedData } = updatedData
-            const result = await updateItem(record?.id, sanitizedData );
+            const { category, ...sanitizedData } = updatedData
+            const result = await updateItem(record?.id, sanitizedData);
             await loadItems();
         } catch (err) {
             setLoader(false);
@@ -68,7 +68,7 @@ const ItemBillingContainer = () => {
         );
     };
 
-    
+
 
     const filteredItems = items?.filter(i =>
         i?.name?.toLowerCase().includes(search?.toLowerCase())
@@ -124,11 +124,20 @@ const ItemBillingContainer = () => {
             key: 'is_active',
             render: (isActive) => (
                 <Tag
-                    color={isActive ? '#28a745' : '#dc3545'}
-                    style={{ color: 'white', fontSize: '12px', padding: '0 8px' }}
+                    color={isActive ? '#d4edda' : '#f8d7da'} // Light background colors
+                    style={{
+                        color: isActive ? '#155724' : '#721c24',
+                        fontSize: '12px',
+                        padding: '0 8px',
+                        borderRadius : '50px'
+                        // width: '100px',  // Fixed width
+                        //textAlign: 'center'  // To center the text within the tag
+                    }}
                 >
                     {isActive ? 'Active' : 'Sold Out'}
                 </Tag>
+
+
             ),
         },
         {
@@ -158,9 +167,9 @@ const ItemBillingContainer = () => {
             setSearch={setSearch}
             selectedItems={selectedItems}
             loader={loader}
-            setViewMode = {setViewMode}
+            setViewMode={setViewMode}
             viewMode={viewMode}
-            getMenu = {getMenu}
+            getMenu={getMenu}
         />
     </div>
 
