@@ -125,8 +125,6 @@ const AddItemsModal = (props) => {
     }
   };
 
-  console.info(Object.values(props?.formItems?.[0]?.error), 'cate')
-
   const columns = [
     {
       title: "Category",

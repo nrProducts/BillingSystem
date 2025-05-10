@@ -106,7 +106,7 @@ const TableManager = () => {
   const handleSubmit = async () => {
     let tempError = {};
 
-    if (!tableForm?.name.trim()) {
+    if (!tableForm?.name?.trim()) {
       tempError.name = 'Table name is required';
     }
 
