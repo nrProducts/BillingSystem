@@ -31,7 +31,7 @@ const App = () => {
                     <Routes>
                       <Route path="/" element={<Home />} />
                       <Route path="/user" element={<UserManagement />} />
-                      <Route path="/itemBilling/:tableId" element={<ItemBilling />} />
+                      <Route path="/itemBilling/:tableId?" element={<ItemBilling />} />
                       {/* <Route path="/itemBilling" element={<ItemBilling />} /> */}
                       <Route path="/tableManager" element={<TableManager />} />
                       <Route path="/items" element={<ManageItems />} />

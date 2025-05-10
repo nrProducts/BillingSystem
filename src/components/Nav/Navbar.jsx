@@ -69,7 +69,7 @@ const Navbar = () => {
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/itemBilling/:tableId" className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`}>
+                <NavLink to="/itemBilling/:tableId?" className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`}>
                   Item Billing
                 </NavLink>
               </li>
