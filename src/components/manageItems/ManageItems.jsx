@@ -96,7 +96,7 @@ const ManageItems = ({
                   columns={itemColumns}
                   rowKey="id"
                   pagination={{ pageSize: 10 }}
-                  // scroll={{ y: 'calc(75vh - 150px)' }} 
+                  // scroll={{ y: 'calc(75vh - 150px)' }}
                   rowClassName={(record) =>
                     record?.is_active === false ? "inactive-row" : ""
                   }

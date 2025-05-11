@@ -10,11 +10,8 @@ const UserProfileContainer = ({ isOpen, onSave, userDetails, setOpenUserPopup })
     useEffect(() => {
         if (isOpen) {
             setFormData(userDetails)
-            console.info(isOpen, 'use');
         }
     }, [isOpen])
-
-    console.info(isOpen, 'isOpen');
 
     const handleChange = (e) => {
         const { name, value } = e.target;

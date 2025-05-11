@@ -3,6 +3,7 @@ import { Button, Dropdown, Menu, Tag } from 'antd';
 import { fetchItems, updateItem } from "../../api/items"
 import { EllipsisOutlined } from '@ant-design/icons'; // Import the icon
 import ItemBilling from "./ItemBilling";
+import { fetchCategory } from "../../api/category";
 
 const ItemBillingContainer = () => {
 
@@ -11,9 +12,11 @@ const ItemBillingContainer = () => {
     const [search, setSearch] = useState('');
     const [loader, setLoader] = useState(false);
     const [viewMode, setViewMode] = useState('table');
+    const [categoryList, setCategoryList] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState(null);
 
     useEffect(() => {
-        loadItems()
+        loadCategory();
     }, [])
 
     const loadItems = async () => {
@@ -27,6 +30,19 @@ const ItemBillingContainer = () => {
         } catch (err) {
             setLoader(false);
             alert('Error loading items')
+        }
+    }
+
+    const loadCategory = async () => {
+        try {
+            setLoader(true);
+            const data = await fetchCategory()
+            setCategoryList(data?.data ?? '')
+            await loadItems();
+            setLoader(false);
+        } catch (err) {
+            setLoader(false);
+            alert('Error loading category')
         }
     }
 
@@ -69,10 +85,11 @@ const ItemBillingContainer = () => {
     };
 
 
-
-    const filteredItems = items?.filter(i =>
-        i?.name?.toLowerCase().includes(search?.toLowerCase())
+    const filteredItems = items?.filter(item =>
+        item?.name?.toLowerCase().includes(search?.toLowerCase()) &&
+        (!selectedCategory || item?.category === selectedCategory?.name)
     );
+
 
     const menuItems = (record) => {
         return [
@@ -129,7 +146,7 @@ const ItemBillingContainer = () => {
                         color: isActive ? '#155724' : '#721c24',
                         fontSize: '12px',
                         padding: '0 8px',
-                        borderRadius : '50px'
+                        borderRadius: '50px'
                         // width: '100px',  // Fixed width
                         //textAlign: 'center'  // To center the text within the tag
                     }}
@@ -170,6 +187,9 @@ const ItemBillingContainer = () => {
             setViewMode={setViewMode}
             viewMode={viewMode}
             getMenu={getMenu}
+            categoryList={categoryList}
+            setSelectedCategory={setSelectedCategory}
+            selectedCategory={selectedCategory}
         />
     </div>
 
