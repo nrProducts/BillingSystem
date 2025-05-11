@@ -1,29 +1,65 @@
-import { Input, Spin, Table } from "antd";
+import { Input, Spin, Table, Modal } from "antd";
 import React from "react";
 
-const User = (props) => {
-    return <div className="shared-layout-container">
-        <div className="item-table-section">
-            <h3 className="title">User Management</h3>
-            <Spin spinning={props?.loader} tip={"Loading..."}>
-                <div className="table-controls">
-                    <Input
-                        placeholder="Search user"
-                        value={props?.search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        style={{ width: "100%" }}
-                    />
-                </div>
+const User = ({
+  loader,
+  search,
+  setSearch,
+  userList,
+  columns,
+  showPopConfirm,
+  setShowPopConfirm,
+  setLoader,
+  userId,
+  handleDelete,
+}) => {
+  return (
+    <div className="shared-layout-container">
+      <div className="item-table-section">
+        <h3 className="title">User Management</h3>
+        <Spin spinning={loader} tip={"Loading..."}>
+          <div className="table-controls">
+            <Input
+              placeholder="Search user"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              style={{ width: "100%" }}
+            />
+          </div>
 
-                <Table
-                    dataSource={props?.filteredItems}
-                    columns={props?.column}
-                    rowKey="id"
-                    pagination={{ pageSize: 10 }}
-                />
-            </Spin>
-        </div>
-    </div >
-}
+          <Table
+            dataSource={userList}
+            columns={columns}
+            rowKey="user_id"
+            rowClassName={(record) =>
+              record?.is_active === false ? "inactive-row" : ""
+            }
+            pagination={{ pageSize: 10 }}
+          />
+        </Spin>
+
+        <Modal
+          title="Are you sure you want to delete this item?"
+          open={showPopConfirm}
+          onOk={() => handleDelete(userId)}
+          onCancel={() => {
+            setShowPopConfirm(false);
+            setLoader(false);
+          }}
+          okText="Yes"
+          cancelText="No"
+          okButtonProps={{
+            style: {
+              backgroundColor: "#d6085e",
+              color: "white",
+            },
+          }}
+        >
+          <p>This action cannot be undone.</p>
+        </Modal>
+      </div>
+    </div>
+  );
+};
 
 export default User;
