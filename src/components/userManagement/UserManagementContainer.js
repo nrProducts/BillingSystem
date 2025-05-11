@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from '../../supabase/client'
 import { EllipsisOutlined } from "@ant-design/icons";
-import { Button, Dropdown, Menu } from "antd";
+import { Button, Dropdown, Menu, Tag } from "antd";
 import User from "./UserManagement";
 import { fetchAllUserDetails, updateUserDetails, getUserById } from "../../api/user";
 
@@ -138,9 +138,25 @@ const UserContainer = () => {
             key: 'location',
         },
         {
-            title: 'Active',
+            title: 'Status',
             dataIndex: 'is_active',
             key: 'is_active',
+            render: (isActive) => (
+                <Tag
+                    color={isActive ? '#d4edda' : '#f8d7da'} // Light background colors
+                    style={{
+                        color: isActive ? '#155724' : '#721c24',
+                        fontSize: '12px',
+                        padding: '0 8px',
+                        borderRadius : '50px'
+                        // width: '100px',  // Fixed width
+                        //textAlign: 'center'  // To center the text within the tag
+                    }}
+                >
+                    {isActive ? 'Active' : 'Inactive'}
+                </Tag>
+
+            ),
         },
 
     ];
