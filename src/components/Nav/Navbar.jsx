@@ -46,7 +46,7 @@ const Navbar = () => {
 
   return (
     <aside className="sidebar">
-       <img src={billTime} alt="Logo" className="logo" width='200px' height='50px' ty/>
+      <img src={billTime} alt="Logo" className="logo" width='200px' height='50px' ty />
       <nav>
         <ul>
           <li>
@@ -91,6 +91,12 @@ const Navbar = () => {
                 onCancel={handleCancel}
                 okText="Yes, Logout"
                 cancelText="Cancel"
+                okButtonProps={{
+                  style: {
+                    backgroundColor: '#d6085e', // Set the desired background color
+                    color: 'white', // Set the text color (optional)
+                  },
+                }}
               >
                 <p>Are you sure you want to logout?</p>
               </Modal>

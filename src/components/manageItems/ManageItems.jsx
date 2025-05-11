@@ -58,6 +58,12 @@ const ManageItems = ({
         }}
         okText="Yes"
         cancelText="No"
+        okButtonProps={{
+          style: {
+            backgroundColor: '#d6085e', // Set the desired background color
+            color: 'white', // Set the text color (optional)
+          },
+        }}
       >
         <p>This action cannot be undone.</p>
       </Modal>

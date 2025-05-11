@@ -205,6 +205,12 @@ const TableManager = () => {
           onCancel={() => setShowModal(false)}
           okText="Save"
           width={420}
+          okButtonProps={{
+          style: {
+            backgroundColor: '#d6085e', // Set the desired background color
+            color: 'white', // Set the text color (optional)
+          },
+        }}
         >
           <div className="custom-form">
             <label>Table Name:</label>
