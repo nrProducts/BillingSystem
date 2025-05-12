@@ -10,9 +10,8 @@ import { fetchCategory } from "../../api/category";
 const ItemBillingContainer = () => {
 
     const { tableId } = useParams();
-    console.info('tableId', tableId)
     const isValidTableId = tableId && !isNaN(Number(tableId));
-    console.info(isValidTableId, 'valid')
+
     const [items, setItems] = useState([])
     const [selectedItems, setSelectedItems] = useState([]);
     const [search, setSearch] = useState('');
@@ -28,9 +27,9 @@ const ItemBillingContainer = () => {
     }, [])
 
     useEffect(() => {
-        if (isValidTableId) {            
+        if (isValidTableId) {
             fetchTableDetails();
-        }else{
+        } else {
             setTableDetails(null);
             setSelectedItems([]);
         }
@@ -100,7 +99,7 @@ const ItemBillingContainer = () => {
         const existing = selectedItems.find(i =>
             i?.isStagedData ? i?.item_id === item?.id : i?.id === item?.id
         );
-    
+
         if (existing) {
             setSelectedItems(prev =>
                 prev.map(i =>
@@ -129,24 +128,24 @@ const ItemBillingContainer = () => {
     // const handleRemove = (id) => {
     //     const existingItem = existedItems.find(item => item?.item_id === id);
     //     const existingQty = existingItem?.quantity ?? 0;
-    
+
     //     setSelectedItems(prevItems =>
     //         prevItems
     //             ?.map(item => {
     //                 const isMatch = item?.isStagedData ? item?.item_id === id : item?.id === id;
-    
+
     //                 if (!isMatch) return item;
-    
+
     //                 const newQty = item.quantity === existingQty
     //                     ? item.quantity
     //                     : item.quantity - 1;
-    
+
     //                 return { ...item, quantity: newQty };
     //             })
     //             .filter(item => item.quantity > 0)
     //     );
     // };
-    
+
 
     const filteredItems = items?.filter(item =>
         item?.name?.toLowerCase().includes(search?.toLowerCase()) &&

@@ -1,5 +1,6 @@
 import { Card, Button, Modal, Spin, Radio } from 'antd';
 import { MinusCircleOutlined } from '@ant-design/icons';
+import Kitchen from '../../kitchen/kitchen';
 
 const BillHeader = () => (
   <h3 className="bill-title">Bill Preview</h3>
@@ -21,7 +22,7 @@ export const BillPreview = ({
   onChoosePayment,
   paymentOptions,
   savePaymentMethod,
-  tableDetails
+  tableDetails,
 }) => {
   const { subtotal, gstAmount, total } = billingDetails;
 
@@ -156,7 +157,6 @@ export const BillPreview = ({
             value={paymentMethod}
           />
         </Modal>
-
       </div>
     </div>
   );

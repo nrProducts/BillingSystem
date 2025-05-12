@@ -82,6 +82,11 @@ const Navbar = () => {
                 </NavLink>
               </li>
               <li>
+                <NavLink to="/kitchen" className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`}>
+                  Kitchen
+                </NavLink>
+              </li>
+              <li>
                 <NavLink onClick={showLogoutModal} className="nav-link logout-btn">Logout</NavLink>
               </li>
               <Modal

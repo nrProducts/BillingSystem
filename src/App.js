@@ -13,6 +13,7 @@ import Footer from "./components/layout/footer";
 import BillingDashboard from "./components/billingDashboard/BillingDashboard";
 import UserManagement from "./components/userManagement/UserManagementContainer";
 import TableManager from "./components/tableManager/tableManager";
+import Kitchen from "./components/kitchen/kitchen";
 
 const App = () => {
   return (
@@ -32,10 +33,10 @@ const App = () => {
                       <Route path="/" element={<Home />} />
                       <Route path="/user" element={<UserManagement />} />
                       <Route path="/itemBilling/:tableId?" element={<ItemBilling />} />
-                      {/* <Route path="/itemBilling" element={<ItemBilling />} /> */}
                       <Route path="/tableManager" element={<TableManager />} />
                       <Route path="/items" element={<ManageItems />} />
                       <Route path="/billingDashboard" element={<BillingDashboard />} />
+                      <Route path="/kitchen" element={<Kitchen />} />
                     </Routes>
                   </div>
                   <Footer />

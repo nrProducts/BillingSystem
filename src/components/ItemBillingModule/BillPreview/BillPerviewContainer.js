@@ -19,13 +19,12 @@ const BillContainer = (props) => {
     const [showPopConfirm, setShowPopConfirm] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState('');
     const [generatedBill, setGeneratedBill] = useState(null);
+
     const paymentOptions = [
         { value: 'Cash', label: 'Cash' },
         { value: 'Card', label: 'Card' },
         { value: 'UPI', label: 'UPI' },
     ]
-
-    console.info('selectedItems', selectedItems)
 
     const subtotal = selectedItems.reduce(
         (sum, item) => sum + item.price * item.quantity,
@@ -191,7 +190,7 @@ const BillContainer = (props) => {
                 };
             });
 
-            const { error: itemError } = await createBillItems(billItemsPayload);
+            const { error: itemError, success } = await createBillItems(billItemsPayload);
             if (itemError) throw new Error(itemError);
 
             notification.success({
@@ -245,7 +244,7 @@ const BillContainer = (props) => {
 
             });
 
-            const { data, error } = await saveStageBillItems(stageBillItemsPayload);
+            const { data, error, success } = await saveStageBillItems(stageBillItemsPayload);
             if (error) throw new Error(error || "Failed to create bill");
 
             if (isTakeAway) {
@@ -265,7 +264,7 @@ const BillContainer = (props) => {
                     fetchBillByTableId(tableDetails?.id);
             }
 
-            if(tableDetails?.id){
+            if (tableDetails?.id) {
                 const updatedtableDetails = {
                     ...tableDetails,
                     is_active: true,
