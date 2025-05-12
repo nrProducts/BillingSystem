@@ -121,21 +121,25 @@ const UserContainer = () => {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
+            render: (x) => x ?? '-',
         },
         {
             title: 'Email',
             dataIndex: 'email',
             key: 'email',
+            render: (x) => x ?? '-',
         },
         {
             title: 'role',
             dataIndex: 'role',
             key: 'role',
+            render: (x) => x ?? '-',
         },
         {
             title: 'Location',
             dataIndex: 'location',
             key: 'location',
+            render: (x) => x ?? '-',
         },
         {
             title: 'Status',
@@ -160,7 +164,7 @@ const UserContainer = () => {
         },
 
     ];
-    console.info(userList, 'userList')
+    
     return <User
         userList={filteredItems}
         columns={columns}

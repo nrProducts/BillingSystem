@@ -24,7 +24,7 @@ const Header = () => {
 
 
     const loadUserDetails = async () => {
-        const result = await fetchUserDetails();
+        const result = await fetchUserDetails(userId);
         if (result?.success) {
             setUserDetails(result.data);
             if (!result?.data?.name) {

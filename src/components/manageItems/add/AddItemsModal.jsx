@@ -280,6 +280,7 @@ const AddItemsModal = (props) => {
             columns={columns}
             pagination={false}
             rowKey="id"
+            className="add"
           />
           {props?.formItems?.[0]?.isEdit ? <></> : <Button
             onClick={handleAddRow}
