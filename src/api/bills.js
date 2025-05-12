@@ -16,6 +16,21 @@ export const createBills = async (bill) => {
     return { data: data, message: 'Bill created successfully', error: null, success: true };
 };
 
+export const updateBills = async (id, updates) => {
+    const { data, error } = await supabase
+        .from('bills')
+        .update(updates)
+        .eq('id', id)
+        .select();
+
+    if (error) {
+        console.error('Error updating bills:', error.message);
+        return { data: [], message: error?.message, error, success: false };
+    }
+
+    return { data: data[0], message: 'Bills updated successfully', error: null, success: true };
+};
+
 
 export async function getBills({ page, pageSize, sortField, sortOrder, startDate, endDate }) {
     let query = supabase

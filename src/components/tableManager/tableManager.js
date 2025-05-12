@@ -182,6 +182,8 @@ const TableManager = () => {
   const acTables = tables.filter(t => t.zone === 'AC');
   const nonAcTables = tables.filter(t => t.zone === 'Non AC');
 
+  // need to add logic for print and save and show status
+
   return (
     <div className="shared-layout-container">
       <div className="shared-table-section">
@@ -206,11 +208,11 @@ const TableManager = () => {
           okText="Save"
           width={420}
           okButtonProps={{
-          style: {
-            backgroundColor: '#d6085e', // Set the desired background color
-            color: 'white', // Set the text color (optional)
-          },
-        }}
+            style: {
+              backgroundColor: '#d6085e', // Set the desired background color
+              color: 'white', // Set the text color (optional)
+            },
+          }}
         >
           <div className="custom-form">
             <label>Table Name:</label>
@@ -248,7 +250,10 @@ const TableManager = () => {
                   <h4>AC Tables</h4>
                   <div className="table-cards-container ac-zone">
                     {acTables.map((table) => (
-                      <div key={table.id} className="table-card" onClick={() => goToBilling(table.id)}>
+                      <div key={table.id} className={`table-card status-${table?.status?.toLowerCase()}`} onClick={() => goToBilling(table.id)}>
+                        {table?.is_active && (
+                          <div className="table-status">{table?.status}</div>
+                        )}
                         <div className="table-name">{table.name} ({table.zone})</div>
                         <div className="menu-dropdown" onClick={(e) => e.stopPropagation()}>
                           <Dropdown overlay={getMenu(table)} trigger={['click']}>
@@ -267,7 +272,10 @@ const TableManager = () => {
                   <h4>Non AC Tables</h4>
                   <div className="table-cards-container nonac-zone">
                     {nonAcTables.map((table) => (
-                      <div key={table.id} className="table-card" onClick={() => goToBilling(table.id)}>
+                      <div key={table.id} className={`table-card status-${table.status?.toLowerCase()}`} onClick={() => goToBilling(table.id)}>
+                        {table?.is_active && (
+                          <div className="table-status">{table?.status}</div>
+                        )}
                         <div className="table-name">{table.name} ({table.zone})</div>
                         <div className="menu-dropdown" onClick={(e) => e.stopPropagation()}>
                           <Dropdown overlay={getMenu(table)} trigger={['click']}>
@@ -282,7 +290,7 @@ const TableManager = () => {
             </div>
           ) : (
             <div className="no-tables-message">
-              No tables found. Click the <bold style={{color:"#d6085e"}}>Add Table</bold> button to create your first table.
+              No tables found. Click the <bold style={{ color: "#d6085e" }}>Add Table</bold> button to create your first table.
             </div>
           )}
         </Spin>

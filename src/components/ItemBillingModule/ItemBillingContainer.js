@@ -3,18 +3,55 @@ import { Button, Dropdown, Menu, Tag } from 'antd';
 import { fetchItems, updateItem } from "../../api/items"
 import { EllipsisOutlined } from '@ant-design/icons'; // Import the icon
 import ItemBilling from "./ItemBilling";
+import { useParams } from 'react-router-dom';
+import { getTableById } from "../../api/tables";
 
 const ItemBillingContainer = () => {
 
+    const { tableId } = useParams();
+    console.info('tableId', tableId)
+    const isValidTableId = tableId && !isNaN(Number(tableId));
+    console.info(isValidTableId, 'valid')
     const [items, setItems] = useState([])
     const [selectedItems, setSelectedItems] = useState([]);
     const [search, setSearch] = useState('');
     const [loader, setLoader] = useState(false);
     const [viewMode, setViewMode] = useState('table');
+    const [tableDetails, setTableDetails] = useState(null);
+    const [existedItems, setExistedItems] = useState([]);
 
     useEffect(() => {
         loadItems()
     }, [])
+
+    useEffect(() => {
+        if (isValidTableId) {            
+            fetchTableDetails();
+        }else{
+            setTableDetails(null);
+            setSelectedItems([]);
+        }
+    }, [tableId])
+
+    const fetchTableDetails = async () => {
+        try {
+            setLoader(true);
+            const { data, error } = await getTableById(tableId);
+
+            if (error) {
+                console.error('Error fetching table:', error);
+            } else {
+                console.info(data, 'All users');
+                setTableDetails(data);
+            }
+        } catch (err) {
+            console.error('Unexpected error:', err);
+        } finally {
+            setLoader(false);
+        }
+    };
+
+    console.info('tableDetails', tableDetails)
 
     const loadItems = async () => {
         try {
@@ -44,11 +81,16 @@ const ItemBillingContainer = () => {
     }
 
     const handleAddToBill = (item) => {
-        const existing = selectedItems.find(i => i?.id === item?.id);
+        const existing = selectedItems.find(i =>
+            i?.isStagedData ? i?.item_id === item?.id : i?.id === item?.id
+        );
+    
         if (existing) {
             setSelectedItems(prev =>
                 prev.map(i =>
-                    i?.id === item?.id ? { ...i, quantity: i?.quantity + 1 } : i
+                    (i?.isStagedData ? i?.item_id === item?.id : i?.id === item?.id)
+                        ? { ...i, quantity: i.quantity + 1 }
+                        : i
                 )
             );
         } else {
@@ -56,7 +98,7 @@ const ItemBillingContainer = () => {
         }
     };
 
-    const handleRemove = (id) => {
+    const handleRemove = (id) => { // need to implement remove logic
         setSelectedItems(prev =>
             prev
                 ?.map(i =>
@@ -68,6 +110,27 @@ const ItemBillingContainer = () => {
         );
     };
 
+    // const handleRemove = (id) => {
+    //     const existingItem = existedItems.find(item => item?.item_id === id);
+    //     const existingQty = existingItem?.quantity ?? 0;
+    
+    //     setSelectedItems(prevItems =>
+    //         prevItems
+    //             ?.map(item => {
+    //                 const isMatch = item?.isStagedData ? item?.item_id === id : item?.id === id;
+    
+    //                 if (!isMatch) return item;
+    
+    //                 const newQty = item.quantity === existingQty
+    //                     ? item.quantity
+    //                     : item.quantity - 1;
+    
+    //                 return { ...item, quantity: newQty };
+    //             })
+    //             .filter(item => item.quantity > 0)
+    //     );
+    // };
+    
 
 
     const filteredItems = items?.filter(i =>
@@ -129,7 +192,7 @@ const ItemBillingContainer = () => {
                         color: isActive ? '#155724' : '#721c24',
                         fontSize: '12px',
                         padding: '0 8px',
-                        borderRadius : '50px'
+                        borderRadius: '50px'
                         // width: '100px',  // Fixed width
                         //textAlign: 'center'  // To center the text within the tag
                     }}
@@ -170,6 +233,8 @@ const ItemBillingContainer = () => {
             setViewMode={setViewMode}
             viewMode={viewMode}
             getMenu={getMenu}
+            tableDetails={tableDetails}
+            setExistedItems={setExistedItems}
         />
     </div>
 

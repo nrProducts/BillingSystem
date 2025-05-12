@@ -132,3 +132,32 @@
   color: #888;
   font-size: 14px;
 }
+
+/* Status badge style */
+.table-status {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #d6085e;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  /* text-transform: uppercase; */
+  box-shadow: 0 0 4px rgba(0,0,0,0.1);
+}
+
+/* Status-based colors */
+.table-card.status-occupied {
+  background-color: #ffe0e0 !important; /* Light red */
+}
+
+.table-card.status-open {
+  background-color: #e0ffe5 !important; /* Light green */
+}
+
+.table-card.status-reserved {
+  background-color: #fff3cd !important; /* Light yellow */
+}
+

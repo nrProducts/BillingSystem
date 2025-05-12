@@ -14,6 +14,21 @@ export const fetchTables = async () => {
     return { data, message: 'Tables fetched successfully', error: null, success: true };
 };
 
+export const getTableById = async (id) => {
+    const { data, error } = await supabase
+      .from('tables')
+      .select('*')
+      .eq('id', id)
+      .single();
+  
+    if (error) {
+      console.error('Error fetching tables:', error.message);
+      return { data: null, message: error?.message, error, success: false };
+    }
+  
+    return { data, message: 'Tables fetched successfully', error: null, success: true };
+  };
+
 export const addTable = async (table) => {
     const { data, error } = await supabase
         .from('tables')

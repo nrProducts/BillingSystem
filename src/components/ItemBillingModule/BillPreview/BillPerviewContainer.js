@@ -1,14 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Bill from "./BillPerview";
 import { createBillItems } from "../../../api/billItems";
-import { createBills } from "../../../api/bills";
+import { createBills, updateBills } from "../../../api/bills";
 import { notification } from 'antd';
+import { addStageBillItems, getStageBillItemsByTableId, saveStageBillItems } from "../../../api/stage_bill_items";
+import { useNavigate } from 'react-router-dom';
+import { deleteStageBillItemsByTable, deleteStageBillItemsByBill } from "../../../api/stage_bill_items";
+import { updateTable } from "../../../api/tables";
 
 const BillContainer = (props) => {
 
-    const [loader, setLoader] = useState(false);
-    const { selectedItems, setSelectedItems, handleRemove } = props;
+    const { selectedItems, setSelectedItems, handleRemove, tableDetails, setExistedItems } = props;
+
     const userId = sessionStorage.getItem('userId');
+    const navigate = useNavigate();
+    const [loader, setLoader] = useState(false);
+    const [enableSave, setEnableSave] = useState(false);
+    const [showPopConfirm, setShowPopConfirm] = useState(false);
+    const [paymentMethod, setPaymentMethod] = useState('');
+    const [generatedBill, setGeneratedBill] = useState(null);
+    const paymentOptions = [
+        { value: 'Cash', label: 'Cash' },
+        { value: 'Card', label: 'Card' },
+        { value: 'UPI', label: 'UPI' },
+    ]
+
+    console.info('selectedItems', selectedItems)
 
     const subtotal = selectedItems.reduce(
         (sum, item) => sum + item.price * item.quantity,
@@ -24,6 +41,35 @@ const BillContainer = (props) => {
     }, 0);
 
     const grandTotal = subtotal + gstAmount;
+
+    useEffect(() => {
+        if (tableDetails?.id) {
+            fetchBillByTableId(tableDetails?.id);
+        }
+    }, [tableDetails])
+
+    const fetchBillByTableId = async (id) => {
+        try {
+            setLoader(true);
+            const { data, error } = await getStageBillItemsByTableId(id);
+
+            if (error) {
+                console.error('Error fetching table:', error);
+            } else {
+                const updatedData = data?.map(item => ({
+                    ...item,
+                    isStagedData: true
+                }));
+                setSelectedItems(updatedData);
+                setExistedItems(updatedData);
+                setEnableSave(updatedData?.length > 0)
+            }
+        } catch (err) {
+            console.error('Unexpected error:', err);
+        } finally {
+            setLoader(false);
+        }
+    };
 
     // Function to call the backend to print the bill
     const printBillFromBackend = async (bill, items) => {
@@ -111,7 +157,7 @@ const BillContainer = (props) => {
     };
 
 
-    const handleGenerateBill = async () => {
+    const handleGenerateBill = async (isTakeAway = false) => {
         if (selectedItems?.length === 0) return;
 
         try {
@@ -121,10 +167,14 @@ const BillContainer = (props) => {
                 total_gst: gstAmount,
                 grand_total: grandTotal,
                 user_id: userId,
+                table_id: tableDetails?.id ? tableDetails?.id : null
             };
 
             const { data: bill, error: billError } = await createBills(billPayload);
             if (billError) throw new Error(billError || "Failed to create bill");
+
+            console.info(bill, 'bill')
+            setGeneratedBill(bill)
 
             const billItemsPayload = selectedItems.map((item) => {
                 const itemTotal = item?.price * item?.quantity;
@@ -132,7 +182,7 @@ const BillContainer = (props) => {
 
                 return {
                     bill_id: bill?.id,
-                    item_id: item?.id,
+                    item_id: item?.isStagedData ? item?.item_id : item?.id,
                     quantity: item?.quantity,
                     price: item?.price,
                     gst_rate: item?.gst_rate ?? 0,
@@ -151,13 +201,17 @@ const BillContainer = (props) => {
             });
 
 
-            printBillWindow(bill, selectedItems, gstAmount, grandTotal)
-            setSelectedItems([]);
+            // printBillWindow(bill, selectedItems, gstAmount, grandTotal)
+            // setSelectedItems([]);
+            if (!isTakeAway) {
+                printBillWindow(bill, selectedItems, gstAmount, grandTotal)
+                setShowPopConfirm(true);
+            }
         } catch (error) {
             console.error("Billing Error:", error);
             notification.error({
                 message: "Error",
-                description: error.message || "Something went wrong during billing.",
+                description: error?.message || "Something went wrong during billing.",
                 placement: "topRight",
             });
         } finally {
@@ -165,6 +219,149 @@ const BillContainer = (props) => {
         }
     };
 
+    const handleKot = async (isTakeAway = false) => {
+        console.info('test')
+        if (selectedItems?.length === 0) return;
+        try {
+            setLoader(true);
+
+            const stageBillItemsPayload = selectedItems.map((item) => {
+                const itemTotal = item?.price * item?.quantity;
+                const gstAmount = item?.gst_rate ? itemTotal * (item?.gst_rate / 100) : 0;
+
+                return {
+                    id: 0,
+                    item_id: item?.id,
+                    name: item?.name,
+                    quantity: item?.quantity,
+                    user_id: userId,
+                    table_id: tableDetails?.id ? tableDetails?.id : null,
+                    bill_id: isTakeAway ? generatedBill?.id : null,
+                    price: item?.price,
+                    gst_rate: item?.gst_rate ?? 0,
+                    gst_amount: gstAmount,
+                    total_amount: itemTotal + gstAmount,
+                };
+
+            });
+
+            const { data, error } = await saveStageBillItems(stageBillItemsPayload);
+            if (error) throw new Error(error || "Failed to create bill");
+
+            if (isTakeAway) {
+                setShowPopConfirm(true);
+            }
+
+            if (!isTakeAway) {
+                console.info('test2')
+                notification.success({
+                    message: "Success",
+                    description: "Item has been added successfully.",
+                    placement: "topRight",
+                });
+                setSelectedItems([]);
+                // navigate('/tableManager');
+                if (tableDetails?.id)
+                    fetchBillByTableId(tableDetails?.id);
+            }
+
+            if(tableDetails?.id){
+                const updatedtableDetails = {
+                    ...tableDetails,
+                    is_active: true,
+                    status: 'Occupied'
+                };
+                await updateTable(updatedtableDetails?.id, updatedtableDetails)
+            }
+        } catch (error) {
+            console.error("Billing Error:", error);
+            notification.error({
+                message: "Error",
+                description: error?.message || "Something went wrong during billing.",
+                placement: "topRight",
+            });
+        } finally {
+            setLoader(false);
+        }
+    }
+
+    const handleKotAndPrint = async () => { // need to modify
+        await handleGenerateBill(true);
+        await handleKot(true);
+    }
+
+    const handleSaveStagedItems = async () => {
+        if (selectedItems?.length === 0) return;
+        try {
+            setLoader(true);
+
+            const stageBillItemsPayload = selectedItems.map((item) => {
+                const itemTotal = item?.price * item?.quantity;
+                const gstAmount = item?.gst_rate ? itemTotal * (item?.gst_rate / 100) : 0;
+
+                return {
+                    id: item?.isStagedData ? item?.id : 0,
+                    item_id: item?.isStagedData ? item?.item_id : item?.id,
+                    name: item?.name,
+                    quantity: item?.quantity,
+                    user_id: userId,
+                    table_id: tableDetails.id,
+                    price: item?.price,
+                    gst_rate: item?.gst_rate ?? 0,
+                    gst_amount: gstAmount,
+                    total_amount: itemTotal + gstAmount,
+                };
+            });
+
+            console.log('stageBillItemsPayload', stageBillItemsPayload)
+            const { data, error } = await saveStageBillItems(stageBillItemsPayload);
+            if (error) throw new Error(error || "Failed to create bill");
+
+            if (tableDetails?.id)
+                fetchBillByTableId(tableDetails?.id);
+
+            notification.success({
+                message: "Success",
+                description: "Item has been saved successfully.",
+                placement: "topRight",
+            });
+        } catch (error) {
+            console.error("Billing Error:", error);
+            notification.error({
+                message: "Error",
+                description: error?.message || "Something went wrong during billing.",
+                placement: "topRight",
+            });
+        } finally {
+            setLoader(false);
+        }
+    }
+
+    const onChoosePayment = (e) => {
+        console.info(e?.target?.value, 'value');
+        setPaymentMethod(e?.target?.value);
+    };
+
+    const savePaymentMethod = async () => {
+        if (generatedBill) {
+            console.info(generatedBill, 'billing');
+
+            const updatedBill = {
+                ...generatedBill,
+                payment_mood: paymentMethod,
+            };
+
+            await updateBills(updatedBill.id, updatedBill);
+        }
+        setSelectedItems([]);
+        setShowPopConfirm(false);
+        setLoader(false);
+        await deleteStageBillItemsByBill(generatedBill?.id)
+        if (tableDetails) {
+            await deleteStageBillItemsByTable(tableDetails?.id)
+            navigate('/tableManager');
+        }
+    };
 
 
     const billingDetails = {
@@ -180,6 +377,18 @@ const BillContainer = (props) => {
             handleRemove={handleRemove}
             handleGenerateBill={handleGenerateBill}
             loader={loader}
+            handleKot={handleKot}
+            handleKotAndPrint={handleKotAndPrint}
+            handleSaveStagedItems={handleSaveStagedItems}
+            enableSave={enableSave}
+            setEnableSave={setEnableSave}
+            showPopConfirm={showPopConfirm}
+            setShowPopConfirm={setShowPopConfirm}
+            onChoosePayment={onChoosePayment}
+            paymentMethod={paymentMethod}
+            paymentOptions={paymentOptions}
+            savePaymentMethod={savePaymentMethod}
+            tableDetails={tableDetails}
         />
     );
 }
