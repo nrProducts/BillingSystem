@@ -13,7 +13,6 @@ export const BillPreview = ({
   handleGenerateBill,
   loader,
   handleKot,
-  handleKotAndPrint,
   handleSaveStagedItems,
   enableSave,
   showPopConfirm,
@@ -23,6 +22,7 @@ export const BillPreview = ({
   paymentOptions,
   savePaymentMethod,
   tableDetails,
+  navState
 }) => {
   const { subtotal, gstAmount, total } = billingDetails;
 
@@ -91,15 +91,9 @@ export const BillPreview = ({
                   disabled={selectedItems?.length === 0}
                   onClick={() => handleKot()}
                 >
-                  Dine-In
+                  Move To Kitchen
                 </Button>
               )}
-              <Button
-                disabled={selectedItems?.length === 0}
-                onClick={() => handleKotAndPrint()}
-              >
-                Takeaway
-              </Button>
             </>
           )
         }
@@ -110,7 +104,7 @@ export const BillPreview = ({
           size="large"
           block
           disabled={selectedItems?.length === 0}
-          onClick={() => handleGenerateBill()}
+          onClick={() => navState?.source === 'TakeAway' ? handleGenerateBill(true) : handleGenerateBill()}
           className="bill-generate-btn"
         >
           Generate Bill

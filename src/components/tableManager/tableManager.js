@@ -155,7 +155,11 @@ const TableManager = () => {
 
   const goToBilling = (id) => {
     if (!id) {
-      navigate('/itemBilling');
+      navigate('/itemBilling', {
+        state: {
+          source: 'TakeAway',          
+        }
+      });
     } else {
       navigate(`/itemBilling/${id}`);
     }

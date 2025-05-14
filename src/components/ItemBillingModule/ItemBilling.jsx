@@ -25,6 +25,7 @@ const ItemBilling = ({
   categoryList,
   selectedCategory,
   setSelectedCategory,
+  navState
 }) => {
   return (
     <div className="shared-layout-container">
@@ -193,6 +194,7 @@ const ItemBilling = ({
           handleRemove={handleRemove}
           tableDetails={tableDetails}
           setExistedItems={setExistedItems}
+          navState={navState}
         />
       </div>
     </div>
