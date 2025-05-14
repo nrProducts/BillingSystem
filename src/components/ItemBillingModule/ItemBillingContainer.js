@@ -3,7 +3,7 @@ import { Button, Dropdown, Menu, Tag } from 'antd';
 import { fetchItems, updateItem } from "../../api/items"
 import { EllipsisOutlined } from '@ant-design/icons'; // Import the icon
 import ItemBilling from "./ItemBilling";
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { getTableById } from "../../api/tables";
 import { fetchCategory } from "../../api/category";
 
@@ -11,6 +11,8 @@ const ItemBillingContainer = () => {
 
     const { tableId } = useParams();
     const isValidTableId = tableId && !isNaN(Number(tableId));
+    const location = useLocation();
+    const navState = location.state;
 
     const [items, setItems] = useState([])
     const [selectedItems, setSelectedItems] = useState([]);
@@ -254,6 +256,7 @@ const ItemBillingContainer = () => {
             selectedCategory={selectedCategory}
             tableDetails={tableDetails}
             setExistedItems={setExistedItems}
+            navState={navState}
         />
     </div>
 

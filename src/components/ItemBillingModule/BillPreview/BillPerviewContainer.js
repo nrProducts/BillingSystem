@@ -10,7 +10,7 @@ import { updateTable } from "../../../api/tables";
 
 const BillContainer = (props) => {
 
-    const { selectedItems, setSelectedItems, handleRemove, tableDetails, setExistedItems } = props;
+    const { selectedItems, setSelectedItems, handleRemove, tableDetails, setExistedItems, navState } = props;
 
     const userId = sessionStorage.getItem('userId');
     const navigate = useNavigate();
@@ -206,6 +206,9 @@ const BillContainer = (props) => {
                 printBillWindow(bill, selectedItems, gstAmount, grandTotal)
                 setShowPopConfirm(true);
             }
+            else{
+                await handleKot(true, bill);
+            }
         } catch (error) {
             console.error("Billing Error:", error);
             notification.error({
@@ -218,7 +221,7 @@ const BillContainer = (props) => {
         }
     };
 
-    const handleKot = async (isTakeAway = false) => {
+    const handleKot = async (isTakeAway = false, bill = null) => {
         console.info('test')
         if (selectedItems?.length === 0) return;
         try {
@@ -235,7 +238,7 @@ const BillContainer = (props) => {
                     quantity: item?.quantity,
                     user_id: userId,
                     table_id: tableDetails?.id ? tableDetails?.id : null,
-                    bill_id: isTakeAway ? generatedBill?.id : null,
+                    bill_id: isTakeAway ? bill?.id : null,
                     price: item?.price,
                     gst_rate: item?.gst_rate ?? 0,
                     gst_amount: gstAmount,
@@ -268,7 +271,7 @@ const BillContainer = (props) => {
                 const updatedtableDetails = {
                     ...tableDetails,
                     is_active: true,
-                    status: 'Occupied'
+                    status: 'occupied'
                 };
                 await updateTable(updatedtableDetails?.id, updatedtableDetails)
             }
@@ -282,11 +285,6 @@ const BillContainer = (props) => {
         } finally {
             setLoader(false);
         }
-    }
-
-    const handleKotAndPrint = async () => { // need to modify
-        await handleGenerateBill(true);
-        await handleKot(true);
     }
 
     const handleSaveStagedItems = async () => {
@@ -355,11 +353,17 @@ const BillContainer = (props) => {
         setSelectedItems([]);
         setShowPopConfirm(false);
         setLoader(false);
-        await deleteStageBillItemsByBill(generatedBill?.id)
+
         if (tableDetails) {
             await deleteStageBillItemsByTable(tableDetails?.id)
-            navigate('/tableManager');
+            const updatedtableDetails = {
+                ...tableDetails,
+                is_active: false,
+                status: 'open'
+            };
+            await updateTable(updatedtableDetails?.id, updatedtableDetails)
         }
+        navigate('/tableManager');
     };
 
 
@@ -369,6 +373,8 @@ const BillContainer = (props) => {
         total: grandTotal
     }
 
+    console.info(navState?.source, "navState")
+
     return (
         <Bill
             selectedItems={selectedItems}
@@ -377,7 +383,6 @@ const BillContainer = (props) => {
             handleGenerateBill={handleGenerateBill}
             loader={loader}
             handleKot={handleKot}
-            handleKotAndPrint={handleKotAndPrint}
             handleSaveStagedItems={handleSaveStagedItems}
             enableSave={enableSave}
             setEnableSave={setEnableSave}
@@ -388,6 +393,7 @@ const BillContainer = (props) => {
             paymentOptions={paymentOptions}
             savePaymentMethod={savePaymentMethod}
             tableDetails={tableDetails}
+            navState={navState}
         />
     );
 }
