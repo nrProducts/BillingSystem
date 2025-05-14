@@ -15,13 +15,17 @@ const Header = () => {
 
     useEffect(() => {
         loadUserDetails();
-        const interval = setInterval(() => {
-            setCurrentTime(new Date());
-        }, 1000);
-        return () => clearInterval(interval);
     }, []);
 
+    useEffect(() => {
+        if (userDetails?.is_checked) {
 
+            const interval = setInterval(() => {
+                setCurrentTime(new Date());
+            }, 1000);
+            return () => clearInterval(interval);
+        }
+    }, [userDetails]);
 
     const loadUserDetails = async () => {
         const result = await fetchUserDetails(userId);

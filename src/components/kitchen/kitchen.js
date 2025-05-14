@@ -11,12 +11,15 @@ const Kitchen = () => {
     useEffect(() => {
         const interval = setInterval(() => {
             fetchStagedItems();
-        }, 3000); // 3000 milliseconds = 3 seconds
+        }, 10000);
 
         // Cleanup on unmount
         return () => clearInterval(interval);
     }, []);
 
+    useEffect(() => {
+        fetchStagedItems();
+    }, []);
 
     const groupByTableOrBill = (items) => {
         return items.reduce((acc, item) => {
