@@ -90,69 +90,73 @@ const BillContainer = (props) => {
         }
     };
 
-    // Generate bill content for printing
-    const printBillWindow = (bill, selectedItems, gstAmount, grandTotal) => {
-        const newWindow = window.open('', '_blank', 'width=800,height=600');
-        if (!newWindow) return;
 
+    const printBillWindow = async (bill, selectedItems, gstAmount, grandTotal) => {
         const billHtml = `
-            <html>
-            <head>
-                <title>Bill Receipt</title>
-                <style>
-                    body { font-family: Arial, sans-serif; padding: 20px; }
-                    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-                    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-                    th { background-color: #f0f0f0; }
-                </style>
-            </head>
-            <body>
-                <h2>Bill ID: ${bill?.id}</h2>
-                <p><strong>Total GST:</strong> ₹${gstAmount?.toFixed(2)}</p>
-                <p><strong>Grand Total:</strong> ₹${grandTotal?.toFixed(2)}</p>
-    
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Item</th>
-                            <th>Qty</th>
-                            <th>Price</th>
-                            <th>GST %</th>
-                            <th>GST Amt</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${selectedItems.map(item => {
+        <html>
+        <head>
+            <title>Bill Receipt</title>
+            <style>
+                body { font-family: Arial, sans-serif; padding: 20px; }
+                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+                th { background-color: #f0f0f0; }
+            </style>
+        </head>
+        <body>
+            <h2>Bill ID: ${bill?.id}</h2>
+            <p><strong>Total GST:</strong> ₹${gstAmount?.toFixed(2)}</p>
+            <p><strong>Grand Total:</strong> ₹${grandTotal?.toFixed(2)}</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>GST %</th>
+                        <th>GST Amt</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${selectedItems.map(item => {
             const itemTotal = item?.price * item?.quantity;
             const gstAmt = item.gst_rate ? itemTotal * (item.gst_rate / 100) : 0;
             const totalAmt = itemTotal + gstAmt;
             return `
-                                <tr>
-                                    <td>${item?.name}</td>
-                                    <td>${item?.quantity}</td>
-                                    <td>₹${item?.price?.toFixed(2)}</td>
-                                    <td>${item?.gst_rate ?? 0}%</td>
-                                    <td>₹${gstAmt?.toFixed(2)}</td>
-                                    <td>₹${totalAmt?.toFixed(2)}</td>
-                                </tr>
-                            `;
+                            <tr>
+                                <td>${item?.name}</td>
+                                <td>${item?.quantity}</td>
+                                <td>₹${item?.price?.toFixed(2)}</td>
+                                <td>${item?.gst_rate ?? 0}%</td>
+                                <td>₹${gstAmt?.toFixed(2)}</td>
+                                <td>₹${totalAmt?.toFixed(2)}</td>
+                            </tr>
+                        `;
         }).join('')}
-                    </tbody>
-                </table>
-                <script>
-                    window.onload = function() {
-                        window.print();
-                        window.onafterprint = function() { window.close(); };
-                    };
-                </script>
-            </body>
-            </html>
-        `;
+                </tbody>
+            </table>
+        </body>
+        </html>
+    `;
 
-        newWindow.document.open();
-        newWindow.document.write(billHtml);
-        newWindow.document.close();
+        try {
+            const response = await fetch('http://localhost:5000/api/print-bill', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ html: billHtml, billId: bill?.id })
+            });
+
+            const result = await response.json();
+            if (result?.success) {
+                notification.success({ message: 'Bill sent to printer' });
+            } else {
+                notification.error({ message: 'Print failed', description: result?.error });
+            }
+        } catch (err) {
+            console.error("Print error:", err);
+            notification.error({ message: 'Print error', description: err.message });
+        }
     };
 
 
@@ -171,8 +175,6 @@ const BillContainer = (props) => {
 
             const { data: bill, error: billError } = await createBills(billPayload);
             if (billError) throw new Error(billError || "Failed to create bill");
-
-            console.info(bill, 'bill')
             setGeneratedBill(bill)
 
             const billItemsPayload = selectedItems.map((item) => {
@@ -199,16 +201,15 @@ const BillContainer = (props) => {
                 placement: "topRight",
             });
 
-
-            // printBillWindow(bill, selectedItems, gstAmount, grandTotal)
-            // setSelectedItems([]);
             if (!isTakeAway) {
-                printBillWindow(bill, selectedItems, gstAmount, grandTotal)
+                //printBillWindow(bill, selectedItems, gstAmount, grandTotal)
                 setShowPopConfirm(true);
             }
-            else{
+            else {
                 await handleKot(true, bill);
             }
+            printBillWindow(bill, selectedItems, gstAmount, grandTotal)
+
         } catch (error) {
             console.error("Billing Error:", error);
             notification.error({
@@ -222,7 +223,6 @@ const BillContainer = (props) => {
     };
 
     const handleKot = async (isTakeAway = false, bill = null) => {
-        console.info('test')
         if (selectedItems?.length === 0) return;
         try {
             setLoader(true);
@@ -372,8 +372,6 @@ const BillContainer = (props) => {
         gstAmount: gstAmount,
         total: grandTotal
     }
-
-    console.info(navState?.source, "navState")
 
     return (
         <Bill
