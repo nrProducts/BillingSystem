@@ -1,27 +1,42 @@
-
-
-.kitchen-container {
+.kitchen-split-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 32px;
     padding: 20px;
     background-color: #f4f4f4;
 }
 
-.kitchen-group {
-    margin-bottom: 30px;
+.kitchen-column {
+    flex: 1;
 }
+
+.kitchen-group {
+    margin-bottom: 24px;
+}
+
+.kitchen-group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px;
+    border-radius: 10px;
+    background: linear-gradient(to right, #d6085e12, #ffffff);
+    margin-bottom: 10px;
+}
+
 
 .kitchen-group-title {
     font-size: 14px;
-    margin-bottom: 16px;
-    padding-left: 8px;
     color: #2c3e50;
     border-left: 4px solid #d6085e;
+    padding-left: 8px;
+    margin: 0;
 }
 
 .kitchen-items-grid {
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
-    justify-content: flex-start;
 }
 
 .kitchen-item-card {
@@ -29,22 +44,23 @@
     border-radius: 12px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
     padding: 16px;
-    width: 250px; /* fixed box width */
-    transition: transform 0.2s ease-in-out;
+    width: 250px;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 
 .kitchen-item-card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
 
 .kitchen-item-details {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    width: 100%;
 }
 
 .item-quantity {
@@ -60,7 +76,9 @@
     color: #444;
 }
 
-.item-price {
-    font-weight: bold;
-    color: #28a745;
+.remove-icon {
+    font-size: 14px;
+    color: #d6085e;
+    cursor: pointer;
+    margin-left: 8px;
 }

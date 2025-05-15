@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Bill from "./BillPerview";
 import { createBillItems } from "../../../api/billItems";
 import { createBills, updateBills } from "../../../api/bills";
-import { notification } from 'antd';
+import { notification, message } from 'antd';
 import { addStageBillItems, getStageBillItemsByTableId, saveStageBillItems } from "../../../api/stage_bill_items";
 import { useNavigate } from 'react-router-dom';
 import { deleteStageBillItemsByTable, deleteStageBillItemsByBill } from "../../../api/stage_bill_items";
@@ -340,6 +340,11 @@ const BillContainer = (props) => {
     };
 
     const savePaymentMethod = async () => {
+        if (!paymentMethod) {
+            message.warning("Please select a payment method before saving.");
+            return;
+        }
+
         if (generatedBill) {
             console.info(generatedBill, 'billing');
 
@@ -353,6 +358,7 @@ const BillContainer = (props) => {
         setSelectedItems([]);
         setShowPopConfirm(false);
         setLoader(false);
+        setPaymentMethod('');
 
         if (tableDetails) {
             await deleteStageBillItemsByTable(tableDetails?.id)
@@ -363,7 +369,10 @@ const BillContainer = (props) => {
             };
             await updateTable(updatedtableDetails?.id, updatedtableDetails)
         }
-        navigate('/tableManager');
+        
+        if(tableDetails || navState?.source === 'TakeAway'){
+            navigate('/tableManager');
+        }
     };
 
 

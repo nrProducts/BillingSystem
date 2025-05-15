@@ -103,6 +103,18 @@ const TableManager = () => {
     setTableForm(tempForm);
   };
 
+  const isDuplicateTableName = (tables, tableForm, isEdit = false) => {
+    if (!tableForm?.name || !tableForm?.zone) return false;
+  
+    return tables.some((table) => {
+      return (
+        table.name.trim().toLowerCase() === tableForm.name.trim().toLowerCase() &&        
+        (!isEdit || table.id !== tableForm.id)
+      );
+    });
+  };
+  
+
   const handleSubmit = async () => {
     let tempError = {};
 
@@ -117,6 +129,11 @@ const TableManager = () => {
 
     if (Object?.keys(tempError)?.length > 0) {
       message.error(Object.values(tempError).join(', '));
+      return;
+    }
+
+    if (isDuplicateTableName(tables, tableForm, isEdit)) {
+      message.warning(`A table named "${tableForm.name}" already exists`);
       return;
     }
 

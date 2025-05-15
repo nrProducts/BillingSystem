@@ -4,6 +4,7 @@ export const fetchStageBillItems = async () => {
     const { data, error } = await supabase
         .from('stage_bill_items')
         .select('*')
+        .eq('status', 'pending')
         .order('id');
 
     if (error) {
