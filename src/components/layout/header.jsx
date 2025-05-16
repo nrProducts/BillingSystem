@@ -8,10 +8,8 @@ import { CheckCircleOutlined } from '@ant-design/icons';
 import { useUser } from '../../context/UserContext';
 
 const Header = () => {
-    const {user} = useUser();
+    const { user } = useUser();
     const userId = user?.id;
-
-    console.info("user", user)
 
     const [userDetails, setUserDetails] = useState({});
     const [openUserPopup, setOpenUserPopup] = useState(false);
