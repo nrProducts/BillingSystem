@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { fetchStageBillItems, deleteStageBillItems, updateStageBillItems } from "../../api/stage_bill_items";
+import { fetchStageBillItems, updateStageBillItems, deleteStageBillItemsByTable, deleteStageBillItemsByBill } from "../../api/stage_bill_items";
 import "./kitchen.css";
-import { Spin, Modal, Button, Checkbox, notification } from "antd";
-import { CloseOutlined } from "@ant-design/icons";
+import { Spin, Modal, notification } from "antd";
+import { CheckOutlined } from "@ant-design/icons";
 
 const Kitchen = () => {
     const [kitchenItems, setKitchenItems] = useState({});
     const [loader, setLoader] = useState(false);
     const [hoveredItem, setHoveredItem] = useState(null);
     const [showGroupModal, setShowGroupModal] = useState(false);
-    const [selectedItems, setSelectedItems] = useState([]);
     const [modalItems, setModalItems] = useState([]);
     const [currentGroupKey, setCurrentGroupKey] = useState('');
 
@@ -46,15 +45,8 @@ const Kitchen = () => {
         }
     };
 
-    const handleItemRemovalConfirm = async (item, isFrom) => {
-        let result;
-
-        if (isFrom === 'Takeaway') {
-            result = await removeItem(item);
-        } else {
-            result = await updateStagedItems(item);
-        }
-
+    const handleMarkServed = async (item) => {
+        const result = await updateStagedItems(item, 'served');
         if (result?.error) {
             notification.error({
                 message: "Error",
@@ -64,58 +56,41 @@ const Kitchen = () => {
         } else {
             notification.success({
                 message: 'Success',
-                description: `Removed "${item?.name}".`,
+                description: `"${item?.name}" - Item updated to served`,
                 placement: 'topRight',
             });
         }
-
-        fetchStagedItems();
+        await fetchStagedItems();
     };
 
-    const showRemoveConfirm = (item, isFrom) => {
-        Modal.confirm({
-            title: "Item Served?",
-            content: `Remove "${item.name}" from kitchen list?`,
-            okText: "Yes",
-            cancelText: "Cancel",
-            okButtonProps: { style: { backgroundColor: "#d6085e", color: "#fff" } },
-            onOk() { handleItemRemovalConfirm(item, isFrom); },
-        });
-    };
 
-    const handleGroupRemoveClick = (groupKey, items) => {
-        console.info("remove all", groupKey, items)
+    const handleGroupRemoveClick = (groupKey, items, isFrom) => {
         setCurrentGroupKey(groupKey);
         setModalItems(items);
-        setSelectedItems([]);
-        setShowGroupModal(true);
+        console.info(items, 'items')
+        const allServed = items.every(item => item?.status === "served");
+        console.info(allServed, 'all')
+        if (allServed) {
+            handleGroupRemovalConfirm(items, isFrom);
+        } else {
+            setShowGroupModal(true);
+        }
     };
 
-    const handleCheckboxChange = (itemId) => {
-        setSelectedItems((prev) =>
-            prev.includes(itemId)
-                ? prev.filter((id) => id !== itemId)
-                : [...prev, itemId]
-        );
-    };
-
-    const updateStagedItems = async (item) => {        
-        const updatedItem = { ...item, status: 'served' };        
+    const updateStagedItems = async (item, status) => {
+        const updatedItem = { ...item, status: status };
         await updateStageBillItems(item?.id, updatedItem);
     }
 
 
-    const handleGroupRemovalConfirm = async () => {
-        const itemsToRemove = modalItems.filter(item => selectedItems.includes(item.id));
+    const handleGroupRemovalConfirm = async (items, isFrom) => {
+        setLoader(true); // Start loader
         let hasError = false;
 
-        for (let item of itemsToRemove) {
-            let result;
-            if (item.table_id !== null) {
-                result = await updateStagedItems(item);
-            } else {
-                result = await removeItem(item);
-            }
+        for (let item of items) {
+            let result = isFrom === "Takeaway"
+                ? await deleteStageBillItemsByBill(item?.bill_id)
+                : await updateStagedItems(item, "ready_for_billing"); // both should await
 
             if (result?.error) {
                 hasError = true;
@@ -127,23 +102,17 @@ const Kitchen = () => {
             }
         }
 
-        setShowGroupModal(false);
-        setSelectedItems([]);
-        fetchStagedItems();
-
         if (!hasError) {
+            const groupType = isFrom === "Takeaway" ? "Takeaway" : "Dine In";
             notification.success({
                 message: "Success",
-                description: "Selected items processed successfully.",
+                description: `The ${groupType} items successfully closed`,
                 placement: "topRight",
             });
         }
-    };
 
-
-    const removeItem = async (item) => {
-        console.log("Removing", item);
-        await deleteStageBillItems(item?.id)
+        await fetchStagedItems();
+        setLoader(false);
     };
 
     const dineInItems = {};
@@ -162,38 +131,46 @@ const Kitchen = () => {
                         <div key={groupKey} className="kitchen-group">
                             <div className="kitchen-group-header">
                                 <h4 className="kitchen-group-title">{groupKey}</h4>
-                                <Button
+                                <div
                                     size="small"
                                     danger
-                                    onClick={() => handleGroupRemoveClick(groupKey, items)}
-                                    style={{ backgroundColor: "#d6085e", color: "#fff" }}
+                                    onClick={() => handleGroupRemoveClick(groupKey, items, "DineIn")}
+                                    class="btn-remove"
                                 >
-                                    Remove Items
-                                </Button>
+                                    Close
+                                </div>
                             </div>
                             <div className="kitchen-items-grid">
-                                {items.map((item) => (
-                                    <div
-                                        key={item?.id}
-                                        className="kitchen-item-card"
-                                        onMouseEnter={() => setHoveredItem(item?.id)}
-                                        onMouseLeave={() => setHoveredItem(null)}
-                                    >
-                                        <div className="kitchen-item-details">
-                                            <span className="item-quantity">{item?.quantity} x</span>
-                                            <span className="item-name">{item?.name}</span>
-                                            {hoveredItem === item?.id && (
-                                                <CloseOutlined
-                                                    className="remove-icon"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        showRemoveConfirm(item, 'DineIn');
-                                                    }}
-                                                />
-                                            )}
+                                {items.map((item) => {
+                                    const isHovered = hoveredItem === item?.id;
+                                    const isServed = item?.status == "served";
+                                    return (
+                                        <div
+                                            key={item?.id}
+                                            className="kitchen-item-card"
+                                            onMouseEnter={() => setHoveredItem(item?.id)}
+                                            onMouseLeave={() => setHoveredItem(null)}
+                                            style={{
+                                                backgroundColor: isServed ? "#f6ffed" : undefined,
+                                            }}
+                                        >
+                                            <div className="kitchen-item-details">
+                                                <span className="item-quantity">{item?.quantity} x</span>
+                                                <span className="item-name">{item?.name}</span>
+
+                                                {isHovered && !isServed && (
+                                                    <CheckOutlined
+                                                        className="served-icon"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleMarkServed(item);
+                                                        }}
+                                                    />
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         </div>
                     ))}
@@ -205,38 +182,46 @@ const Kitchen = () => {
                         <div key={groupKey} className="kitchen-group">
                             <div className="kitchen-group-header">
                                 <h4 className="kitchen-group-title">{groupKey}</h4>
-                                <Button
+                                <div
                                     size="small"
                                     danger
-                                    onClick={() => handleGroupRemoveClick(groupKey, items)}
-                                    style={{ backgroundColor: "#d6085e", color: "#fff" }}
+                                    onClick={() => handleGroupRemoveClick(groupKey, items, "Takeaway")}
+                                    class="btn-remove"
                                 >
-                                    Remove Items
-                                </Button>
+                                    Close
+                                </div>
                             </div>
                             <div className="kitchen-items-grid">
-                                {items.map((item) => (
-                                    <div
-                                        key={item?.id}
-                                        className="kitchen-item-card"
-                                        onMouseEnter={() => setHoveredItem(item?.id)}
-                                        onMouseLeave={() => setHoveredItem(null)}
-                                    >
-                                        <div className="kitchen-item-details">
-                                            <span className="item-quantity">{item?.quantity} x</span>
-                                            <span className="item-name">{item?.name}</span>
-                                            {hoveredItem === item?.id && (
-                                                <CloseOutlined
-                                                    className="remove-icon"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        showRemoveConfirm(item, 'Takeaway');
-                                                    }}
-                                                />
-                                            )}
+                                {items.map((item) => {
+                                    const isHovered = hoveredItem === item?.id;
+                                    const isServed = item?.status == "served";
+                                    return (
+                                        <div
+                                            key={item?.id}
+                                            className="kitchen-item-card"
+                                            onMouseEnter={() => setHoveredItem(item?.id)}
+                                            onMouseLeave={() => setHoveredItem(null)}
+                                            style={{
+                                                backgroundColor: isServed ? "#f6ffed" : undefined,
+                                            }}
+                                        >
+                                            <div className="kitchen-item-details">
+                                                <span className="item-quantity">{item?.quantity} x</span>
+                                                <span className="item-name">{item?.name}</span>
+
+                                                {isHovered && !isServed && (
+                                                    <CheckOutlined
+                                                        className="served-icon"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleMarkServed(item);
+                                                        }}
+                                                    />
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         </div>
                     ))}
@@ -244,25 +229,22 @@ const Kitchen = () => {
             </div>
 
             <Modal
-                title={`Mark items in ${currentGroupKey} as served?`}
+                title={`Still some items in ${currentGroupKey} are not served`}
                 open={showGroupModal}
                 onCancel={() => setShowGroupModal(false)}
-                onOk={handleGroupRemovalConfirm}
-                okText="Remove Selected"
+                onOk={() => setShowGroupModal(false)}
+                okText="Ok"
                 cancelText="Cancel"
                 okButtonProps={{ style: { backgroundColor: "#d6085e", color: "#fff" } }}
             >
-                <p>Select the items you want to remove:</p>
                 <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                    {modalItems.map((item) => (
-                        <label key={item.id} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                            <Checkbox
-                                checked={selectedItems.includes(item.id)}
-                                onChange={() => handleCheckboxChange(item.id)}
-                            />
-                            <span>{item.quantity} x {item.name}</span>
-                        </label>
-                    ))}
+                    {modalItems.map((item) =>
+                        item?.status === "pending" ? (
+                            <label key={item.id} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                <span>{item.quantity} x {item.name}</span>
+                            </label>
+                        ) : null
+                    )}
                 </div>
             </Modal>
 

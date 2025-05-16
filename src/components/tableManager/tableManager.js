@@ -4,10 +4,12 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './tableManager.css';
 import { addTable, deleteTable, fetchTables, updateTable } from '../../api/tables';
+import { useUser } from '../../context/UserContext';
 
 const TableManager = () => {
   const navigate = useNavigate();
-  const userId = sessionStorage.getItem('userId');
+  const {user} = useUser();
+  const userId = user?.id;
 
   const [tables, setTables] = useState([]);
   const [loader, setLoader] = useState(false);

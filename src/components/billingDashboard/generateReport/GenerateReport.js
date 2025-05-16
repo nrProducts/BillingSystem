@@ -5,6 +5,7 @@ import { fetchReportData } from '../../../api/bills';
 import { sendReportByEmail } from '../../../api/emailService';
 import { Card, Typography } from 'antd';
 const { Title } = Typography;
+import { useUser } from '../../../context/UserContext';
 
 
 const { Option } = Select;
@@ -12,7 +13,8 @@ const { RangePicker } = DatePicker;
 
 const GenerateReport = ({ setModalOpen }) => {
 
-    const emailId = sessionStorage.getItem('emailId');
+    const {user} = useUser();
+    const emailId = user?.email;
 
     const [loading, setLoading] = useState(false);
     const [type, setType] = useState(null);

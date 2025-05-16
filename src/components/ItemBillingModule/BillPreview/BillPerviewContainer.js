@@ -7,12 +7,14 @@ import { addStageBillItems, getStageBillItemsByTableId, saveStageBillItems } fro
 import { useNavigate } from 'react-router-dom';
 import { deleteStageBillItemsByTable, deleteStageBillItemsByBill } from "../../../api/stage_bill_items";
 import { updateTable } from "../../../api/tables";
+import { useUser } from "../../../context/UserContext";
 
 const BillContainer = (props) => {
 
     const { selectedItems, setSelectedItems, handleRemove, tableDetails, setExistedItems, navState } = props;
 
-    const userId = sessionStorage.getItem('userId');
+    const {user} = useUser();
+    const userId = user?.id;
     const navigate = useNavigate();
     const [loader, setLoader] = useState(false);
     const [enableSave, setEnableSave] = useState(false);

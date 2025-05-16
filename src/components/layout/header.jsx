@@ -5,9 +5,13 @@ import { addUserDetails, fetchUserDetails, updateUserDetails } from '../../api/u
 import UserProfile from '../userProfile/UserProfileCantainer';
 import { Button } from 'antd';
 import { CheckCircleOutlined } from '@ant-design/icons';
+import { useUser } from '../../context/UserContext';
 
 const Header = () => {
-    const userId = sessionStorage.getItem('userId');
+    const {user} = useUser();
+    const userId = user?.id;
+
+    console.info("user", user)
 
     const [userDetails, setUserDetails] = useState({});
     const [openUserPopup, setOpenUserPopup] = useState(false);

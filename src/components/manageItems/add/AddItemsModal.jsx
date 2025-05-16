@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { Modal, Input, InputNumber, Select, Button, Table, message, Spin } from "antd";
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import { v4 as uuidv4 } from "uuid";
+import { useUser } from "../../../context/UserContext";
 
 const { Option } = Select;
 
 const AddItemsModal = (props) => {
 
-  const userId = sessionStorage.getItem('userId');
+  const {user} = useUser();
+  const userId = user?.id;
   const [saveDisable, setSaveDisable] = useState(false);
 
 

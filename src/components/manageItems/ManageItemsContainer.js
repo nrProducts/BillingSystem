@@ -5,10 +5,12 @@ import { Button, Dropdown, Menu, notification, Tag } from 'antd';
 import { EllipsisOutlined } from '@ant-design/icons';
 import ManageItems from './ManageItems';
 import { v4 as uuidv4 } from "uuid";
+import { useUser } from '../../context/UserContext';
 
 const ManageItemsContainer = () => {
 
-    const userId = sessionStorage.getItem('userId');
+    const {user} = useUser();
+    const userId = user?.id;
 
     const [items, setItems] = useState([])
     const [search, setSearch] = useState('');
