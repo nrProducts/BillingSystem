@@ -1,11 +1,29 @@
-import { Card, Button, Divider, Spin } from 'antd';
+import { Card, Button, Modal, Spin, Radio } from 'antd';
 import { MinusCircleOutlined } from '@ant-design/icons';
+import Kitchen from '../../kitchen/kitchen';
 
 const BillHeader = () => (
-  <h3 className="bill-title">🧾 Bill Preview</h3>
+  <h3 className="bill-title">Bill Preview</h3>
 );
 
-export const BillPreview = ({ selectedItems, handleRemove, billingDetails, handleGenerateBill, loader }) => {
+export const BillPreview = ({
+  selectedItems,
+  handleRemove,
+  billingDetails,
+  handleGenerateBill,
+  loader,
+  handleKot,
+  handleSaveStagedItems,
+  enableSave,
+  showPopConfirm,
+  setShowPopConfirm,
+  paymentMethod,
+  onChoosePayment,
+  paymentOptions,
+  savePaymentMethod,
+  tableDetails,
+  navState
+}) => {
   const { subtotal, gstAmount, total } = billingDetails;
 
   return (
@@ -19,25 +37,25 @@ export const BillPreview = ({ selectedItems, handleRemove, billingDetails, handl
             <div className="bill-items">
               {selectedItems.map((item) => (
                 <Card
-                  key={item.id}
+                  key={item?.id}
                   className="bill-item-card"
                   bodyStyle={{ padding: '1rem' }}
                 >
                   <div className="bill-item-header">
-                    <strong>{item.name}</strong>
+                    <strong>{item?.name}</strong>
                     <Button
                       size="small"
                       type="text"
                       danger
                       icon={<MinusCircleOutlined />}
-                      onClick={() => handleRemove(item.id)}
+                      onClick={() => handleRemove(item?.id)}
                     />
                   </div>
                   <div className="bill-item-details">
-                    <div>Qty : {item.quantity}</div>
-                    <div>Unit : ₹{item.price.toFixed(2)}</div>
-                    <div style={{ fontWeight: '600' }}>Subtotal : ₹{(item.price * item.quantity).toFixed(2)}</div>
-                    <div style={{ color: '#0c7a0c' }}>GST Rate : {item.gst_rate}%</div>
+                    <div>Qty : {item?.quantity}</div>
+                    <div>Unit : ₹{item?.price.toFixed(2)}</div>
+                    <div style={{ fontWeight: '600' }}>Subtotal : ₹{(item?.price * item?.quantity).toFixed(2)}</div>
+                    <div style={{ color: '#0c7a0c' }}>GST Rate : {item?.gst_rate}%</div>
                   </div>
                 </Card>
               ))}
@@ -61,16 +79,78 @@ export const BillPreview = ({ selectedItems, handleRemove, billingDetails, handl
             <span>₹{total.toFixed(2)}</span>
           </div>
         </div>
+        {
+          enableSave ? (
+            <Button onClick={() => handleSaveStagedItems()}>
+              Save
+            </Button>
+          ) : (
+            <>
+              {tableDetails && (
+                <Button
+                  disabled={selectedItems?.length === 0}
+                  onClick={() => handleKot()}
+                >
+                  Move To Kitchen
+                </Button>
+              )}
+            </>
+          )
+        }
+
+
         <Button
           type="primary"
           size="large"
           block
           disabled={selectedItems?.length === 0}
-          onClick={handleGenerateBill}
+          onClick={() => navState?.source === 'TakeAway' ? handleGenerateBill(true) : handleGenerateBill()}
           className="bill-generate-btn"
         >
-          ✅ Generate Bill
+          Generate Bill
         </Button>
+
+        <Modal
+          title="Update the payment method"
+          open={showPopConfirm}
+          onOk={() => {
+            savePaymentMethod()
+          }}
+          onCancel={() => {
+            // do nothing or show a warning
+          }}
+          maskClosable={false} // prevent close on outside click
+          keyboard={false} // prevent close on ESC key
+          okText="Save"
+          okButtonProps={{
+            style: {
+              backgroundColor: "#d6085e",
+              color: "white",
+            },
+          }}
+          footer={[
+            <Button
+              key="save"
+              type="primary"
+              onClick={() => {
+                savePaymentMethod()
+              }}
+              style={{
+                backgroundColor: "#d6085e",
+                color: "white",
+              }}
+            >
+              Save
+            </Button>,
+          ]}
+        >
+          <Radio.Group
+            name="radiogroup"
+            options={paymentOptions}
+            onChange={(e) => onChoosePayment(e)}
+            value={paymentMethod}
+          />
+        </Modal>
       </div>
     </div>
   );

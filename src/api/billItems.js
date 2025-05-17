@@ -8,8 +8,8 @@ export const createBillItems = async (billItems) => {
 
     if (error) {
         console.error('Error adding BillItems:', error.message);
-        return { data: [], message: error?.message, error };
+        return { data: [], message: error?.message, error, success : false };
     }
 
-    return { data: data, message: 'BillItems added successfully', error: null };
+    return { data: data, message: 'BillItems added successfully', error: null, success : true  };
 };

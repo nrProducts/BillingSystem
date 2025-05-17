@@ -5,12 +5,17 @@ import { fetchReportData } from '../../../api/bills';
 import { sendReportByEmail } from '../../../api/emailService';
 import { Card, Typography } from 'antd';
 const { Title } = Typography;
+import { useUser } from '../../../context/UserContext';
 
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
 const GenerateReport = ({ setModalOpen }) => {
+
+    const {user} = useUser();
+    const emailId = user?.email;
+
     const [loading, setLoading] = useState(false);
     const [type, setType] = useState(null);
     const [range, setRange] = useState([]);
@@ -62,7 +67,7 @@ const GenerateReport = ({ setModalOpen }) => {
             const to = dayjs(endDate).endOf('day').toISOString();
 
             const data = await fetchReportData(from, to);
-            const csvContent = generateCSV(data);
+            const csvContent = generateCSV(data?.data);
 
             if (action === 'download') {
                 downloadCSV(csvContent, type);
@@ -74,7 +79,8 @@ const GenerateReport = ({ setModalOpen }) => {
                     const base64String = reader.result.split(',')[1];
 
                     const body = {
-                        to: 'nrofficialproducts@gmail.com',
+                        to: emailId,
+                        // cc
                         subject: `Your Billing Report for ${new Date().toLocaleString('default', { month: 'long', year: 'numeric' })}`,
                         message: `
                       <p>Dear Customer,</p>
@@ -185,7 +191,7 @@ const GenerateReport = ({ setModalOpen }) => {
                     onClick={handleGenerate}
                     loading={loading}
                     block
-                    style={{ marginTop: 12 }}
+                    style={{ marginTop: 12, backgroundColor : "#d6085e", color : 'white' }}
                 >
                     Generate
                 </Button>

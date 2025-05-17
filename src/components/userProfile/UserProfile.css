@@ -1,0 +1,58 @@
+.user-profile-modal .ant-modal-content {
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px 24px;
+    background-color: #ffffff;
+}
+
+.user-profile-form .ant-form-item {
+    margin-bottom: 12px; /* Less space between items */
+}
+
+.user-profile-form .ant-form-item-label > label {
+    margin-bottom: 4px; /* Minimal space between label and input */
+    font-size: 12px;
+    font-weight: 500;
+    color: #333;
+    
+}
+
+.custom-input {
+    margin: 0;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 12px;
+    border: 1px solid #d9d9d9;
+    transition: border 0.3s;
+}
+
+.custom-input:focus,
+.custom-input:hover {
+    border-color: #40a9ff;
+    outline: none;
+}
+
+.custom-upload .ant-btn {
+    border-radius: 6px;
+    background-color: #fafafa;
+    border: 1px solid #d9d9d9;
+    font-size: 12px;
+}
+
+.custom-upload .ant-btn:hover {
+    background-color: #f5f5f5;
+}
+
+.save-button {
+    border-radius: 6px;
+    font-weight: 600;
+    height: 38px;
+    font-size: 12px;
+    width: 345px !important;
+    background-color: #d6085e;
+    border: none;
+}
+
+.save-button:hover {
+    background-color: #d86f9b;
+}

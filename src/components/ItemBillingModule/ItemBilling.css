@@ -6,6 +6,35 @@
   padding: 20px;
 }
 
+.maindiv {
+  display: flex;
+  width: 100%;
+}
+
+.sideDiv1 {
+  width: 15%;
+  margin-right: 20px;
+  /* border-right: 1px solid rgba(0, 0, 0, 0.1); soft border */
+  /* padding-right: 10px; optional spacing */
+  height: auto;
+}
+
+
+.sideDiv2 {
+  width: 84%;
+}
+
+.category {
+  width: 100%;
+  background: #fff;
+}
+
+.category-item.active {
+  background-color: #64b4f650;
+  color: #111827;
+  font-weight: bold;
+}
+
 /* Table section - 80% */
 .shared-table-section {
   flex: 4;
@@ -65,10 +94,10 @@ input[type="text"]:focus {
 }
 
 .ant-table-thead>tr>th {
-  background-color: #a1c5ec !important;
+  background-color: white !important;
   ;
   /* Default header background */
-  color: white;
+  color: black;
   font-weight: bold;
   text-transform: uppercase;
   border-bottom: 2px solid #dee2e6;
@@ -90,12 +119,10 @@ input[type="text"]:focus {
 
 .ant-table-tbody>tr>td {
   color: #6c757d !important;
-  ;
-  /* Text color for table data */
-  padding: 12px 16px;
+  padding: 5px 10px !important;
   border-bottom: 1px solid #eee;
-  /* Border for cells */
 }
+
 
 /* If you want to add a border to table cells */
 .ant-table-cell {
@@ -206,7 +233,7 @@ button:disabled {
 }
 
 .bounce-button {
-  background-color: #ff7f50;
+  background-color: #d6085e;
   color: white;
   border: none;
   border-radius: 50px;
@@ -305,7 +332,9 @@ button:disabled {
 
 .bill-generate-btn {
   margin-top: 0.5rem;
-  font-size: 12px
+  font-size: 12px;
+  background-color: #d6085e;
+  color: white;
 }
 
 /* ItemBilling.css */
@@ -314,7 +343,6 @@ button:disabled {
   grid-template-columns: repeat(4, 1fr);
   /* 4 items per row */
   gap: 20px;
-  padding: 20px;
   justify-items: center;
 }
 
@@ -339,7 +367,7 @@ button:disabled {
 }
 
 .blue-header-card .ant-card-head {
-  background-color: #a1c5ec;
+  background-color: #e5e5e5b0;
   color: white;
   border-bottom: none;
   font-weight: bold;

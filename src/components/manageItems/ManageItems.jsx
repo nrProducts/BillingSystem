@@ -3,7 +3,6 @@ import AddItemsModal from "./add/AddItemsModal";
 import { Modal, Input, Button, Table, Spin } from "antd";
 import "./ManageItems.css"; // Import external CSS
 import { PlusOutlined, CheckOutlined } from '@ant-design/icons';
-import { Label } from "@fluentui/react";
 
 const ManageItems = ({
   filteredItems,
@@ -28,8 +27,8 @@ const ManageItems = ({
   setAddCategoryForm,
   categoryError,
   SetCategoryError,
-  showPopconfirm,
-  setShowPopconfirm,
+  showPopConfirm,
+  setShowPopConfirm,
   itemToDelete,
   handleDelete,
   setLoader
@@ -51,14 +50,20 @@ const ManageItems = ({
 
       <Modal
         title="Are you sure you want to delete this item?"
-        open={showPopconfirm}
+        open={showPopConfirm}
         onOk={() => handleDelete(itemToDelete)}
         onCancel={() => {
-          setShowPopconfirm(false);
+          setShowPopConfirm(false);
           setLoader(false);
         }}
         okText="Yes"
         cancelText="No"
+        okButtonProps={{
+          style: {
+            backgroundColor: '#d6085e', // Set the desired background color
+            color: 'white', // Set the text color (optional)
+          },
+        }}
       >
         <p>This action cannot be undone.</p>
       </Modal>
@@ -80,7 +85,7 @@ const ManageItems = ({
                   <Button
                     type="primary"
                     onClick={onAddClicked}
-                    style={{ marginLeft: "1rem" }}
+                    style={{ marginLeft: "1rem", backgroundColor : "#d6085e", color : 'white' }}
                   >
                     Bulk Add Items
                   </Button>
@@ -91,7 +96,7 @@ const ManageItems = ({
                   columns={itemColumns}
                   rowKey="id"
                   pagination={{ pageSize: 10 }}
-                  // scroll={{ y: 'calc(75vh - 150px)' }} 
+                  // scroll={{ y: 'calc(75vh - 150px)' }}
                   rowClassName={(record) =>
                     record?.is_active === false ? "inactive-row" : ""
                   }
@@ -105,12 +110,13 @@ const ManageItems = ({
           <div className="category-preview-section">
             <div className="category-card">
               <div className="category-header">
-                <h3>📁 Category List</h3>
+                <h3>Category List</h3>
                 <Button
                   className={`fab-button ${addCategoryForm ? "rotated" : ""}`}
                   type="primary"
                   shape="circle"
                   icon={<PlusOutlined />}
+                  style={{backgroundColor : "#d6085e", color : 'white'}}
                   onClick={() => { setAddCategoryForm(!addCategoryForm), SetCategoryError('') }}
                 />
               </div>

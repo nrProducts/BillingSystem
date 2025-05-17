@@ -1,0 +1,163 @@
+.header-c {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.takeaway {
+  background-color: #a6a9aa; /* Color for 'Take Away' button */
+  color: white;
+  margin-left: 10px;
+}
+
+.add-table {
+  background-color: #d6085e; /* Color for 'Add Table' button */
+  color: white;
+  margin-left: 10px;
+}
+
+
+.custom-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.custom-form label {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.custom-form input {
+  padding: 8px;
+  font-size: 14px;
+}
+
+.ant-radio-group {
+  margin-top: 4px;
+}
+
+.table-cards-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.table-category {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #ffffff;
+}
+
+.table-category h4 {
+  margin-bottom: 1rem;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.5rem;
+}
+
+.ac-zone .table-card {
+  background-color: #f1f1f1 !important; /* light blue for AC */
+}
+
+.nonac-zone .table-card {
+  background-color: #fffbe6; /* light yellow for Non AC */
+}
+
+.table-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.table-card {
+  margin: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  min-width: 180px;
+  min-height: 150px; /* Fixed height */
+  display: flex; /* Enable flexbox */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  text-align: center; /* Center text */
+  position: relative;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.table-card:hover {
+  transform: scale(1.05); /* Slight scale effect on hover */
+}
+
+.table-name {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.no-tables-message {
+  padding: 2rem;
+  text-align: center;
+  color: #888;
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.menu-dropdown {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  opacity: 0; /* Initially hidden */
+  visibility: hidden; /* Initially hidden */
+  transition: opacity 0.3s, visibility 0.3s; /* Smooth transition */
+}
+
+.table-card:hover .menu-dropdown {
+  opacity: 1; /* Show on hover */
+  visibility: visible; /* Make it visible */
+}
+
+.no-tables-message {
+  padding: 2rem;
+  text-align: center;
+  color: #888;
+  font-size: 14px;
+}
+
+/* Status badge style */
+.table-status {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #d6085e;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  /* text-transform: uppercase; */
+  box-shadow: 0 0 4px rgba(0,0,0,0.1);
+}
+
+/* Status-based colors */
+.table-card.status-occupied {
+  background-color: #ffe0e0 !important; /* Light red */
+}
+
+.table-card.status-open {
+  background-color: #e0ffe5 !important; /* Light green */
+}
+
+.table-card.status-reserved {
+  background-color: #fff3cd !important; /* Light yellow */
+}
+

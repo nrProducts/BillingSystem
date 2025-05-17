@@ -23,13 +23,12 @@ h1 {
 .app-container {
   display: flex;
   min-height: 100vh;
-  background: #f8f9fa;
+  background: #f8f8fa;
 }
 
 .sidebar {
   width: 220px;
-  background-color: #ffffff;
-  padding: 20px;
+  background-color: #f8f8fa;
   border-right: 1px solid #dee2e6;
 }
 
@@ -54,5 +53,5 @@ h1 {
 .page-content {
   flex: 1;
   overflow-y: auto;
-  background-color: #fdfdfd;
+  background-color: #f8f8fa;
 }

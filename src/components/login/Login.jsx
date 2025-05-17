@@ -11,7 +11,7 @@ const Login = () => {
   useEffect(() => {
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
+    } = supabase.auth?.onAuthStateChange((event, session) => {
       if (session) {
         sessionStorage.setItem('userId', session?.user?.id);
         sessionStorage.setItem('emailId', session?.user?.email);
@@ -35,8 +35,8 @@ const Login = () => {
               variables: {
                 default: {
                   colors: {
-                    brand: '#a1c5ec',
-                    brandAccent: '#a1c5ec',
+                    brand: '#087890',
+                    brandAccent: '#087890',
                   },
                 },
               },

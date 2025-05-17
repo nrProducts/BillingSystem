@@ -5,10 +5,12 @@ import { Button, Dropdown, Menu, notification, Tag } from 'antd';
 import { EllipsisOutlined } from '@ant-design/icons';
 import ManageItems from './ManageItems';
 import { v4 as uuidv4 } from "uuid";
+import { useUser } from '../../context/UserContext';
 
 const ManageItemsContainer = () => {
 
-    const userId = sessionStorage.getItem('userId');
+    const {user} = useUser();
+    const userId = user?.id;
 
     const [items, setItems] = useState([])
     const [search, setSearch] = useState('');
@@ -19,7 +21,7 @@ const ManageItemsContainer = () => {
     const [addCategoryForm, setAddCategoryForm] = useState(false);
     const [newCategory, setNewCategory] = useState('');
     const [categoryError, SetCategoryError] = useState('');
-    const [showPopconfirm, setShowPopconfirm] = useState(false)
+    const [showPopConfirm, setShowPopConfirm] = useState(false)
     const [itemToDelete, setItemToDelete] = useState(null);
 
     useEffect(() => {
@@ -29,40 +31,72 @@ const ManageItemsContainer = () => {
 
     const handleAdd = async (item) => {
         setLoader(true);
-        await addItem(item);
-        await loadItems();
-        notification.success({
-            message: "Success",
-            description: "Items added successfully.",
-            placement: "topRight",
-        });
-        setLoader(false);
-        setVisibleForm(false);
-        setFormItems([]);
+        const result = await addItem(item);
+        if (result?.success) {
+            await loadItems();
+            notification.success({
+                message: "Success",
+                description: "Items added successfully.",
+                placement: "topRight",
+            });
+            setLoader(false);
+            setVisibleForm(false);
+            setFormItems([]);
+        } else {
+            notification.error({
+                message: "Error",
+                description: "Failed to add",
+                placement: "topRight",
+            });
+            setLoader(false);
+        }
     };
 
 
     const handleUpdate = async (item) => {
         setLoader(true);
-        await updateItem(item.id, item)
-        await loadItems()
-        notification.success({
-            message: "Success",
-            description: "Items edited successfully.",
-            placement: "topRight",
-        });
-        setLoader(false);
-        setVisibleForm(false);
-        setFormItems([]);
+        const result = await updateItem(item.id, item)
+        if (result.success) {
+            await loadItems()
+            notification.success({
+                message: "Success",
+                description: "Items edited successfully.",
+                placement: "topRight",
+            });
+            setLoader(false);
+            setVisibleForm(false);
+            setFormItems([]);
+        } else {
+            notification.error({
+                message: "Error",
+                description: "Failed to edit",
+                placement: "topRight",
+            });
+            setLoader(false);
+        }
     }
 
     const handleDelete = async (id) => {
         setLoader(true);
-        await deleteItem(id)
-        await loadItems()
-        setLoader(false);
-        setItemToDelete(null)
-        setShowPopconfirm(false)
+        const result = await deleteItem(id)
+        if (result?.success) {
+            await loadItems()
+            notification.success({
+                message: "Success",
+                description: "Items deleted successfully.",
+                placement: "topRight",
+            });
+            setLoader(false);
+            setItemToDelete(null)
+            setShowPopConfirm(false)
+        } else {
+            notification.error({
+                message: "Error",
+                description: "Failed to delete",
+                placement: "topRight",
+            });
+            setLoader(false);
+        }
     }
 
     const loadItems = async () => {
@@ -98,7 +132,7 @@ const ManageItemsContainer = () => {
                 setFormItems([{ ...record, isEdit: true }]);
                 setLoader(false);
             } else if (value == 'Remove') {
-                setShowPopconfirm(true)
+                setShowPopConfirm(true)
                 setItemToDelete(record?.id);
             } else {
                 const isActive = value !== 'Inactive';
@@ -205,11 +239,19 @@ const ManageItemsContainer = () => {
             key: 'is_active',
             render: (isActive) => (
                 <Tag
-                    color={isActive ? '#28a745' : '#dc3545'}
-                    style={{ color: 'white', fontSize: '12px', padding: '0 8px' }}
+                    color={isActive ? '#d4edda' : '#f8d7da'} // Light background colors
+                    style={{
+                        color: isActive ? '#155724' : '#721c24',
+                        fontSize: '12px',
+                        padding: '0 8px',
+                        borderRadius : '50px'
+                        // width: '100px',  // Fixed width
+                        //textAlign: 'center'  // To center the text within the tag
+                    }}
                 >
                     {isActive ? 'Active' : 'Sold Out'}
                 </Tag>
+
             ),
         },
 
@@ -238,8 +280,8 @@ const ManageItemsContainer = () => {
                 submitCategory={submitCategory}
                 categoryError={categoryError}
                 SetCategoryError={SetCategoryError}
-                showPopconfirm={showPopconfirm}
-                setShowPopconfirm={setShowPopconfirm}
+                showPopConfirm={showPopConfirm}
+                setShowPopConfirm={setShowPopConfirm}
                 itemToDelete={itemToDelete}
                 handleDelete={handleDelete}
                 setLoader={setLoader}

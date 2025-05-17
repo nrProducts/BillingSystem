@@ -3,9 +3,19 @@ import { Link, useNavigate, NavLink } from 'react-router-dom';
 import { supabase } from '../../supabase/client';
 import './Nav.css';
 import { Modal } from 'antd';
+import billTime from '../../asserts/images/billTime.png'
+import billTime1 from '../../asserts/images/billTime1.png'
+import { fetchUserDetails } from '../../api/user';
+import { useUser } from '../../context/UserContext';
 
 const Navbar = () => {
+
+  const { user } = useUser();
+  const userId = user?.id;
+
   const [session, setSession] = useState(null);
+  const [userDetails, setUserDetails] = useState()
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,6 +34,13 @@ const Navbar = () => {
     return () => subscription.unsubscribe();
   }, []);
 
+  useEffect(() => {
+    if (userId) {
+      loadUserDetails(userId)
+    }
+  }, [userId])
+
+
   const handleLogout = async () => {
     setIsModalVisible(false);
     await supabase.auth.signOut();
@@ -32,7 +49,15 @@ const Navbar = () => {
     navigate('/login');
   };
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const loadUserDetails = async (id) => {
+    if (id) {
+      const result = await fetchUserDetails(id);
+      if (result?.success) {
+        setUserDetails(result.data);
+      }
+    }
+  };
+
 
   const showLogoutModal = () => {
     setIsModalVisible(true);
@@ -44,6 +69,7 @@ const Navbar = () => {
 
   return (
     <aside className="sidebar">
+      <img src={billTime} alt="Logo" className="logo" width='200px' height='50px' ty />
       <nav>
         <ul>
           <li>
@@ -54,18 +80,33 @@ const Navbar = () => {
           {session ? (
             <>
               <li>
-                <NavLink to="/billingdashboard" className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`}>
+                <NavLink to="/billingDashboard" className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`}>
                   Dashboard
                 </NavLink>
               </li>
+              {userDetails?.role == 'admin' && <li>
+                <NavLink to="/user" className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`}>
+                  User Management
+                </NavLink>
+              </li>}
               <li>
-                <NavLink to="/itemBilling" className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`}>
+                <NavLink to="/tableManager" className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`}>
+                  Table Manager
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/itemBilling/:tableId?" className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`}>
                   Item Billing
                 </NavLink>
               </li>
               <li>
                 <NavLink to="/items" className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`}>
                   Manage Items
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/kitchen" className={({ isActive }) => `nav-link ${isActive ? 'active-link' : ''}`}>
+                  Kitchen
                 </NavLink>
               </li>
               <li>
@@ -78,6 +119,12 @@ const Navbar = () => {
                 onCancel={handleCancel}
                 okText="Yes, Logout"
                 cancelText="Cancel"
+                okButtonProps={{
+                  style: {
+                    backgroundColor: '#d6085e', // Set the desired background color
+                    color: 'white', // Set the text color (optional)
+                  },
+                }}
               >
                 <p>Are you sure you want to logout?</p>
               </Modal>

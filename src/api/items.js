@@ -8,14 +8,14 @@ export const fetchItems = async () => {
 
   if (error) {
     console.error('Error fetching items:', error.message);
-    return { data: [], message: error?.message, error };
+    return { data: [], message: error?.message, error, success : false };
   } else {
     const updatedItems = data.map(item => ({
       ...item,
       category: item.category ? item.category.name : null
     }));
 
-    return { data: updatedItems, message: 'Items fetched successfully', error: null };
+    return { data: updatedItems, message: 'Items fetched successfully', error: null, success : true };
   }
 };
 
@@ -27,10 +27,10 @@ export const addItem = async (item) => {
 
   if (error) {
     console.error('Error adding items:', error.message);
-    return { data: [], message: error?.message, error };
+    return { data: [], message: error?.message, error, success : false };
   }
 
-  return { data: data[0], message: 'Item added successfully', error: null };
+  return { data: data[0], message: 'Item added successfully', error: null, success : true };
 };
 
 export const updateItem = async (id, updates) => {
@@ -42,10 +42,10 @@ export const updateItem = async (id, updates) => {
 
   if (error) {
     console.error('Error updating items:', error.message);
-    return { data: [], message: error?.message, error };
+    return { data: [], message: error?.message, error , success : false};
   }
 
-  return { data: data[0], message: 'Item updated successfully', error: null };
+  return { data: data[0], message: 'Item updated successfully', error: null, success : true };
 };
 
 export const deleteItem = async (id) => {
@@ -56,10 +56,10 @@ export const deleteItem = async (id) => {
 
   if (error) {
     console.error('Error deleting items:', error.message);
-    return { data: [], message: error?.message, error };
+    return { data: [], message: error?.message, error , success : false};
   }
 
-  return { data: null, message: 'Item deleted successfully', error: null };
+  return { data: null, message: 'Item deleted successfully', error: null, success : true };
 };
 
 

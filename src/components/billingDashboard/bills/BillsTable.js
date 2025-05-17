@@ -134,7 +134,7 @@ const BillsTable = () => {
         <Button
           type="primary"
           onClick={() => setModalOpen(true)}
-          style={{ marginTop: 8, height: 40}}
+          style={{ marginTop: 8, height: 40, backgroundColor : "#d6085e", color : 'white'}}
         >
           Generate Report
         </Button>

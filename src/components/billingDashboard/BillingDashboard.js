@@ -4,7 +4,7 @@ import { getBillSummary, getSalesByCategory } from '../../api/bills';
 import './BillingDashboard.css';
 import BillsTable from './bills/BillsTable'
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+const COLORS = ['#7fd0e1', '#096aa1', '#eeeee4', '#21130d'];
 
 const BillingDashboard = () => {
   const [billData, setBillData] = useState([]);
@@ -12,11 +12,11 @@ const BillingDashboard = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const bills = await getBillSummary();
-      const categorySummary = await getSalesByCategory();
+      const billResult = await getBillSummary();
+      const SalesByCategoryResult = await getSalesByCategory();
 
       setBillData(
-        bills.map((b) => ({
+        billResult?.data?.map((b) => ({
           date: new Date(b.date).toLocaleDateString(),
           total: parseFloat(b.total),
           gst: parseFloat(b.gst),
@@ -24,7 +24,7 @@ const BillingDashboard = () => {
       );
 
       setCategorySales(
-        Object.entries(categorySummary).map(([name, value]) => ({
+        Object.entries(SalesByCategoryResult?.data).map(([name, value]) => ({
           name,
           value: parseFloat(value),
         }))
@@ -53,7 +53,7 @@ const BillingDashboard = () => {
                   />
                   <YAxis />
                   <Tooltip />
-                  <Bar dataKey="total" fill="#8884d8" barSize={20} />
+                  <Bar dataKey="total" fill="#a6a9aa" barSize={20} />
                 </BarChart>
               </ResponsiveContainer>
 
