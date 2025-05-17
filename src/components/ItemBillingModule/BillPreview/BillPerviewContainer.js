@@ -13,7 +13,7 @@ const BillContainer = (props) => {
 
     const { selectedItems, setSelectedItems, handleRemove, tableDetails, setExistedItems, navState } = props;
 
-    const {user} = useUser();
+    const { user } = useUser();
     const userId = user?.id;
     const navigate = useNavigate();
     const [loader, setLoader] = useState(false);
@@ -245,6 +245,7 @@ const BillContainer = (props) => {
                     gst_rate: item?.gst_rate ?? 0,
                     gst_amount: gstAmount,
                     total_amount: itemTotal + gstAmount,
+                    pending_quantity: item?.quantity
                 };
 
             });
@@ -294,9 +295,21 @@ const BillContainer = (props) => {
         try {
             setLoader(true);
 
+            const oldStagedItems = await getStageBillItemsByTableId(tableDetails?.id);
+
             const stageBillItemsPayload = selectedItems.map((item) => {
                 const itemTotal = item?.price * item?.quantity;
                 const gstAmount = item?.gst_rate ? itemTotal * (item?.gst_rate / 100) : 0;
+
+                const oldItem = oldStagedItems?.data?.find(
+                    (old) => old.id === item?.id
+                );
+
+                let status = item?.status ?? "pending";
+
+                if (oldItem && item?.quantity > oldItem?.quantity) {
+                    status = "pending";
+                }
 
                 return {
                     id: item?.isStagedData ? item?.id : 0,
@@ -309,6 +322,8 @@ const BillContainer = (props) => {
                     gst_rate: item?.gst_rate ?? 0,
                     gst_amount: gstAmount,
                     total_amount: itemTotal + gstAmount,
+                    pending_quantity: item?.pending_quantity ?? item?.quantity,
+                    status,
                 };
             });
 
@@ -371,8 +386,8 @@ const BillContainer = (props) => {
             };
             await updateTable(updatedtableDetails?.id, updatedtableDetails)
         }
-        
-        if(tableDetails || navState?.source === 'TakeAway'){
+
+        if (tableDetails || navState?.source === 'TakeAway') {
             navigate('/tableManager');
         }
     };

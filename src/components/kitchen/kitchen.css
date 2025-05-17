@@ -126,3 +126,45 @@
   outline: 2px solid #f72585;
   outline-offset: 2px;
 }
+
+
+.simple-kitchen-modal .ant-modal-content {
+    border-radius: 10px;
+    padding: 20px;
+  }
+  
+  .simple-kitchen-modal .ant-modal-header {
+    border-bottom: none;
+  }
+  
+  .simple-modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 15px;
+    color: #333;
+  }
+  
+  .simple-modal-item {
+    /* padding: 6px 10px;
+    background: #f6f6f6;
+    border-radius: 6px; */
+    font-size: small;
+  }
+  
+  .simple-modal-warning {
+    margin-top: 12px;
+    font-weight: 500;
+    color: #444;
+  }
+  
+  .modal-ok-btn {
+    background-color: #d6085e !important;
+    color: #fff !important;
+    border-radius: 4px;
+  }
+  
+  .modal-cancel-btn {
+    border-radius: 4px;
+  }
+  

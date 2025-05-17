@@ -2,12 +2,16 @@ const express = require('express');
 const puppeteer = require('puppeteer');
 const pdfPrinter = require('pdf-to-printer');
 const cors = require('cors');
+const fs = require('fs');
+const path = require('path');
+const os = require('os');
 
 const app = express();
 
-// Enable CORS for specific origin (React on localhost:3000)
-app.use(cors({ origin: 'http://localhost:3000' }));
-
+const corsOptions = {
+  origin: process.env.FRONTEND_ORIGIN || '*',
+};
+app.use(cors(corsOptions));
 app.use(express.json({ limit: '5mb' }));
 
 app.post('/api/print-bill', async (req, res) => {
@@ -17,28 +21,39 @@ app.post('/api/print-bill', async (req, res) => {
         return res.status(400).json({ error: "Missing HTML or Bill ID" });
     }
 
+    const tempPath = path.join(os.tmpdir(), `bill-${billId}.pdf`);
+
     try {
-        // Launch Puppeteer browser and generate PDF
-        const browser = await puppeteer.launch({ headless: true }); // headless mode for no UI
+        const browser = await puppeteer.launch({
+            headless: true,
+            args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        });
+
         const page = await browser.newPage();
         await page.setContent(html, { waitUntil: 'networkidle0' });
 
-        // Generate PDF as a buffer
         const pdfBuffer = await page.pdf({
             format: 'A4',
             printBackground: true,
         });
 
         await browser.close();
+        fs.writeFileSync(tempPath, pdfBuffer);
 
-        // Send the PDF buffer to the printer directly using pdf-to-printer
-        await pdfPrinter.print(pdfBuffer);
+        const printers = await pdfPrinter.getPrinters();
+        if (!printers.length) {
+            return res.status(500).json({ error: 'No printers available' });
+        }
 
+        await pdfPrinter.print(tempPath);
         res.json({ success: true, message: 'Bill sent to printer' });
     } catch (err) {
         console.error("Print error:", err);
         res.status(500).json({ error: 'Failed to generate or print bill' });
+    } finally {
+        if (fs.existsSync(tempPath)) fs.unlinkSync(tempPath);
     }
 });
 
-app.listen(5000, () => console.log('Server running on http://localhost:5000'));
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

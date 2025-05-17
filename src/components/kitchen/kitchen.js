@@ -11,6 +11,7 @@ const Kitchen = () => {
     const [showGroupModal, setShowGroupModal] = useState(false);
     const [modalItems, setModalItems] = useState([]);
     const [currentGroupKey, setCurrentGroupKey] = useState('');
+    const [orderFrom, setOrderFrom] = useState('');
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -67,6 +68,7 @@ const Kitchen = () => {
     const handleGroupRemoveClick = (groupKey, items, isFrom) => {
         setCurrentGroupKey(groupKey);
         setModalItems(items);
+        setOrderFrom(isFrom);
         console.info(items, 'items')
         const allServed = items.every(item => item?.status === "served");
         console.info(allServed, 'all')
@@ -78,13 +80,17 @@ const Kitchen = () => {
     };
 
     const updateStagedItems = async (item, status) => {
-        const updatedItem = { ...item, status: status };
+        const updatedItem = {
+            ...item,
+            status: status,
+            pending_quantity: item?.quantity
+        };
         await updateStageBillItems(item?.id, updatedItem);
     }
 
 
     const handleGroupRemovalConfirm = async (items, isFrom) => {
-        setLoader(true); // Start loader
+        setLoader(true);
         let hasError = false;
 
         for (let item of items) {
@@ -110,7 +116,7 @@ const Kitchen = () => {
                 placement: "topRight",
             });
         }
-
+        setShowGroupModal(false);
         await fetchStagedItems();
         setLoader(false);
     };
@@ -155,7 +161,11 @@ const Kitchen = () => {
                                             }}
                                         >
                                             <div className="kitchen-item-details">
-                                                <span className="item-quantity">{item?.quantity} x</span>
+                                                <span className="item-quantity">{
+                                                    item?.quantity === item?.pending_quantity
+                                                        ? item?.quantity
+                                                        : Math.abs((item?.quantity || 0) - (item?.pending_quantity || 0))
+                                                } x</span>
                                                 <span className="item-name">{item?.name}</span>
 
                                                 {isHovered && !isServed && (
@@ -229,24 +239,29 @@ const Kitchen = () => {
             </div>
 
             <Modal
-                title={`Still some items in ${currentGroupKey} are not served`}
+                title={`Unserved items in ${currentGroupKey}`}
                 open={showGroupModal}
                 onCancel={() => setShowGroupModal(false)}
-                onOk={() => setShowGroupModal(false)}
-                okText="Ok"
-                cancelText="Cancel"
-                okButtonProps={{ style: { backgroundColor: "#d6085e", color: "#fff" } }}
+                onOk={() => handleGroupRemovalConfirm(modalItems, orderFrom)}
+                okText="Yes, Close"
+                cancelText="No"
+                okButtonProps={{ className: "modal-ok-btn" }}
+                cancelButtonProps={{ className: "modal-cancel-btn" }}
+                className="simple-kitchen-modal"
             >
-                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                    {modalItems.map((item) =>
-                        item?.status === "pending" ? (
-                            <label key={item.id} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                                <span>{item.quantity} x {item.name}</span>
-                            </label>
-                        ) : null
-                    )}
+                <div className="simple-modal-content">
+                    {modalItems
+                        .filter(item => item?.status === "pending")
+                        .map(item => (
+                            <div key={item.id} className="simple-modal-item">
+                                {item.quantity} x {item.name}
+                            </div>
+                        ))}
+                    <div className="simple-modal-warning">Do you want to close this order anyway?</div>
                 </div>
             </Modal>
+
+
 
         </Spin>
     );
