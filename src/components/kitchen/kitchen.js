@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchStageBillItems, updateStageBillItems, deleteStageBillItemsByTable, deleteStageBillItemsByBill } from "../../api/stage_bill_items";
 import "./kitchen.css";
-import { Spin, Modal, notification } from "antd";
+import { Spin, Modal, notification, Checkbox } from "antd";
 import { CheckOutlined } from "@ant-design/icons";
 
 const Kitchen = () => {
@@ -124,130 +124,137 @@ const Kitchen = () => {
 
     return (
         <Spin spinning={loader}>
-            <div className="kitchen-split-container">
-                <div className="kitchen-column">
-                    <h3>Dine In</h3>
-                    {Object.entries(dineInItems).map(([groupKey, items]) => (
-                        <div key={groupKey} className="kitchen-group">
-                            <div className="kitchen-group-header">
-                                <h4 className="kitchen-group-title">{groupKey}</h4>
-                                <div
-                                    size="small"
-                                    danger
-                                    onClick={() => handleGroupRemoveClick(groupKey, items, "DineIn")}
-                                    class="btn-remove"
-                                >
-                                    Close
+            <div className="shared-layout-container">
+                <div className="shared-table-section-k">
+                    <div className="kitchen-column">
+                        <h3>Dine In</h3>
+                        {Object.entries(dineInItems).map(([groupKey, items]) => (
+                            <div key={groupKey} className="kitchen-group">
+                                <div className="kitchen-group-header">
+                                    <h4 className="kitchen-group-title">{groupKey}</h4>
+                                    <div
+                                        size="small"
+                                        danger
+                                        onClick={() => handleGroupRemoveClick(groupKey, items, "DineIn")}
+                                        class="btn-remove"
+                                    >
+                                        Close
+                                    </div>
+                                </div>
+                                <div className="kitchen-items-grid">
+                                    {items.map((item) => {
+                                        const isHovered = hoveredItem === item?.id;
+                                        const isServed = item?.status == "served";
+                                        return (
+                                            <div
+                                                key={item?.id}
+                                                className="kitchen-item-card"
+                                                onMouseEnter={() => setHoveredItem(item?.id)}
+                                                onMouseLeave={() => setHoveredItem(null)}
+                                                style={{
+                                                    backgroundColor: isServed ? "#f6ffed" : undefined,
+                                                }}
+                                            >
+                                                <div className="kitchen-item-details">
+                                                    <span className="item-quantity">{item?.quantity} x</span>
+                                                    <span className="item-name">{item?.name}</span>
+                                                    {isServed ? (
+                                                        <CheckOutlined className="served-icon" />
+                                                    ) : isHovered && (
+                                                        <Checkbox
+                                                            className="served-checkbox"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                handleMarkServed(item);
+                                                            }}
+                                                        />
+                                                    )}
+
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             </div>
-                            <div className="kitchen-items-grid">
-                                {items.map((item) => {
-                                    const isHovered = hoveredItem === item?.id;
-                                    const isServed = item?.status == "served";
-                                    return (
-                                        <div
-                                            key={item?.id}
-                                            className="kitchen-item-card"
-                                            onMouseEnter={() => setHoveredItem(item?.id)}
-                                            onMouseLeave={() => setHoveredItem(null)}
-                                            style={{
-                                                backgroundColor: isServed ? "#f6ffed" : undefined,
-                                            }}
-                                        >
-                                            <div className="kitchen-item-details">
-                                                <span className="item-quantity">{item?.quantity} x</span>
-                                                <span className="item-name">{item?.name}</span>
-
-                                                {isHovered && !isServed && (
-                                                    <CheckOutlined
-                                                        className="served-icon"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            handleMarkServed(item);
-                                                        }}
-                                                    />
-                                                )}
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
+                <div className="shared-side-section-k">
+                    <div className="kitchen-column">
+                        <h3>Takeaway</h3>
+                        {Object.entries(takeawayItems).map(([groupKey, items]) => (
+                            <div key={groupKey} className="kitchen-group">
+                                <div className="kitchen-group-header">
+                                    <h4 className="kitchen-group-title">{groupKey}</h4>
+                                    <div
+                                        size="small"
+                                        danger
+                                        onClick={() => handleGroupRemoveClick(groupKey, items, "Takeaway")}
+                                        class="btn-remove"
+                                    >
+                                        Close
+                                    </div>
+                                </div>
+                                <div className="kitchen-items-grid">
+                                    {items.map((item) => {
+                                        const isHovered = hoveredItem === item?.id;
+                                        const isServed = item?.status == "served";
+                                        return (
+                                            <div
+                                                key={item?.id}
+                                                className="kitchen-item-card"
+                                                onMouseEnter={() => setHoveredItem(item?.id)}
+                                                onMouseLeave={() => setHoveredItem(null)}
+                                                style={{
+                                                    backgroundColor: isServed ? "#f6ffed" : undefined,
+                                                }}
+                                            >
+                                                <div className="kitchen-item-details">
+                                                    <span className="item-quantity">{item?.quantity} x</span>
+                                                    <span className="item-name">{item?.name}</span>
 
-                <div className="kitchen-column">
-                    <h3>Takeaway</h3>
-                    {Object.entries(takeawayItems).map(([groupKey, items]) => (
-                        <div key={groupKey} className="kitchen-group">
-                            <div className="kitchen-group-header">
-                                <h4 className="kitchen-group-title">{groupKey}</h4>
-                                <div
-                                    size="small"
-                                    danger
-                                    onClick={() => handleGroupRemoveClick(groupKey, items, "Takeaway")}
-                                    class="btn-remove"
-                                >
-                                    Close
+                                                    {isServed ? (
+                                                        <CheckOutlined className="served-icon" />
+                                                    ) : isHovered && (
+                                                        <Checkbox
+                                                            className="served-checkbox"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                handleMarkServed(item);
+                                                            }}
+                                                        />
+                                                    )}
+
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             </div>
-                            <div className="kitchen-items-grid">
-                                {items.map((item) => {
-                                    const isHovered = hoveredItem === item?.id;
-                                    const isServed = item?.status == "served";
-                                    return (
-                                        <div
-                                            key={item?.id}
-                                            className="kitchen-item-card"
-                                            onMouseEnter={() => setHoveredItem(item?.id)}
-                                            onMouseLeave={() => setHoveredItem(null)}
-                                            style={{
-                                                backgroundColor: isServed ? "#f6ffed" : undefined,
-                                            }}
-                                        >
-                                            <div className="kitchen-item-details">
-                                                <span className="item-quantity">{item?.quantity} x</span>
-                                                <span className="item-name">{item?.name}</span>
-
-                                                {isHovered && !isServed && (
-                                                    <CheckOutlined
-                                                        className="served-icon"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            handleMarkServed(item);
-                                                        }}
-                                                    />
-                                                )}
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
-            </div>
 
-            <Modal
-                title={`Still some items in ${currentGroupKey} are not served`}
-                open={showGroupModal}
-                onCancel={() => setShowGroupModal(false)}
-                onOk={() => setShowGroupModal(false)}
-                okText="Ok"
-                cancelText="Cancel"
-                okButtonProps={{ style: { backgroundColor: "#d6085e", color: "#fff" } }}
-            >
-                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                    {modalItems.map((item) =>
-                        item?.status === "pending" ? (
-                            <label key={item.id} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                                <span>{item.quantity} x {item.name}</span>
-                            </label>
-                        ) : null
-                    )}
-                </div>
-            </Modal>
-
+                <Modal
+                    title={`Still some items in ${currentGroupKey} are not served`}
+                    open={showGroupModal}
+                    onCancel={() => setShowGroupModal(false)}
+                    onOk={() => setShowGroupModal(false)}
+                    okText="Ok"
+                    cancelText="Cancel"
+                    okButtonProps={{ style: { backgroundColor: "#d6085e", color: "#fff" } }}
+                >
+                    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                        {modalItems.map((item) =>
+                            item?.status === "pending" ? (
+                                <label key={item.id} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                    <span>{item.quantity} x {item.name}</span>
+                                </label>
+                            ) : null
+                        )}
+                    </div>
+                </Modal>
+            </div >
         </Spin>
     );
 };
