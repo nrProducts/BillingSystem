@@ -1,8 +1,10 @@
 {
-    "functions": {
-      "api/sendemail.js": {
-        "runtime": "nodejs18.x"
-      }
+  "functions": {
+    "api/sendemail.js": {
+      "runtime": "nodejs18.x"
+    },
+    "api/print-bill.js": {
+      "runtime": "nodejs18.x"
     }
   }
-  
+}
