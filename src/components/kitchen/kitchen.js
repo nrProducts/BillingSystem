@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchStageBillItems, updateStageBillItems, deleteStageBillItemsByTable, deleteStageBillItemsByBill } from "../../api/stage_bill_items";
 import "./kitchen.css";
-import { Spin, Modal, notification } from "antd";
+import { Spin, Modal, notification, Checkbox } from "antd";
 import { CheckOutlined } from "@ant-design/icons";
 
 const Kitchen = () => {
@@ -130,8 +130,8 @@ const Kitchen = () => {
 
     return (
         <Spin spinning={loader}>
-            <div className="kitchen-split-container">
-                <div className="kitchen-column">
+            <div className="shared-layout-container">
+                <div className="shared-table-section-k">
                     <h3>Dine In</h3>
                     {Object.entries(dineInItems).map(([groupKey, items]) => (
                         <div key={groupKey} className="kitchen-group">
@@ -167,16 +167,19 @@ const Kitchen = () => {
                                                         : Math.abs((item?.quantity || 0) - (item?.pending_quantity || 0))
                                                 } x</span>
                                                 <span className="item-name">{item?.name}</span>
+                                                {isServed ? (
+                                                    <CheckOutlined className="served-icon" />
+                                                ) : isHovered && (
+                                                    <Checkbox
 
-                                                {isHovered && !isServed && (
-                                                    <CheckOutlined
-                                                        className="served-icon"
+                                                        className="served-checkbox"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                             handleMarkServed(item);
                                                         }}
                                                     />
                                                 )}
+
                                             </div>
                                         </div>
                                     );
@@ -185,8 +188,7 @@ const Kitchen = () => {
                         </div>
                     ))}
                 </div>
-
-                <div className="kitchen-column">
+                <div className="shared-side-section-k">
                     <h3>Takeaway</h3>
                     {Object.entries(takeawayItems).map(([groupKey, items]) => (
                         <div key={groupKey} className="kitchen-group">
@@ -216,18 +218,25 @@ const Kitchen = () => {
                                             }}
                                         >
                                             <div className="kitchen-item-details">
-                                                <span className="item-quantity">{item?.quantity} x</span>
+                                                <span className="item-quantity">{
+                                                    item?.quantity === item?.pending_quantity
+                                                        ? item?.quantity
+                                                        : Math.abs((item?.quantity || 0) - (item?.pending_quantity || 0))
+                                                } x</span>
                                                 <span className="item-name">{item?.name}</span>
 
-                                                {isHovered && !isServed && (
-                                                    <CheckOutlined
-                                                        className="served-icon"
+                                                {isServed ? (
+                                                    <CheckOutlined className="served-icon" />
+                                                ) : isHovered && (
+                                                    <Checkbox
+                                                        className="served-checkbox"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                             handleMarkServed(item);
                                                         }}
                                                     />
                                                 )}
+
                                             </div>
                                         </div>
                                     );
@@ -237,31 +246,25 @@ const Kitchen = () => {
                     ))}
                 </div>
             </div>
-
             <Modal
-                title={`Unserved items in ${currentGroupKey}`}
+                title={`Still some items in ${currentGroupKey} are not served`}
                 open={showGroupModal}
                 onCancel={() => setShowGroupModal(false)}
-                onOk={() => handleGroupRemovalConfirm(modalItems, orderFrom)}
-                okText="Yes, Close"
-                cancelText="No"
-                okButtonProps={{ className: "modal-ok-btn" }}
-                cancelButtonProps={{ className: "modal-cancel-btn" }}
-                className="simple-kitchen-modal"
+                onOk={() => setShowGroupModal(false)}
+                okText="Ok"
+                cancelText="Cancel"
+                okButtonProps={{ style: { backgroundColor: "#d6085e", color: "#fff" } }}
             >
-                <div className="simple-modal-content">
-                    {modalItems
-                        .filter(item => item?.status === "pending")
-                        .map(item => (
-                            <div key={item.id} className="simple-modal-item">
-                                {item.quantity} x {item.name}
-                            </div>
-                        ))}
-                    <div className="simple-modal-warning">Do you want to close this order anyway?</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    {modalItems.map((item) =>
+                        item?.status === "pending" ? (
+                            <label key={item.id} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                <span>{item.quantity} x {item.name}</span>
+                            </label>
+                        ) : null
+                    )}
                 </div>
             </Modal>
-
-
 
         </Spin>
     );
