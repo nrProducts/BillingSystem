@@ -12,6 +12,7 @@ import { useUser } from "../../../context/UserContext";
 const BillContainer = (props) => {
 
     const { selectedItems, setSelectedItems, handleRemove, tableDetails, setExistedItems, navState } = props;
+    const baseUrl = process.env.BACKEND_URL ||  "http://localhost:5000"
 
     const { user } = useUser();
     const userId = user?.id;
@@ -143,7 +144,7 @@ const BillContainer = (props) => {
     `;
 
         try {
-            const response = await fetch('http://localhost:5000/api/print-bill', {
+            const response = await fetch(`${baseUrl}/api/print-bill`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ html: billHtml, billId: bill?.id })
