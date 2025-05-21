@@ -12,9 +12,7 @@ import { useUser } from "../../../context/UserContext";
 const BillContainer = (props) => {
 
     const { selectedItems, setSelectedItems, handleRemove, tableDetails, setExistedItems, navState } = props;
-    const baseUrl = process.env.REACT_APP_BACKEND_URL  ||  "http://localhost:5000"
-
-    console.info(baseUrl, "baseUrl")
+    const baseUrl = process.env.REACT_APP_BACKEND_URL  ||  "http://localhost:5000"    
 
     const { user } = useUser();
     const userId = user?.id;
