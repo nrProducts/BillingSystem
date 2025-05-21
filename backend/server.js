@@ -14,6 +14,10 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json({ limit: '5mb' }));
 
+app.get('/', (req, res) => {
+    res.send("API working......")
+})
+
 app.post('/api/print-bill', async (req, res) => {
     const { html, billId } = req.body;
 

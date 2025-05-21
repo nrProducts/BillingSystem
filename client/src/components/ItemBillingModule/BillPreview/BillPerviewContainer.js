@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 import { deleteStageBillItemsByTable, deleteStageBillItemsByBill } from "../../../api/stage_bill_items";
 import { updateTable } from "../../../api/tables";
 import { useUser } from "../../../context/UserContext";
-import { printBill } from "../../../api/printerService";
 
 const BillContainer = (props) => {
 
@@ -73,6 +72,27 @@ const BillContainer = (props) => {
         }
     };
 
+    // Function to call the backend to print the bill
+    const printBillFromBackend = async (bill, items) => {
+        try {
+            const response = await fetch('http://localhost:5000/print', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ bill, items }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to print bill');
+            }
+
+            const data = await response.text();
+            console.log(data); // Print the response from the backend
+        } catch (error) {
+            console.error('Error during print request:', error);
+        }
+    };
+
+
     const printBillWindow = async (bill, selectedItems, gstAmount, grandTotal) => {
         const billHtml = `
         <html>
@@ -123,13 +143,20 @@ const BillContainer = (props) => {
     `;
 
         try {
-            const result = await printBill(billHtml, bill?.id);
+            const response = await fetch('http://localhost:5000/api/print-bill', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ html: billHtml, billId: bill?.id })
+            });
+
+            const result = await response.json();
             if (result?.success) {
                 notification.success({ message: 'Bill sent to printer' });
             } else {
                 notification.error({ message: 'Print failed', description: result?.error });
             }
         } catch (err) {
+            console.error("Print error:", err);
             notification.error({ message: 'Print error', description: err.message });
         }
     };
