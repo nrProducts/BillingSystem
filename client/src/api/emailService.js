@@ -1,6 +1,8 @@
 export const sendReportByEmail = async (body) => {
+  const baseUrl = process.env.REACT_APP_BACKEND_URL  ||  "http://localhost:5000" 
+
     try {
-      const res = await fetch('/api/sendemail', {
+      const res = await fetch(`${baseUrl}/api/sendemail`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),

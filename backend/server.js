@@ -5,6 +5,7 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
+const { Resend } = require('resend');
 
 const app = express();
 
@@ -56,6 +57,36 @@ app.post('/api/print-bill', async (req, res) => {
         res.status(500).json({ error: 'Failed to generate or print bill' });
     } finally {
         if (fs.existsSync(tempPath)) fs.unlinkSync(tempPath);
+    }
+});
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+const FROM_EMAIL = process.env.FROM_EMAIL;
+
+app.post('/api/sendemail', async (req, res) => {
+    const { to, subject, message, attachment } = req.body;
+
+    try {
+        const emailData = {
+            from: FROM_EMAIL,
+            to,
+            subject,
+            html: `<div>${message}</div>`,
+        };
+
+        if (attachment && attachment.filename && attachment.content) {
+            emailData.attachments = [
+                {
+                    filename: attachment.filename,
+                    content: attachment.content,
+                },
+            ];
+        }
+
+        const data = await resend.emails.send(emailData);
+        res.status(200).json({ success: true, data });
+    } catch (error) {
+        res.status(500).json({ error: error?.message });
     }
 });
 
