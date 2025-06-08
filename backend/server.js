@@ -1,5 +1,6 @@
 const express = require('express');
-const puppeteer = require('puppeteer');
+const chromium = require('chromium');
+const puppeteer = require('puppeteer-core');
 const pdfPrinter = require('pdf-to-printer');
 const cors = require('cors');
 const fs = require('fs');
@@ -30,19 +31,10 @@ app.post('/api/print-bill', async (req, res) => {
 
     try {
         const browser = await puppeteer.launch({
+            executablePath: chromium.path,
             headless: true,
-            args: [
-                '--no-sandbox',
-                '--disable-setuid-sandbox',
-                '--disable-gpu',
-                '--disable-dev-shm-usage',
-                '--disable-extensions',
-                '--disable-infobars',
-                '--window-size=1920,1080'
-            ]
+            args: ['--no-sandbox', '--disable-setuid-sandbox'],
         });
-
-        console.log('→ Using Chromium at:', puppeteer.executablePath());
 
         const page = await browser.newPage();
         await page.setContent(html, { waitUntil: 'networkidle0' });
