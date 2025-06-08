@@ -10,7 +10,7 @@ const { Resend } = require('resend');
 const app = express();
 
 const corsOptions = {
-  origin: process.env.FRONTEND_ORIGIN || '*',
+    origin: process.env.FRONTEND_ORIGIN || '*',
 };
 app.use(cors(corsOptions));
 app.use(express.json({ limit: '5mb' }));
@@ -31,8 +31,18 @@ app.post('/api/print-bill', async (req, res) => {
     try {
         const browser = await puppeteer.launch({
             headless: true,
-            args: ['--no-sandbox', '--disable-setuid-sandbox'],
+            args: [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-gpu',
+                '--disable-dev-shm-usage',
+                '--disable-extensions',
+                '--disable-infobars',
+                '--window-size=1920,1080'
+            ]
         });
+
+        console.log('→ Using Chromium at:', puppeteer.executablePath());
 
         const page = await browser.newPage();
         await page.setContent(html, { waitUntil: 'networkidle0' });
